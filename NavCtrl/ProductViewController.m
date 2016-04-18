@@ -44,6 +44,12 @@
     if ([self.title isEqualToString:@"Samsung mobile devices"]) {
         self.products = @[@"Galaxy S4", @"Galaxy Note", @"Galaxy Tab"];
     }
+    if ([self.title isEqualToString:@"SpaceX"]) {
+        self.products = @[@"Falcon 9 Rocket", @"Dragon Capsule", @"Falcon Heavy"];
+    }
+    if ([self.title isEqualToString:@"Bill's cheese factory"]) {
+        self.products = @[@"Swiss", @"Gruyere", @"Roqueforte"];
+    }
     [self.tableView reloadData];
 }
 
