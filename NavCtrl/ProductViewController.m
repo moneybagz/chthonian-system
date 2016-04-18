@@ -40,7 +40,8 @@
     
     if ([self.title isEqualToString:@"Apple mobile devices"]) {
         self.products = @[@"iPad", @"iPod Touch",@"iPhone"];
-    } else {
+    }
+    if ([self.title isEqualToString:@"Samsung mobile devices"]) {
         self.products = @[@"Galaxy S4", @"Galaxy Note", @"Galaxy Tab"];
     }
     [self.tableView reloadData];

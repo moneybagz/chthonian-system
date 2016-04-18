@@ -36,7 +36,10 @@
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     
-    self.companyList = @[@"Apple mobile devices",@"Samsung mobile devices"];
+    self.companyList = @[@"Apple mobile devices",
+                         @"Samsung mobile devices",
+                         @"SpaceX",
+                         @"Bill's cheese factory"];
     self.title = @"Mobile device makers";
     
     
@@ -128,9 +131,17 @@
 
     if (indexPath.row == 0){
         self.productViewController.title = @"Apple mobile devices";
-    } else {
+    }
+    if (indexPath.row == 1){
         self.productViewController.title = @"Samsung mobile devices";
     }
+    if (indexPath.row == 2){
+        self.productViewController.title = self.companyList[2];
+    }
+    if (indexPath.row == 3){
+        self.productViewController.title = self.companyList[3];
+    }
+    
     
     [self.navigationController
         pushViewController:self.productViewController
