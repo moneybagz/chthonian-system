@@ -43,6 +43,8 @@
     self.title = @"Mobile device makers";
     
     
+    
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -79,7 +81,22 @@
     
     cell.textLabel.text = [self.companyList objectAtIndex:[indexPath row]];
     
+    if ([cell.textLabel.text  isEqual:@"SpaceX"]) {
+        [[cell imageView] setImage: [UIImage imageNamed:@"spacex-logo.jpg"]];
+    }
+    if ([cell.textLabel.text  isEqual:@"Apple mobile devices"]) {
+        [[cell imageView] setImage: [UIImage imageNamed:@"apple.gif"]];
+    }
+    if ([cell.textLabel.text  isEqual:@"Bill's cheese factory"]) {
+        [[cell imageView] setImage: [UIImage imageNamed:@"cheese.png"]];
+    }
+    if ([cell.textLabel.text  isEqual:@"Samsung mobile devices"]) {
+        [[cell imageView] setImage: [UIImage imageNamed:@"samsung.gif"]];
+    }
     return cell;
+    
+    
+    
 }
 
 /*

@@ -84,7 +84,23 @@
     }
     // Configure the cell...
     cell.textLabel.text = [self.products objectAtIndex:[indexPath row]];
+    
+    
+    if ([self.title  isEqualToString:@"Apple mobile devices"]) {
+        [[cell imageView] setImage: [UIImage imageNamed:@"apple.gif"]];
+    }
+    if ([self.title  isEqualToString:@"Samsung mobile devices"]) {
+        [[cell imageView] setImage: [UIImage imageNamed:@"samsung.gif"]];
+    }
+    if ([self.title  isEqualToString:@"Bill's cheese factory"]) {
+        cell.imageView.image = [UIImage imageNamed:@"cheese.png"];
+    }
+    if ([self.title  isEqualToString:@"SpaceX"]) {
+        cell.imageView.image = [UIImage imageNamed:@"spacex-logo.jpg"];
+    }
+    
     return cell;
+    
 }
 
 /*
