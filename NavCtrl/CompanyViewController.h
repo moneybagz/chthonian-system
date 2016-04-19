@@ -10,7 +10,7 @@
 
 @class ProductViewController;
 
-@interface CompanyViewController : UITableViewController
+@interface CompanyViewController : UITableViewController <UITableViewDelegate>
 
 @property (nonatomic, retain) NSMutableArray *companyList;
 @property (nonatomic, retain) NSMutableArray *productLists;

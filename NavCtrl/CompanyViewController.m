@@ -130,6 +130,7 @@
     if ([cell.textLabel.text  isEqual:@"Apple mobile devices"]) {
         [[cell imageView] setImage: [UIImage imageNamed:@"apple.gif"]];
     }
+    
     if ([cell.textLabel.text  isEqual:@"Bill's cheese factory"]) {
         [[cell imageView] setImage: [UIImage imageNamed:@"cheese.png"]];
     }
@@ -141,6 +142,17 @@
     
     
 }
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.companyList removeObjectAtIndex:indexPath.row];
+    [self.urlLists removeObjectAtIndex:indexPath.row];
+    [self.productLists removeObjectAtIndex:indexPath.row];
+    
+    [tableView reloadData];
+}
+
+
 
 /*
 // Override to support conditional editing of the table view.

@@ -39,18 +39,7 @@
     
     [super viewWillAppear:animated];
     
-    if ([self.title isEqualToString:@"Apple mobile devices"]) {
-        self.products = @[@"iPad", @"iPod Touch",@"iPhone"];
-    }
-    if ([self.title isEqualToString:@"Samsung mobile devices"]) {
-        self.products = @[@"Galaxy S4", @"Galaxy Note", @"Galaxy Tab"];
-    }
-    if ([self.title isEqualToString:@"SpaceX"]) {
-        self.products = @[@"Falcon 9 Rocket", @"Dragon Capsule", @"Falcon Heavy"];
-    }
-    if ([self.title isEqualToString:@"Bill's cheese factory"]) {
-        self.products = @[@"Swiss", @"Gruyere", @"Roqueforte"];
-    }
+
     [self.tableView reloadData];
 }
 
@@ -106,6 +95,14 @@
     
 }
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.products removeObjectAtIndex:indexPath.row];
+    [self.urls removeObjectAtIndex:indexPath.row];
+    
+    
+    [self.tableView reloadData];
+}
 
 
 /*

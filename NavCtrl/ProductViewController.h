@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ProductViewController : UITableViewController <UIWebViewDelegate>
-@property (nonatomic, retain) NSArray *products;
-@property (nonatomic, retain) NSArray *urls;
+@interface ProductViewController : UITableViewController <UITableViewDelegate>
+@property (nonatomic, retain) NSMutableArray *products;
+@property (nonatomic, retain) NSMutableArray *urls;
 
 
 @end

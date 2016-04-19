@@ -10,7 +10,7 @@
 #import <WebKit/WebKit.h>
 
 
-@interface WebViewController : UIViewController
+@interface WebViewController : UIViewController <UIWebViewDelegate>
 
 @property (nonatomic, strong) NSString * url;
 @property(strong,nonatomic) WKWebView *webView;
