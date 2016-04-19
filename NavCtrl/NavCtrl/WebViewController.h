@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
+
 
 @interface WebViewController : UIViewController
 
 @property (nonatomic, strong) NSString * url;
+@property(strong,nonatomic) WKWebView *webView;
 
 @end

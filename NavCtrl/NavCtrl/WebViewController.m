@@ -17,12 +17,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIWebView *webview = [[UIWebView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.webView = [[WKWebView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     NSString *url= self.url;
     NSURL *nsurl=[NSURL URLWithString:url];
     NSURLRequest *nsrequest=[NSURLRequest requestWithURL:nsurl];
-    [webview loadRequest:nsrequest];
-    [self.view addSubview:webview];
+    [self.webView loadRequest:nsrequest];
+    self.webView.frame = CGRectMake(self.view.frame.origin.x,self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
+    [self.view addSubview:self.webView];
 
 }
 
