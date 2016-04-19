@@ -7,6 +7,7 @@
 //
 
 #import "ProductViewController.h"
+#import "WebViewController.h"
 
 @interface ProductViewController ()
 
@@ -99,9 +100,13 @@
         cell.imageView.image = [UIImage imageNamed:@"spacex-logo.jpg"];
     }
     
+    
+    
     return cell;
     
 }
+
+
 
 /*
 // Override to support conditional editing of the table view.
@@ -142,7 +147,7 @@
 }
 */
 
-/*
+
 #pragma mark - Table view delegate
 
 // In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
@@ -150,14 +155,16 @@
 {
     // Navigation logic may go here, for example:
     // Create the next view controller.
-    <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
+    WebViewController *wvc = [[WebViewController alloc] initWithNibName:nil bundle:nil];
+    wvc.url = self.urls[indexPath.row];
+
 
     // Pass the selected object to the new view controller.
     
     // Push the view controller.
-    [self.navigationController pushViewController:detailViewController animated:YES];
+    [self.navigationController pushViewController:wvc animated:YES];
 }
  
- */
+
 
 @end

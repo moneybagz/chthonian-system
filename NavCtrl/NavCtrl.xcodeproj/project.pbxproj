@@ -27,6 +27,7 @@
 		53681C4B1CC56B4400F1E0FC /* samsung.gif in Resources */ = {isa = PBXBuildFile; fileRef = 53681C4A1CC56B4400F1E0FC /* samsung.gif */; };
 		53681C511CC5709B00F1E0FC /* cheese.png in Resources */ = {isa = PBXBuildFile; fileRef = 53681C501CC5709B00F1E0FC /* cheese.png */; };
 		53681C531CC570FC00F1E0FC /* spacex-logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 53681C521CC570FC00F1E0FC /* spacex-logo.jpg */; };
+		53681C561CC597D100F1E0FC /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53681C551CC597D100F1E0FC /* WebViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +67,8 @@
 		53681C4A1CC56B4400F1E0FC /* samsung.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = samsung.gif; sourceTree = "<group>"; };
 		53681C501CC5709B00F1E0FC /* cheese.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cheese.png; sourceTree = "<group>"; };
 		53681C521CC570FC00F1E0FC /* spacex-logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "spacex-logo.jpg"; sourceTree = "<group>"; };
+		53681C541CC597D100F1E0FC /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		53681C551CC597D100F1E0FC /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +118,8 @@
 			children = (
 				48A656E818163F8700746D36 /* ProductViewController.h */,
 				48A656E918163F8700746D36 /* ProductViewController.m */,
+				53681C541CC597D100F1E0FC /* WebViewController.h */,
+				53681C551CC597D100F1E0FC /* WebViewController.m */,
 			);
 			name = ProductViewController;
 			sourceTree = "<group>";
@@ -299,6 +304,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				48A656E618163C1B00746D36 /* CompanyViewController.m in Sources */,
+				53681C561CC597D100F1E0FC /* WebViewController.m in Sources */,
 				48A656C518163BF200746D36 /* NavControllerAppDelegate.m in Sources */,
 				48A656C118163BF200746D36 /* main.m in Sources */,
 				48A656EB18163F8700746D36 /* ProductViewController.m in Sources */,

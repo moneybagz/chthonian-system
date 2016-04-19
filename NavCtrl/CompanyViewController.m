@@ -36,10 +36,51 @@
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     
-    self.companyList = @[@"Apple mobile devices",
-                         @"Samsung mobile devices",
-                         @"SpaceX",
-                         @"Bill's cheese factory"];
+    
+    //Create an array of product arrays to help index into ProductViewController
+    NSMutableArray *AppleMobileDevices = [NSMutableArray arrayWithObjects:@"iPad", @"iPod Touch",@"iPhone", nil];
+    NSMutableArray *SamsungMobileDevices = [NSMutableArray arrayWithObjects:@"Galaxy S4", @"Galaxy Note", @"Galaxy Tab", nil];
+    NSMutableArray *SpaceX = [NSMutableArray arrayWithObjects:@"Falcon 9 Rocket", @"Dragon Capsule", @"Falcon Heavy", nil];
+    NSMutableArray *BillsCheeseFactory = [NSMutableArray arrayWithObjects:@"Swiss", @"Gruyere", @"Roqueforte", nil];
+    
+    self.productLists = [[NSMutableArray alloc]init];
+    
+    [self.productLists addObject:AppleMobileDevices];
+    [self.productLists addObject:SamsungMobileDevices];
+    [self.productLists addObject:SpaceX];
+    [self.productLists addObject:BillsCheeseFactory];
+
+    //create a company array to display cell info
+    self.companyList = [[NSMutableArray alloc] init];
+    
+    [self.companyList addObject:@"Apple mobile devices"];
+    [self.companyList addObject:@"Samsung mobile devices"];
+    [self.companyList addObject:@"SpaceX"];
+    [self.companyList addObject:@"Bill's cheese factory"];
+    
+    //Create a url array of arrays to give array property to ProductViewController
+    // which will eventually give url information to WebViewController
+    NSMutableArray *appleURLs = [NSMutableArray arrayWithObjects:@"http://www.apple.com/ipad/", @"http://www.apple.com/ipod/", @"http://www.apple.com/iphone/", nil];
+    NSMutableArray *samsungURLs = [NSMutableArray arrayWithObjects:@"http://www.samsung.com/us/mobile/cell-phones/SCH-I545ZKPVZW", @"http://www.samsung.com/us/mobile/cell-phones/SM-N920AZKAATT", @"http://www.samsung.com/us/mobile/galaxy-tab/SM-T230NZWAXAR", nil];
+    NSMutableArray *spacexURLs = [NSMutableArray arrayWithObjects:@"http://www.spacex.com/falcon9", @"http://www.spacex.com/dragon", @"http://www.spacex.com/falcon-heavy", nil];
+    NSMutableArray *cheeseURLs = [NSMutableArray arrayWithObjects:@"http://www.cheese.com/swiss/", @"http://www.cheese.com/gruyere/", @"http://www.cheese.com/roquefort/", nil];
+    
+    self.urlLists = [[NSMutableArray alloc]init];
+    
+    [self.urlLists addObject:appleURLs];
+    [self.urlLists addObject:samsungURLs];
+    [self.urlLists addObject:spacexURLs];
+    [self.urlLists addObject:cheeseURLs];
+
+
+
+    
+//    self.companyList = @[@"Apple mobile devices",
+//                         @"Samsung mobile devices",
+//                         @"SpaceX",
+//                         @"Bill's cheese factory"];
+    
+    
     self.title = @"Mobile device makers";
     
     
@@ -78,6 +119,8 @@
     }
     
     // Configure the cell...
+    
+    //NSArray *allTheCompanies = [self.companyList copy];
     
     cell.textLabel.text = [self.companyList objectAtIndex:[indexPath row]];
     
@@ -145,19 +188,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 
-
-    if (indexPath.row == 0){
-        self.productViewController.title = @"Apple mobile devices";
-    }
-    if (indexPath.row == 1){
-        self.productViewController.title = @"Samsung mobile devices";
-    }
-    if (indexPath.row == 2){
-        self.productViewController.title = self.companyList[2];
-    }
-    if (indexPath.row == 3){
-        self.productViewController.title = self.companyList[3];
-    }
+    self.productViewController.title = self.companyList[indexPath.row];
+    self.productViewController.products = self.productLists[indexPath.row];
+    self.productViewController.urls = self.urlLists[indexPath.row];
     
     
     [self.navigationController
