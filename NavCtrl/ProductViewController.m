@@ -76,18 +76,15 @@
     cell.textLabel.text = [self.products objectAtIndex:[indexPath row]];
     
     
-    if ([self.title  isEqualToString:@"Apple mobile devices"]) {
-        [[cell imageView] setImage: [UIImage imageNamed:@"apple.gif"]];
-    }
-    if ([self.title  isEqualToString:@"Samsung mobile devices"]) {
-        [[cell imageView] setImage: [UIImage imageNamed:@"samsung.gif"]];
-    }
-    if ([self.title  isEqualToString:@"Bill's cheese factory"]) {
-        cell.imageView.image = [UIImage imageNamed:@"cheese.png"];
-    }
-    if ([self.title  isEqualToString:@"SpaceX"]) {
-        cell.imageView.image = [UIImage imageNamed:@"spacex-logo.jpg"];
-    }
+//    if ([self.title  isEqualToString:@"Apple mobile devices"]) {
+//        [[cell imageView] setImage: [UIImage imageNamed:@"apple.gif"]];
+//    } else if ([self.title  isEqualToString:@"Samsung mobile devices"]) {
+//        [[cell imageView] setImage: [UIImage imageNamed:@"samsung.gif"]];
+//    } else if ([self.title  isEqualToString:@"Bill's cheese factory"]) {
+//        cell.imageView.image = [UIImage imageNamed:@"cheese.png"];
+//    } else if ([self.title  isEqualToString:@"SpaceX"]) {
+//        cell.imageView.image = [UIImage imageNamed:@"spacex-logo.jpg"];
+//    }
     
     
     
@@ -101,7 +98,35 @@
     [self.urls removeObjectAtIndex:indexPath.row];
     
     
+    
     [self.tableView reloadData];
+}
+
+-(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+{
+    
+    
+    NSString * product = [self.products objectAtIndex:fromIndexPath.row];
+    NSString * url = [self.urls objectAtIndex:fromIndexPath.row];
+    
+    NSInteger fromIndex = fromIndexPath.row;
+    NSInteger toIndex = toIndexPath.row;
+    
+    if (fromIndex < toIndex) {
+        toIndex--; // Optional
+    }
+    
+    [self.products removeObjectAtIndex:fromIndex];
+    [self.products insertObject:product atIndex:toIndex];
+    
+    [self.urls removeObjectAtIndex:fromIndex];
+    [self.urls insertObject:url atIndex:toIndex];
+    
+    [tableView reloadData];
 }
 
 

@@ -74,6 +74,7 @@
 
 
 
+
     
 //    self.companyList = @[@"Apple mobile devices",
 //                         @"Samsung mobile devices",
@@ -98,14 +99,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
     return [self.companyList count];
 }
@@ -120,7 +119,6 @@
     
     // Configure the cell...
     
-    //NSArray *allTheCompanies = [self.companyList copy];
     
     cell.textLabel.text = [self.companyList objectAtIndex:[indexPath row]];
     
@@ -145,53 +143,142 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.companyList removeObjectAtIndex:indexPath.row];
-    [self.urlLists removeObjectAtIndex:indexPath.row];
-    [self.productLists removeObjectAtIndex:indexPath.row];
+    //if (editingStyle == UITableViewCellEditingStyleDelete) {
+        //add code here for when you hit delete
+        [self.companyList removeObjectAtIndex:indexPath.row];
+        [self.urlLists removeObjectAtIndex:indexPath.row];
+        [self.productLists removeObjectAtIndex:indexPath.row];
+
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+        
+    //}
+    
     
     [tableView reloadData];
 }
 
-
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
+-(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
 }
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
+//    if (fromIndexPath < toIndexPath) {
+//        toIndexPath.row--; // Optional
+//    }
+    
+    NSString * company = [self.companyList objectAtIndex:fromIndexPath.row];
+    [company retain];
+    
+    
+    NSMutableArray *productList = [self.productLists objectAtIndex:fromIndexPath.row];
+    NSMutableArray *urlList = [self.urlLists objectAtIndex:fromIndexPath.row];
+    [productList retain];
+    [urlList retain];
+    
+    NSInteger fromIndex = fromIndexPath.row;
+    NSInteger toIndex = toIndexPath.row;
+    
+    if (fromIndex < toIndex) {
+        toIndex--; // Optional
+    }
+    
+    
+    [self.companyList removeObjectAtIndex:fromIndex];
+    [self.companyList insertObject:company atIndex:toIndex];
+    
+    [self.productLists removeObjectAtIndex:fromIndex];
+    [self.productLists insertObject:productList atIndex:toIndex];
+    
+    [self.urlLists removeObjectAtIndex:fromIndex];
+    [self.urlLists insertObject:urlList atIndex:toIndex];
+    
+    [company release];
+    [productList release];
+    [urlList release];
+//    id object = [self.productLists objectAtIndex:fromIndex];
+//    [self.productLists removeObjectAtIndex:fromIndex];
+//    [self.productLists insertObject:object atIndex:toIndex];
+//    
+//    id object2 = [self.urlLists objectAtIndex:fromIndex];
+//    [self.urlLists removeObjectAtIndex:fromIndex];
+//    [self.urlLists insertObject:object2 atIndex:toIndex];
+    
+//    NSInteger fromIndex = fromIndexPath.row;
+//    NSInteger toIndex = toIndexPath.row;
+//
+//    
+//    id buffer2 = [self.urlLists objectAtIndex:fromIndex];
+//    [self.urlLists removeObjectAtIndex:fromIndex];
+//    [self.urlLists insertObject:buffer2 atIndex:toIndex];
+//    
+//    id buffer3 = [self.productLists objectAtIndex:fromIndex];
+//    [self.productLists removeObjectAtIndex:fromIndex];
+//    [self.productLists insertObject:buffer3 atIndex:toIndex];
+//    
+//    [self.urlLists exchangeObjectAtIndex:fromIndex withObjectAtIndex:toIndex];
+//    [self.productLists exchangeObjectAtIndex:fromIndex withObjectAtIndex:toIndex];
+    
+//    [self reOrderFrom:&fromIndex reOrderTo:&toIndex];
+    
+    [tableView reloadData];
 }
-*/
 
-/*
+//- (void)reOrderFrom:(NSInteger *)index1 reOrderTo:(NSInteger *)index2
+//{
+//    if (index1 < index2) {
+//        index2--; // Optional
+//    }
+//    
+//    id buffer2 = [self.urlLists objectAtIndex:(int)index1];
+//    [self.urlLists removeObjectAtIndex:(int)index1];
+//    [self.urlLists insertObject:buffer2 atIndex:(int)index2];
+//    
+//    id buffer3 = [self.productLists objectAtIndex:(int)index1];
+//    [self.productLists removeObjectAtIndex:(int)index1];
+//    [self.productLists insertObject:buffer3 atIndex:(int)index2];
+//}
+
+
+ //Override to support conditional editing of the table view.
+//- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    // Return NO if you do not want the specified item to be editable.
+//    return YES;
+//}
+
+
+
+// Override to support editing the table view.
+//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if (editingStyle == UITableViewCellEditingStyleDelete) {
+//        // Delete the row from the data source
+//        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+//    }   
+//    else if (editingStyle == UITableViewCellEditingStyleInsert) {
+//        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+//    }   
+//}
+
+
+
+// Override to support rearranging the table view.
+//- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+//{
+//    
+//}
+
+
+
 // Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
+//- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    // Return NO if you do not want the item to be re-orderable.
+//    return YES;
+//}
+
 
 
 #pragma mark - Table view delegate
@@ -201,9 +288,8 @@
 {
 
     self.productViewController.title = self.companyList[indexPath.row];
-    self.productViewController.products = self.productLists[indexPath.row];
     self.productViewController.urls = self.urlLists[indexPath.row];
-    
+    self.productViewController.products = self.productLists[indexPath.row];
     
     [self.navigationController
         pushViewController:self.productViewController
