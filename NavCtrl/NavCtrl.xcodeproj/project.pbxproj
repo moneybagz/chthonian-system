@@ -29,6 +29,8 @@
 		53681C531CC570FC00F1E0FC /* spacex-logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 53681C521CC570FC00F1E0FC /* spacex-logo.jpg */; };
 		53681C561CC597D100F1E0FC /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53681C551CC597D100F1E0FC /* WebViewController.m */; };
 		53681C581CC6C8B600F1E0FC /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53681C571CC6C8B500F1E0FC /* WebKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		53681C5B1CC94A2200F1E0FC /* Company.m in Sources */ = {isa = PBXBuildFile; fileRef = 53681C5A1CC94A2200F1E0FC /* Company.m */; };
+		53681C611CC94A4600F1E0FC /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 53681C601CC94A4600F1E0FC /* Product.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +73,10 @@
 		53681C541CC597D100F1E0FC /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		53681C551CC597D100F1E0FC /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		53681C571CC6C8B500F1E0FC /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		53681C591CC94A2200F1E0FC /* Company.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Company.h; sourceTree = "<group>"; };
+		53681C5A1CC94A2200F1E0FC /* Company.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Company.m; sourceTree = "<group>"; };
+		53681C5F1CC94A4600F1E0FC /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Product.h; path = ../Product.h; sourceTree = "<group>"; };
+		53681C601CC94A4600F1E0FC /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Product.m; path = ../Product.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +118,10 @@
 			children = (
 				48A656E318163C1B00746D36 /* CompanyViewController.h */,
 				48A656E418163C1B00746D36 /* CompanyViewController.m */,
+				53681C591CC94A2200F1E0FC /* Company.h */,
+				53681C5A1CC94A2200F1E0FC /* Company.m */,
+				53681C5F1CC94A4600F1E0FC /* Product.h */,
+				53681C601CC94A4600F1E0FC /* Product.m */,
 			);
 			name = ParentViewController;
 			sourceTree = "<group>";
@@ -307,7 +317,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53681C611CC94A4600F1E0FC /* Product.m in Sources */,
 				48A656E618163C1B00746D36 /* CompanyViewController.m in Sources */,
+				53681C5B1CC94A2200F1E0FC /* Company.m in Sources */,
 				53681C561CC597D100F1E0FC /* WebViewController.m in Sources */,
 				48A656C518163BF200746D36 /* NavControllerAppDelegate.m in Sources */,
 				48A656C118163BF200746D36 /* main.m in Sources */,

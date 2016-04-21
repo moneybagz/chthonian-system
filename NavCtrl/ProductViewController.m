@@ -8,6 +8,8 @@
 
 #import "ProductViewController.h"
 #import "WebViewController.h"
+#import "Company.h"
+#import "Product.h"
 
 @interface ProductViewController ()
 
@@ -73,18 +75,20 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     // Configure the cell...
-    cell.textLabel.text = [self.products objectAtIndex:[indexPath row]];
+    //cell.textLabel.text = [self.products objectAtIndex:[indexPath row]];
     
+    Product *product = [self.products objectAtIndex:[indexPath row]];
+    cell.textLabel.text = product.productName;
     
-//    if ([self.title  isEqualToString:@"Apple mobile devices"]) {
-//        [[cell imageView] setImage: [UIImage imageNamed:@"apple.gif"]];
-//    } else if ([self.title  isEqualToString:@"Samsung mobile devices"]) {
-//        [[cell imageView] setImage: [UIImage imageNamed:@"samsung.gif"]];
-//    } else if ([self.title  isEqualToString:@"Bill's cheese factory"]) {
-//        cell.imageView.image = [UIImage imageNamed:@"cheese.png"];
-//    } else if ([self.title  isEqualToString:@"SpaceX"]) {
-//        cell.imageView.image = [UIImage imageNamed:@"spacex-logo.jpg"];
-//    }
+    if ([self.title  isEqualToString:@"Apple mobile devices"]) {
+        [[cell imageView] setImage: [UIImage imageNamed:@"apple.gif"]];
+    } else if ([self.title  isEqualToString:@"Samsung mobile devices"]) {
+        [[cell imageView] setImage: [UIImage imageNamed:@"samsung.gif"]];
+    } else if ([self.title  isEqualToString:@"Bill's cheese factory"]) {
+        cell.imageView.image = [UIImage imageNamed:@"cheese.png"];
+    } else if ([self.title  isEqualToString:@"SpaceX"]) {
+        cell.imageView.image = [UIImage imageNamed:@"spacex-logo.jpg"];
+    }
     
     
     
@@ -95,7 +99,7 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.products removeObjectAtIndex:indexPath.row];
-    [self.urls removeObjectAtIndex:indexPath.row];
+//    [self.urls removeObjectAtIndex:indexPath.row];
     
     
     
@@ -111,7 +115,7 @@
     
     
     NSString * product = [self.products objectAtIndex:fromIndexPath.row];
-    NSString * url = [self.urls objectAtIndex:fromIndexPath.row];
+//    NSString * url = [self.urls objectAtIndex:fromIndexPath.row];
     
     NSInteger fromIndex = fromIndexPath.row;
     NSInteger toIndex = toIndexPath.row;
@@ -123,8 +127,8 @@
     [self.products removeObjectAtIndex:fromIndex];
     [self.products insertObject:product atIndex:toIndex];
     
-    [self.urls removeObjectAtIndex:fromIndex];
-    [self.urls insertObject:url atIndex:toIndex];
+//    [self.urls removeObjectAtIndex:fromIndex];
+//    [self.urls insertObject:url atIndex:toIndex];
     
     [tableView reloadData];
 }
@@ -178,7 +182,12 @@
     // Navigation logic may go here, for example:
     // Create the next view controller.
     WebViewController *wvc = [[WebViewController alloc] initWithNibName:nil bundle:nil];
-    wvc.url = self.urls[indexPath.row];
+    
+    //wvc.url = self.urls[indexPath.row];
+    
+    Product *product = self.products[indexPath.row];
+    
+    wvc.url = product.productUrl;
 
 
     // Pass the selected object to the new view controller.
