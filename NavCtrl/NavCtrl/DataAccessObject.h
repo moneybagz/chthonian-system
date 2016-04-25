@@ -20,5 +20,6 @@
 -(void)createProductWithName:(NSString *)productName
                   productURL:(NSString *)productURL
        companyNameForProduct:(NSString *)companyNameForProduct;
+-(void)createCompanyAndProducts;
 
 @end
