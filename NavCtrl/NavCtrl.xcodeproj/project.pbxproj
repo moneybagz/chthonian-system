@@ -31,6 +31,7 @@
 		53681C581CC6C8B600F1E0FC /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53681C571CC6C8B500F1E0FC /* WebKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		53681C5B1CC94A2200F1E0FC /* Company.m in Sources */ = {isa = PBXBuildFile; fileRef = 53681C5A1CC94A2200F1E0FC /* Company.m */; };
 		53681C611CC94A4600F1E0FC /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 53681C601CC94A4600F1E0FC /* Product.m */; };
+		53681C641CC98B9400F1E0FC /* DataAccessObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 53681C631CC98B9400F1E0FC /* DataAccessObject.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,8 @@
 		53681C5A1CC94A2200F1E0FC /* Company.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Company.m; sourceTree = "<group>"; };
 		53681C5F1CC94A4600F1E0FC /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Product.h; path = ../Product.h; sourceTree = "<group>"; };
 		53681C601CC94A4600F1E0FC /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Product.m; path = ../Product.m; sourceTree = "<group>"; };
+		53681C621CC98B9400F1E0FC /* DataAccessObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataAccessObject.h; sourceTree = "<group>"; };
+		53681C631CC98B9400F1E0FC /* DataAccessObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataAccessObject.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +121,8 @@
 			children = (
 				48A656E318163C1B00746D36 /* CompanyViewController.h */,
 				48A656E418163C1B00746D36 /* CompanyViewController.m */,
+				53681C621CC98B9400F1E0FC /* DataAccessObject.h */,
+				53681C631CC98B9400F1E0FC /* DataAccessObject.m */,
 				53681C591CC94A2200F1E0FC /* Company.h */,
 				53681C5A1CC94A2200F1E0FC /* Company.m */,
 				53681C5F1CC94A4600F1E0FC /* Product.h */,
@@ -317,6 +322,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53681C641CC98B9400F1E0FC /* DataAccessObject.m in Sources */,
 				53681C611CC94A4600F1E0FC /* Product.m in Sources */,
 				48A656E618163C1B00746D36 /* CompanyViewController.m in Sources */,
 				53681C5B1CC94A2200F1E0FC /* Company.m in Sources */,

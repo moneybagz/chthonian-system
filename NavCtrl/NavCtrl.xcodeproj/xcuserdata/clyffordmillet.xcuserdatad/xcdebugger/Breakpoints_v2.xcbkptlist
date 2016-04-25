@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CompanyViewController.m"
-            timestampString = "482964435.680967"
+            timestampString = "483297856.158007"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "164"
-            endingLineNumber = "164"
+            startingLineNumber = "161"
+            endingLineNumber = "161"
             landmarkName = "-viewDidLoad"
             landmarkType = "5">
          </BreakpointContent>

@@ -10,7 +10,7 @@
 
 @interface Product : NSObject
 
-@property (retain) NSString *productName;
-@property (retain) NSString *productUrl;
+@property (nonatomic, retain) NSString *productName;
+@property (nonatomic, retain) NSString *productUrl;
 
 @end

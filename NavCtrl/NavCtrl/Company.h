@@ -10,7 +10,9 @@
 
 @interface Company : NSObject
 
-@property (retain) NSString *companyName;
-@property (retain) NSMutableArray *products;
+@property (nonatomic, retain) NSString *companyName;
+@property (nonatomic, retain) NSMutableArray *products;
+
+-(instancetype)initWithCompanyName:(NSString *)name;
 
 @end

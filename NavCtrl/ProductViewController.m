@@ -115,20 +115,17 @@
     
     
     NSString * product = [self.products objectAtIndex:fromIndexPath.row];
-//    NSString * url = [self.urls objectAtIndex:fromIndexPath.row];
     
     NSInteger fromIndex = fromIndexPath.row;
     NSInteger toIndex = toIndexPath.row;
     
-    if (fromIndex < toIndex) {
-        toIndex--; // Optional
-    }
+//    if (fromIndex < toIndex) {
+//        toIndex--; // Optional
+//    }
     
     [self.products removeObjectAtIndex:fromIndex];
     [self.products insertObject:product atIndex:toIndex];
     
-//    [self.urls removeObjectAtIndex:fromIndex];
-//    [self.urls insertObject:url atIndex:toIndex];
     
     [tableView reloadData];
 }

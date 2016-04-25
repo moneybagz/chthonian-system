@@ -10,4 +10,21 @@
 
 @implementation Company
 
+-(instancetype)initWithCompanyName:(NSString *)name
+{
+    self = [super init];
+    
+    if (self) {
+        _companyName = name;
+        
+        _products = [[NSMutableArray alloc]init];
+    }
+    
+    
+    return self;
+}
+
+
+
+
 @end

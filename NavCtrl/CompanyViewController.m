@@ -10,6 +10,7 @@
 #import "ProductViewController.h"
 #import "Company.h"
 #import "Product.h"
+#import "DataAccessObject.h"
 
 @interface CompanyViewController ()
 
@@ -38,126 +39,122 @@
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     
+    [[DataAccessObject sharedCompanies]createCompany:@"Bill's cheese factory"];
+    [[DataAccessObject sharedCompanies]createProductWithName:@"Swiss" productURL:@"http://www.cheese.com/swiss/" companyNameForProduct:@"Bill's cheese factory"];
+    [[DataAccessObject sharedCompanies]createProductWithName:@"Gruyere" productURL:@"http://www.cheese.com/gruyere/" companyNameForProduct:@"Bill's cheese factory"];
+    [[DataAccessObject sharedCompanies]createProductWithName:@"Roquefort" productURL:@"http://www.cheese.com/roquefort/" companyNameForProduct:@"Bill's cheese factory"];
+    
+    [[DataAccessObject sharedCompanies]createCompany:@"Apple mobile devices"];
+    [[DataAccessObject sharedCompanies]createProductWithName:@"iPad" productURL:@"http://www.apple.com/ipad/" companyNameForProduct:@"Apple mobile devices"];
+    [[DataAccessObject sharedCompanies]createProductWithName:@"iPod" productURL:@"http://www.apple.com/ipod/" companyNameForProduct:@"Apple mobile devices"];
+    [[DataAccessObject sharedCompanies]createProductWithName:@"iPhone" productURL:@"http://www.apple.com/iphone/" companyNameForProduct:@"Apple mobile devices"];
+    
+    [[DataAccessObject sharedCompanies]createCompany:@"Samsung mobile devices"];
+    [[DataAccessObject sharedCompanies]createProductWithName:@"Galaxy S4" productURL:@"http://www.samsung.com/us/mobile/cell-phones/SCH-I545ZKPVZW" companyNameForProduct:@"Samsung mobile devices"];
+    [[DataAccessObject sharedCompanies]createProductWithName:@"Galaxy Note" productURL:@"http://www.samsung.com/us/mobile/cell-phones/SM-N920AZKAATT" companyNameForProduct:@"Samsung mobile devices"];
+    [[DataAccessObject sharedCompanies]createProductWithName:@"Galaxy Tab" productURL:@"http://www.samsung.com/us/mobile/galaxy-tab/SM-T230NZWAXAR" companyNameForProduct:@"Samsung mobile devices"];
+    
+    [[DataAccessObject sharedCompanies]createCompany:@"SpaceX"];
+    [[DataAccessObject sharedCompanies]createProductWithName:@"Falcon 9 Rocket" productURL:@"http://www.spacex.com/falcon9" companyNameForProduct:@"SpaceX"];
+    [[DataAccessObject sharedCompanies]createProductWithName:@"Dragon Capsule" productURL:@"http://www.spacex.com/dragon" companyNameForProduct:@"SpaceX"];
+    [[DataAccessObject sharedCompanies]createProductWithName:@"Falcon Heavy" productURL:@"http://www.spacex.com/falcon-heavy" companyNameForProduct:@"SpaceX"];
+    
+    
+    self.companyList = [[DataAccessObject sharedCompanies]allCompanies];
+    
+    
+    
 
-    //Create product objects
-    Product *ipad = [[Product alloc]init];
-    ipad.productName =@"iPad";
-    ipad.productUrl =@"http://www.apple.com/ipad/";
-    Product *ipod = [[Product alloc]init];
-    ipod.productName =@"iPod";
-    ipod.productUrl =@"http://www.apple.com/ipod/";
-    Product *iphone = [[Product alloc]init];
-    iphone.productName =@"iPhone";
-    iphone.productUrl =@"http://www.apple.com/iphone/";
-    
-    Product *galaxyS4 = [[Product alloc]init];
-    galaxyS4.productName =@"Galaxy S4";
-    galaxyS4.productUrl =@"http://www.samsung.com/us/mobile/cell-phones/SCH-I545ZKPVZW";
-    Product *galaxyNote = [[Product alloc]init];
-    galaxyNote.productName =@"Galaxy Note";
-    galaxyNote.productUrl =@"http://www.samsung.com/us/mobile/cell-phones/SM-N920AZKAATT";
-    Product *galaxyTab = [[Product alloc]init];
-    galaxyTab.productName =@"Galaxy Tab";
-    galaxyTab.productUrl =@"http://www.samsung.com/us/mobile/galaxy-tab/SM-T230NZWAXAR";
-    
-    Product *falcon9rocket = [[Product alloc]init];
-    falcon9rocket.productName =@"Falcon 9 Rocket";
-    falcon9rocket.productUrl =@"http://www.spacex.com/falcon9";
-    Product *dragonCapsule = [[Product alloc]init];
-    dragonCapsule.productName =@"Dragon Capsule";
-    dragonCapsule.productUrl =@"http://www.spacex.com/dragon";
-    Product *falconHeavy = [[Product alloc]init];
-    falconHeavy.productName =@"Falcon Heavy";
-    falconHeavy.productUrl =@"http://www.spacex.com/falcon-heavy";
-    
-    Product *swiss = [[Product alloc]init];
-    swiss.productName =@"Swiss";
-    swiss.productUrl =@"http://www.cheese.com/swiss/";
-    Product *gruyere = [[Product alloc]init];
-    gruyere.productName =@"Gruyere";
-    gruyere.productUrl =@"http://www.cheese.com/gruyere/";
-    Product *roqueforte = [[Product alloc]init];
-    roqueforte.productName =@"Roqueforte";
-    roqueforte.productUrl =@"http://www.cheese.com/roquefort/";
-    
-    
-    //Create company objects and fill them with product objects
-    Company *appleMobileDevices = [[Company alloc]init];
-    appleMobileDevices.companyName =@"Apple mobile devices";
-    appleMobileDevices.products = [[NSMutableArray alloc]init];
-    [appleMobileDevices.products addObject:ipad];
-    [appleMobileDevices.products addObject:ipod];
-    [appleMobileDevices.products addObject:iphone];
-    
-    Company *samsungMobileDevices = [[Company alloc]init];
-    samsungMobileDevices.companyName =@"Samsung mobile devices";
-    samsungMobileDevices.products = [[NSMutableArray alloc]init];
-    [samsungMobileDevices.products addObject:galaxyS4];
-    [samsungMobileDevices.products addObject:galaxyNote];
-    [samsungMobileDevices.products addObject:galaxyTab];
-    
-    Company *spaceX = [[Company alloc]init];
-    spaceX.companyName =@"SpaceX";
-    spaceX.products = [[NSMutableArray alloc]init];
-    [spaceX.products addObject:falcon9rocket];
-    [spaceX.products addObject:dragonCapsule];
-    [spaceX.products addObject:falconHeavy];
-    
-    Company *billsCheeseFactory = [[Company alloc]init];
-    billsCheeseFactory.companyName =@"Bill's cheese factory";
-    billsCheeseFactory.products = [[NSMutableArray alloc]init];
-    [billsCheeseFactory.products addObject:swiss];
-    [billsCheeseFactory.products addObject:gruyere];
-    [billsCheeseFactory.products addObject:roqueforte];
-    
+    NSArray *kompanys = [[DataAccessObject sharedCompanies]allCompanies];
+    Company *kompany = kompanys[0];
+    NSLog(@"%@", kompany.companyName);
+    NSArray *productz = kompany.products;
+    NSLog(@"%@", productz[0]);
+//    for (Product *element in productz){
+//        NSLog(@"%@", element);
+//    }
    
-    self.companyList = [[NSMutableArray alloc] init];
-    //Add companies to CompanyViewController's company array
-    [self.companyList addObject:appleMobileDevices];
-    [self.companyList addObject:samsungMobileDevices];
-    [self.companyList addObject:spaceX];
-    [self.companyList addObject:billsCheeseFactory];
-    
-
     
     
-//    //Create an array of product arrays to help index into ProductViewController
-//    NSMutableArray *AppleMobileDevices = [NSMutableArray arrayWithObjects:@"iPad", @"iPod Touch",@"iPhone", nil];
-//    NSMutableArray *SamsungMobileDevices = [NSMutableArray arrayWithObjects:@"Galaxy S4", @"Galaxy Note", @"Galaxy Tab", nil];
-//    NSMutableArray *SpaceX = [NSMutableArray arrayWithObjects:@"Falcon 9 Rocket", @"Dragon Capsule", @"Falcon Heavy", nil];
-//    NSMutableArray *BillsCheeseFactory = [NSMutableArray arrayWithObjects:@"Swiss", @"Gruyere", @"Roqueforte", nil];
+    //Create product objects
+//    Product *ipad = [[Product alloc]init];
+//    ipad.productName =@"iPad";
+//    ipad.productUrl =@"http://www.apple.com/ipad/";
+//    Product *ipod = [[Product alloc]init];
+//    ipod.productName =@"iPod";
+//    ipod.productUrl =@"http://www.apple.com/ipod/";
+//    Product *iphone = [[Product alloc]init];
+//    iphone.productName =@"iPhone";
+//    iphone.productUrl =@"http://www.apple.com/iphone/";
 //    
-//    self.productLists = [[NSMutableArray alloc]init];
+//    Product *galaxyS4 = [[Product alloc]init];
+//    galaxyS4.productName =@"Galaxy S4";
+//    galaxyS4.productUrl =@"http://www.samsung.com/us/mobile/cell-phones/SCH-I545ZKPVZW";
+//    Product *galaxyNote = [[Product alloc]init];
+//    galaxyNote.productName =@"Galaxy Note";
+//    galaxyNote.productUrl =@"http://www.samsung.com/us/mobile/cell-phones/SM-N920AZKAATT";
+//    Product *galaxyTab = [[Product alloc]init];
+//    galaxyTab.productName =@"Galaxy Tab";
+//    galaxyTab.productUrl =@"http://www.samsung.com/us/mobile/galaxy-tab/SM-T230NZWAXAR";
 //    
-//    [self.productLists addObject:AppleMobileDevices];
-//    [self.productLists addObject:SamsungMobileDevices];
-//    [self.productLists addObject:SpaceX];
-//    [self.productLists addObject:BillsCheeseFactory];
-//
-//    //create a company array to display cell info
+//    Product *falcon9rocket = [[Product alloc]init];
+//    falcon9rocket.productName =@"Falcon 9 Rocket";
+//    falcon9rocket.productUrl =@"http://www.spacex.com/falcon9";
+//    Product *dragonCapsule = [[Product alloc]init];
+//    dragonCapsule.productName =@"Dragon Capsule";
+//    dragonCapsule.productUrl =@"http://www.spacex.com/dragon";
+//    Product *falconHeavy = [[Product alloc]init];
+//    falconHeavy.productName =@"Falcon Heavy";
+//    falconHeavy.productUrl =@"http://www.spacex.com/falcon-heavy";
+//    
+//    Product *swiss = [[Product alloc]init];
+//    swiss.productName =@"Swiss";
+//    swiss.productUrl =@"http://www.cheese.com/swiss/";
+//    Product *gruyere = [[Product alloc]init];
+//    gruyere.productName =@"Gruyere";
+//    gruyere.productUrl =@"http://www.cheese.com/gruyere/";
+//    Product *roqueforte = [[Product alloc]init];
+//    roqueforte.productName =@"Roqueforte";
+//    roqueforte.productUrl =@"http://www.cheese.com/roquefort/";
+//    
+//    
+//    //Create company objects and fill them with product objects
+//    Company *appleMobileDevices = [[Company alloc]init];
+//    appleMobileDevices.companyName =@"Apple mobile devices";
+//    appleMobileDevices.products = [[NSMutableArray alloc]init];
+//    [appleMobileDevices.products addObject:ipad];
+//    [appleMobileDevices.products addObject:ipod];
+//    [appleMobileDevices.products addObject:iphone];
+//    
+//    Company *samsungMobileDevices = [[Company alloc]init];
+//    samsungMobileDevices.companyName =@"Samsung mobile devices";
+//    samsungMobileDevices.products = [[NSMutableArray alloc]init];
+//    [samsungMobileDevices.products addObject:galaxyS4];
+//    [samsungMobileDevices.products addObject:galaxyNote];
+//    [samsungMobileDevices.products addObject:galaxyTab];
+//    
+//    Company *spaceX = [[Company alloc]init];
+//    spaceX.companyName =@"SpaceX";
+//    spaceX.products = [[NSMutableArray alloc]init];
+//    [spaceX.products addObject:falcon9rocket];
+//    [spaceX.products addObject:dragonCapsule];
+//    [spaceX.products addObject:falconHeavy];
+//    
+//    Company *billsCheeseFactory = [[Company alloc]init];
+//    billsCheeseFactory.companyName =@"Bill's cheese factory";
+//    billsCheeseFactory.products = [[NSMutableArray alloc]init];
+//    [billsCheeseFactory.products addObject:swiss];
+//    [billsCheeseFactory.products addObject:gruyere];
+//    [billsCheeseFactory.products addObject:roqueforte];
+//    
+//   
 //    self.companyList = [[NSMutableArray alloc] init];
-//    
-//    [self.companyList addObject:@"Apple mobile devices"];
-//    [self.companyList addObject:@"Samsung mobile devices"];
-//    [self.companyList addObject:@"SpaceX"];
-//    [self.companyList addObject:@"Bill's cheese factory"];
-//    
-//    //Create a url array of arrays to give array property to ProductViewController
-//    // which will eventually give url information to WebViewController
-//    NSMutableArray *appleURLs = [NSMutableArray arrayWithObjects:@"http://www.apple.com/ipad/", @"http://www.apple.com/ipod/", @"http://www.apple.com/iphone/", nil];
-//    NSMutableArray *samsungURLs = [NSMutableArray arrayWithObjects:@"http://www.samsung.com/us/mobile/cell-phones/SCH-I545ZKPVZW", @"http://www.samsung.com/us/mobile/cell-phones/SM-N920AZKAATT", @"http://www.samsung.com/us/mobile/galaxy-tab/SM-T230NZWAXAR", nil];
-//    NSMutableArray *spacexURLs = [NSMutableArray arrayWithObjects:@"http://www.spacex.com/falcon9", @"http://www.spacex.com/dragon", @"http://www.spacex.com/falcon-heavy", nil];
-//    NSMutableArray *cheeseURLs = [NSMutableArray arrayWithObjects:@"http://www.cheese.com/swiss/", @"http://www.cheese.com/gruyere/", @"http://www.cheese.com/roquefort/", nil];
-//    
-//    self.urlLists = [[NSMutableArray alloc]init];
-//    
-//    [self.urlLists addObject:appleURLs];
-//    [self.urlLists addObject:samsungURLs];
-//    [self.urlLists addObject:spacexURLs];
-//    [self.urlLists addObject:cheeseURLs];
-
-
-
+//    //Add companies to CompanyViewController's company array
+//    [self.companyList addObject:appleMobileDevices];
+//    [self.companyList addObject:samsungMobileDevices];
+//    [self.companyList addObject:spaceX];
+//    [self.companyList addObject:billsCheeseFactory];
+    
 
     
 
@@ -187,7 +184,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [self.companyList count];
+    return [[[DataAccessObject sharedCompanies]allCompanies]count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -203,9 +200,13 @@
 
 
     Company *company = [self.companyList objectAtIndex:[indexPath row]];
+//
+//    cell.textLabel.text = company.companyName;
     
-    cell.textLabel.text = company.companyName;
-    
+//    NSArray *companies = [[DataAccessObject sharedCompanies]allCompanies];
+//    Company *company = [companies objectAtIndex:indexPath.row];
+        cell.textLabel.text = company.companyName;
+
     
     if ([cell.textLabel.text  isEqual:@"SpaceX"]) {
         [[cell imageView] setImage: [UIImage imageNamed:@"spacex-logo.jpg"]];
@@ -257,31 +258,22 @@
     [company retain];
     
     
-//    NSMutableArray *productList = [self.productLists objectAtIndex:fromIndexPath.row];
-//    NSMutableArray *urlList = [self.urlLists objectAtIndex:fromIndexPath.row];
-//    [productList retain];
-//    [urlList retain];
     
     NSInteger fromIndex = fromIndexPath.row;
     NSInteger toIndex = toIndexPath.row;
     
-    if (fromIndex < toIndex) {
-        toIndex--; // Optional
-    }
+//    if (fromIndex < toIndex) {
+//        toIndex--; // Optional
+//    }
     
     
     [self.companyList removeObjectAtIndex:fromIndex];
     [self.companyList insertObject:company atIndex:toIndex];
     
-//    [self.productLists removeObjectAtIndex:fromIndex];
-//    [self.productLists insertObject:productList atIndex:toIndex];
-//    
-//    [self.urlLists removeObjectAtIndex:fromIndex];
-//    [self.urlLists insertObject:urlList atIndex:toIndex];
+
     
     [company release];
-//    [productList release];
-//    [urlList release];
+
 
     
     [tableView reloadData];
@@ -336,12 +328,17 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 
+//    NSArray *companies = [[DataAccessObject sharedCompanies]allCompanies];
+//    Company *company = [companies objectAtIndex:indexPath.row];
+//    
+//    self.productViewController.title = company.companyName;
+//    self.productViewController.products = company.products;
+    
+    
     Company *company = self.companyList[indexPath.row];
     
     
     self.productViewController.title = company.companyName;
-    //self.productViewController.urls = self.urlLists[indexPath.row];
-    //self.productViewController.products = [[NSMutableArray alloc]init];
     self.productViewController.products = company.products;
     
     [self.navigationController

@@ -13,8 +13,8 @@
 @interface CompanyViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, retain) NSMutableArray *companyList;
-@property (nonatomic, retain) NSMutableArray *productLists;
-@property (nonatomic, retain) NSMutableArray *urlLists;
+//@property (nonatomic, retain) NSMutableArray *productLists;
+//@property (nonatomic, retain) NSMutableArray *urlLists;
 
 
 @property (nonatomic, retain) IBOutlet  ProductViewController * productViewController;

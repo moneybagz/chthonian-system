@@ -10,7 +10,7 @@
 
 @interface ProductViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, retain) NSMutableArray *products;
-@property (nonatomic, retain) NSMutableArray *urls;
+//@property (nonatomic, retain) NSMutableArray *urls;
 
 
 @end
