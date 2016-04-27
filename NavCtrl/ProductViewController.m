@@ -10,6 +10,7 @@
 #import "WebViewController.h"
 #import "Company.h"
 #import "Product.h"
+#import "ProductFormViewController.h"
 
 @interface ProductViewController ()
 
@@ -35,6 +36,84 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+//    UIBarButtonItem *addBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewProductForm:)];
+//    self.navigationItem.leftBarButtonItem = addBtn;
+    
+    // create a toolbar where we can place some buttons
+    self.toolbar = [[UIToolbar alloc]
+                    initWithFrame:CGRectMake(0, 0, 100, 45)];
+    [self.toolbar setBarStyle: UIBarStyleDefault];
+    
+    // create an array for the buttons
+    NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
+    
+    // create a standard save button
+    //    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc]
+    //                                   initWithBarButtonSystemItem:UIBarButtonSystemItemSave
+    //                                   target:self
+    //                                   action:@selector(saveAction:)];
+    //    saveButton.style = UIBarButtonItemStyleBordered;
+    //    [buttons addObject:saveButton];
+    //    [saveButton release];
+    
+    UIBarButtonItem *addBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewProductForm:)];
+    [buttons addObject:addBtn];
+    [addBtn release];
+    
+    // create a spacer between the buttons
+    UIBarButtonItem *spacer = [[UIBarButtonItem alloc]
+                               initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                               target:nil
+                               action:nil];
+    [buttons addObject:spacer];
+    [spacer release];
+    
+    // create a standard delete button with the trash icon
+    UIBarButtonItem *editBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPlease)];
+    [buttons addObject:editBtn];
+    [editBtn release];
+    
+    
+    
+    // put the buttons in the toolbar and release them
+    [self.toolbar setItems:buttons animated:NO];
+    [buttons release];
+    
+    // place the toolbar into the navigation bar
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                              initWithCustomView:self.toolbar];
+    [self.toolbar release];
+}
+
+-(void)editPlease
+{
+    [self.tableView setEditing:YES animated:YES];
+    
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc ] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
+    
+    
+    self.navigationItem.rightBarButtonItem = doneButton;
+}
+
+-(void)done
+{
+    [self.tableView setEditing:NO animated:YES];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                              initWithCustomView:self.toolbar];
+    
+}
+
+-(IBAction)addNewProductForm:(id)sender
+{
+    if (!self.productFormViewController) {
+        self.productFormViewController = [[ProductFormViewController alloc]init];
+    }
+    self.productFormViewController.productViewController = self;
+    [self.navigationController
+     pushViewController:self.productFormViewController
+     animated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

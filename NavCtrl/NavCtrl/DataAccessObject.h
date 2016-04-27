@@ -21,5 +21,6 @@
                   productURL:(NSString *)productURL
        companyNameForProduct:(NSString *)companyNameForProduct;
 -(void)createCompanyAndProducts;
+-(void)addToDAO:(Company *)company;
 
 @end

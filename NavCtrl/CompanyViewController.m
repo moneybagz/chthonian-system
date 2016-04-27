@@ -11,6 +11,7 @@
 #import "Company.h"
 #import "Product.h"
 #import "DataAccessObject.h"
+#import "CompanyFormViewController.h"
 
 @interface CompanyViewController ()
 
@@ -36,7 +37,9 @@
      self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+//    self.navigationItem.rightBarButtonItem = self.editButtonItem;
+//    UIBarButtonItem *addBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewCompanyForm:)];
+//    self.navigationItem.leftBarButtonItem = addBtn;
     
     
     [[DataAccessObject sharedCompanies]createCompanyAndProducts];
@@ -78,14 +81,116 @@
 
     
 
+//    Company *shithouse = [[Company alloc]init];
+//    shithouse.companyName =@"SHIT HOUSE";
+//    self.kompany = shithouse;
+//    [self addNewCompany];
+    
+    if (!self.kompany) {
+        self.kompany = [[Company alloc]init];
+    }
     
 
-    
+ 
     
     self.title = @"Mobile device makers";
     
     
+    self.toolbar = [[UIToolbar alloc]
+                          initWithFrame:CGRectMake(0, 0, 100, 45)];
+    [self.toolbar setBarStyle: UIBarStyleDefault];
     
+    // create an array for the buttons
+    NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
+    
+    // create a standard save button
+    //    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc]
+    //                                   initWithBarButtonSystemItem:UIBarButtonSystemItemSave
+    //                                   target:self
+    //                                   action:@selector(saveAction:)];
+    //    saveButton.style = UIBarButtonItemStyleBordered;
+    //    [buttons addObject:saveButton];
+    //    [saveButton release];
+    
+    UIBarButtonItem *addBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewCompanyForm:)];
+    [buttons addObject:addBtn];
+    [addBtn release];
+    
+    // create a spacer between the buttons
+    UIBarButtonItem *spacer = [[UIBarButtonItem alloc]
+                               initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                               target:nil
+                               action:nil];
+    [buttons addObject:spacer];
+    [spacer release];
+    
+    // create a standard delete button with the trash icon
+    UIBarButtonItem *editBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPlease)];
+    [buttons addObject:editBtn];
+    [editBtn release];
+    
+    
+    
+    // put the buttons in the toolbar and release them
+    [self.toolbar setItems:buttons animated:NO];
+    [buttons release];
+    
+    // place the toolbar into the navigation bar
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                              initWithCustomView:self.toolbar];
+    [self.toolbar release];
+}
+
+//-(void)setEditing:(BOOL)editing animated:(BOOL)animated {
+//    
+//    [super setEditing:editing animated:animated];
+//    
+//    if(editing) {
+//        //Do something for edit mode
+//    }
+//    
+//    else {
+//        //Do something for non-edit mode
+//    }
+//    
+//}
+
+-(void)editPlease
+{
+    [self.tableView setEditing:YES animated:YES];
+    
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc ] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
+    
+    
+    self.navigationItem.rightBarButtonItem = doneButton;
+}
+
+-(void)done
+{
+    [self.tableView setEditing:NO animated:YES];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                              initWithCustomView:self.toolbar];
+    
+}
+
+
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.tableView reloadData];
+    
+//    if (self.kompany.companyName != nil && ![self.kompany.companyName isEqualToString:@""]) {
+//        for (Company *element in [[DataAccessObject sharedCompanies]allCompanies]){
+//            if (element.companyName != self.kompany.companyName) {
+//                NSLog(@"%@", self.kompany.companyName);
+//
+//                [self addNewCompany];
+//            }
+//        }
+//    }
     
 }
 
@@ -94,6 +199,30 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+-(IBAction)addNewCompanyForm:(id)sender
+{
+    if (!self.companyFormViewController) {
+        _companyFormViewController = [[CompanyFormViewController alloc]init];
+    }
+    
+    [self.navigationController
+     pushViewController:self.companyFormViewController
+     animated:YES];
+}
+
+//-(void)addNewCompany
+//{
+//    Company *company = self.kompany;
+//    
+//    [[DataAccessObject sharedCompanies]addToDAO:company];
+//    
+//    NSInteger lastRow = [[[DataAccessObject sharedCompanies]allCompanies] indexOfObject:company];
+//    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:lastRow inSection:0];
+//    
+//    [self.tableView insertRowsAtIndexPaths:@[indexPath]
+//                          withRowAnimation:UITableViewRowAnimationTop];
+//}
 
 #pragma mark - Table view data source
 
@@ -204,12 +333,14 @@
 
 
 
+
+
  //Override to support conditional editing of the table view.
-//- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    // Return NO if you do not want the specified item to be editable.
-//    return YES;
-//}
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Return NO if you do not want the specified item to be editable.
+    return YES;
+}
 
 
 

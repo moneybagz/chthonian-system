@@ -60,6 +60,11 @@
     [self.allCompanies addObject:company];
 }
 
+-(void)addToDAO:(Company *)company
+{
+    [self.allCompanies addObject:company];
+}
+
 -(void)createProductWithName:(NSString *)productName
                   productURL:(NSString *)productURL
        companyNameForProduct:(NSString *)companyNameForProduct
