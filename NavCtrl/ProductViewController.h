@@ -8,13 +8,17 @@
 
 #import <UIKit/UIKit.h>
 @class ProductFormViewController;
+@class EditFormViewController;
+
 
 @interface ProductViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, retain) NSMutableArray *products;
-//@property (nonatomic, retain) NSMutableArray *urls;
 
 @property (nonatomic, retain) IBOutlet ProductFormViewController *productFormViewController;
+@property (nonatomic, retain) IBOutlet EditFormViewController *editFormViewController;
+
 @property (nonatomic, retain) UIToolbar *toolbar;
+@property (nonatomic) BOOL editor;
 
 
 @end

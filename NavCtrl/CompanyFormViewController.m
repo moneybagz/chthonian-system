@@ -46,34 +46,11 @@
     
     [self.view endEditing:YES];
     
-//    if (![self.companyTextfield.text isEqualToString:@""]) {
-//        
-//        if (!_companyViewController) {
-//            _companyViewController = [[CompanyViewController alloc]init];
-//            _companyViewController.kompany = [[Company alloc]init];
-//        }
-//        
-//        self.companyViewController.kompany.companyName = self.companyTextfield.text;
-//        
-//        NSLog(@"%@", self.companyTextfield.text);
-//
-//        NSLog(@"%@", self.companyViewController.kompany.companyName);
-//        
-//        
-//        
-//    }
+
     
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (void)dealloc {
     [_companyTextfield release];

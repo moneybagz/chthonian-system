@@ -11,6 +11,7 @@
 #import "Company.h"
 #import "Product.h"
 #import "ProductFormViewController.h"
+#import "EditFormViewController.h"
 
 @interface ProductViewController ()
 
@@ -37,8 +38,7 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
-//    UIBarButtonItem *addBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewProductForm:)];
-//    self.navigationItem.leftBarButtonItem = addBtn;
+
     
     // create a toolbar where we can place some buttons
     self.toolbar = [[UIToolbar alloc]
@@ -48,14 +48,6 @@
     // create an array for the buttons
     NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
     
-    // create a standard save button
-    //    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc]
-    //                                   initWithBarButtonSystemItem:UIBarButtonSystemItemSave
-    //                                   target:self
-    //                                   action:@selector(saveAction:)];
-    //    saveButton.style = UIBarButtonItemStyleBordered;
-    //    [buttons addObject:saveButton];
-    //    [saveButton release];
     
     UIBarButtonItem *addBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewProductForm:)];
     [buttons addObject:addBtn];
@@ -72,6 +64,8 @@
     // create a standard delete button with the trash icon
     UIBarButtonItem *editBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPlease)];
     [buttons addObject:editBtn];
+    self.navigationItem.rightBarButtonItem = editBtn;
+
     [editBtn release];
     
     
@@ -83,26 +77,37 @@
     // place the toolbar into the navigation bar
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
                                               initWithCustomView:self.toolbar];
+    
     [self.toolbar release];
+    
+    
+}
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated
+{
+    [super setEditing:editing animated:animated];
+    
+    if(editing == YES)
+    {
+        // Your code for entering edit mode goes here
+        self.tableView.allowsSelectionDuringEditing = YES;
+        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc ] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
+        self.navigationItem.rightBarButtonItem = doneButton;
+    } else {
+        // Your code for exiting edit mode goes here
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.toolbar];
+    }
 }
 
 -(void)editPlease
 {
     [self.tableView setEditing:YES animated:YES];
-    
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc ] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
-    
-    
-    self.navigationItem.rightBarButtonItem = doneButton;
+    self.editing = YES;
 }
 
 -(void)done
 {
     [self.tableView setEditing:NO animated:YES];
-    
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
-                                              initWithCustomView:self.toolbar];
-    
 }
 
 -(IBAction)addNewProductForm:(id)sender
@@ -110,6 +115,7 @@
     if (!self.productFormViewController) {
         self.productFormViewController = [[ProductFormViewController alloc]init];
     }
+    
     self.productFormViewController.productViewController = self;
     [self.navigationController
      pushViewController:self.productFormViewController
@@ -117,7 +123,10 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    
+    [self.tableView setEditing:NO animated:YES];
+    self.editing = NO;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                              initWithCustomView:self.toolbar];
     [super viewWillAppear:animated];
     
 
@@ -167,6 +176,8 @@
         cell.imageView.image = [UIImage imageNamed:@"cheese.png"];
     } else if ([self.title  isEqualToString:@"SpaceX"]) {
         cell.imageView.image = [UIImage imageNamed:@"spacex-logo.jpg"];
+    } else {
+        [[cell imageView] setImage: [UIImage imageNamed:@"Question-mark.jpg"]];
     }
     
     
@@ -178,7 +189,6 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self.products removeObjectAtIndex:indexPath.row];
-//    [self.urls removeObjectAtIndex:indexPath.row];
     
     
     
@@ -197,10 +207,6 @@
     
     NSInteger fromIndex = fromIndexPath.row;
     NSInteger toIndex = toIndexPath.row;
-    
-//    if (fromIndex < toIndex) {
-//        toIndex--; // Optional
-//    }
     
     [self.products removeObjectAtIndex:fromIndex];
     [self.products insertObject:product atIndex:toIndex];
@@ -257,19 +263,29 @@
 {
     // Navigation logic may go here, for example:
     // Create the next view controller.
-    WebViewController *wvc = [[WebViewController alloc] initWithNibName:nil bundle:nil];
     
-    //wvc.url = self.urls[indexPath.row];
-    
-    Product *product = self.products[indexPath.row];
-    
-    wvc.url = product.productUrl;
-
-
-    // Pass the selected object to the new view controller.
-    
-    // Push the view controller.
-    [self.navigationController pushViewController:wvc animated:YES];
+    if (self.editing == YES) {
+        if (!self.editFormViewController) {
+            self.editFormViewController = [[EditFormViewController alloc]init];
+            self.editFormViewController.productViewController = self;
+        }
+            self.editFormViewController.product = self.products[indexPath.row];
+            [self.navigationController pushViewController:self.editFormViewController animated:YES];
+    } else {
+        WebViewController *wvc = [[WebViewController alloc] initWithNibName:nil bundle:nil];
+        
+        //wvc.url = self.urls[indexPath.row];
+        
+        Product *product = self.products[indexPath.row];
+        
+        wvc.url = product.productUrl;
+        
+        
+        // Pass the selected object to the new view controller.
+        
+        // Push the view controller.
+        [self.navigationController pushViewController:wvc animated:YES];
+    }
 }
  
 

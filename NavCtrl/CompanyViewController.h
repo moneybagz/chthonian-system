@@ -11,17 +11,15 @@
 
 @class ProductViewController;
 @class Company;
+@class EditViewController;
 
 @interface CompanyViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, retain) NSMutableArray *companyList;
-//@property (nonatomic, retain) NSMutableArray *productLists;
-//@property (nonatomic, retain) NSMutableArray *urlLists;
-
-
 @property (nonatomic, retain) IBOutlet  ProductViewController * productViewController;
 @property (nonatomic, retain) IBOutlet  CompanyFormViewController *companyFormViewController;
-@property (nonatomic, retain) Company *kompany;
+@property (nonatomic, retain) IBOutlet  EditViewController *editViewController;
+//@property (nonatomic, retain) Company *kompany;
 @property (nonatomic, retain) UIToolbar *toolbar;
 
 @end

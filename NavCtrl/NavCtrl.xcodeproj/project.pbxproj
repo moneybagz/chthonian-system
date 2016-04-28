@@ -36,6 +36,11 @@
 		53F31D081CD00C2000984E4E /* CompanyFormViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F31D061CD00C2000984E4E /* CompanyFormViewController.xib */; };
 		53F31D101CD12A7900984E4E /* ProductFormViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F31D0E1CD12A7900984E4E /* ProductFormViewController.m */; };
 		53F31D111CD12A7900984E4E /* ProductFormViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F31D0F1CD12A7900984E4E /* ProductFormViewController.xib */; };
+		53F31D151CD1758700984E4E /* EditFormViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F31D131CD1758700984E4E /* EditFormViewController.m */; };
+		53F31D161CD1758700984E4E /* EditFormViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F31D141CD1758700984E4E /* EditFormViewController.xib */; };
+		53F31D1A1CD1E43600984E4E /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F31D181CD1E43600984E4E /* EditViewController.m */; };
+		53F31D1B1CD1E43600984E4E /* EditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F31D191CD1E43600984E4E /* EditViewController.xib */; };
+		53F31D1D1CD27CF300984E4E /* Question-mark.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 53F31D1C1CD27CF300984E4E /* Question-mark.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,6 +95,13 @@
 		53F31D0D1CD12A7900984E4E /* ProductFormViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductFormViewController.h; sourceTree = "<group>"; };
 		53F31D0E1CD12A7900984E4E /* ProductFormViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductFormViewController.m; sourceTree = "<group>"; };
 		53F31D0F1CD12A7900984E4E /* ProductFormViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProductFormViewController.xib; sourceTree = "<group>"; };
+		53F31D121CD1758700984E4E /* EditFormViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditFormViewController.h; sourceTree = "<group>"; };
+		53F31D131CD1758700984E4E /* EditFormViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditFormViewController.m; sourceTree = "<group>"; };
+		53F31D141CD1758700984E4E /* EditFormViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditFormViewController.xib; sourceTree = "<group>"; };
+		53F31D171CD1E43600984E4E /* EditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditViewController.h; sourceTree = "<group>"; };
+		53F31D181CD1E43600984E4E /* EditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditViewController.m; sourceTree = "<group>"; };
+		53F31D191CD1E43600984E4E /* EditViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditViewController.xib; sourceTree = "<group>"; };
+		53F31D1C1CD27CF300984E4E /* Question-mark.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "Question-mark.jpg"; path = "../../../../Downloads/Question-mark.jpg"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +143,9 @@
 			children = (
 				48A656E318163C1B00746D36 /* CompanyViewController.h */,
 				48A656E418163C1B00746D36 /* CompanyViewController.m */,
+				53F31D171CD1E43600984E4E /* EditViewController.h */,
+				53F31D181CD1E43600984E4E /* EditViewController.m */,
+				53F31D191CD1E43600984E4E /* EditViewController.xib */,
 				53F31D041CD00C2000984E4E /* CompanyFormViewController.h */,
 				53F31D051CD00C2000984E4E /* CompanyFormViewController.m */,
 				53F31D061CD00C2000984E4E /* CompanyFormViewController.xib */,
@@ -149,6 +164,9 @@
 			children = (
 				48A656E818163F8700746D36 /* ProductViewController.h */,
 				48A656E918163F8700746D36 /* ProductViewController.m */,
+				53F31D121CD1758700984E4E /* EditFormViewController.h */,
+				53F31D131CD1758700984E4E /* EditFormViewController.m */,
+				53F31D141CD1758700984E4E /* EditFormViewController.xib */,
 				53F31D0D1CD12A7900984E4E /* ProductFormViewController.h */,
 				53F31D0E1CD12A7900984E4E /* ProductFormViewController.m */,
 				53F31D0F1CD12A7900984E4E /* ProductFormViewController.xib */,
@@ -196,6 +214,7 @@
 				483796CC1BCBF7C70062D5AB /* ParentViewController */,
 				483796CD1BCBF7EB0062D5AB /* ProductViewController */,
 				48A656C618163BF200746D36 /* Images.xcassets */,
+				53F31D1C1CD27CF300984E4E /* Question-mark.jpg */,
 				53681C4A1CC56B4400F1E0FC /* samsung.gif */,
 				53681C521CC570FC00F1E0FC /* spacex-logo.jpg */,
 				53681C501CC5709B00F1E0FC /* cheese.png */,
@@ -312,6 +331,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53F31D1B1CD1E43600984E4E /* EditViewController.xib in Resources */,
+				53F31D1D1CD27CF300984E4E /* Question-mark.jpg in Resources */,
 				48A656EE1816468000746D36 /* Sunflower.gif in Resources */,
 				53681C4B1CC56B4400F1E0FC /* samsung.gif in Resources */,
 				48A656E718163C1B00746D36 /* CompanyViewController.xib in Resources */,
@@ -319,6 +340,7 @@
 				53681C531CC570FC00F1E0FC /* spacex-logo.jpg in Resources */,
 				53681C491CC56B3600F1E0FC /* apple.gif in Resources */,
 				53681C511CC5709B00F1E0FC /* cheese.png in Resources */,
+				53F31D161CD1758700984E4E /* EditFormViewController.xib in Resources */,
 				48A656C718163BF200746D36 /* Images.xcassets in Resources */,
 				53F31D111CD12A7900984E4E /* ProductFormViewController.xib in Resources */,
 				53F31D081CD00C2000984E4E /* CompanyFormViewController.xib in Resources */,
@@ -340,9 +362,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53F31D151CD1758700984E4E /* EditFormViewController.m in Sources */,
 				53681C641CC98B9400F1E0FC /* DataAccessObject.m in Sources */,
 				53681C611CC94A4600F1E0FC /* Product.m in Sources */,
 				48A656E618163C1B00746D36 /* CompanyViewController.m in Sources */,
+				53F31D1A1CD1E43600984E4E /* EditViewController.m in Sources */,
 				53681C5B1CC94A2200F1E0FC /* Company.m in Sources */,
 				53F31D101CD12A7900984E4E /* ProductFormViewController.m in Sources */,
 				53681C561CC597D100F1E0FC /* WebViewController.m in Sources */,
