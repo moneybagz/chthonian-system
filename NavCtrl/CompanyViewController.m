@@ -142,13 +142,60 @@
     
     
     
-    // Create the request.
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://finance.yahoo.com/d/quotes.csv?s=AAPL+GOOG+TSLA+WFM&f=a"]];
+//    // Create the request.
+//    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://finance.yahoo.com/d/quotes.csv?s=AAPL+GOOG+TSLA+WFM&f=a"]];
+//    
+////     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.google.com/finance/info?q=NSE:AAPL,SSNLF,TSLA,AHFP.json"]];
+//    
+//    // Create url connection and fire request
+//    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     
-//     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.google.com/finance/info?q=NSE:AAPL,SSNLF,TSLA,AHFP.json"]];
+    // 1
+    NSString *dataUrl = @"http://finance.yahoo.com/d/quotes.csv?s=AAPL+GOOG+TSLA+WFM&f=a";
+    NSURL *url = [NSURL URLWithString:dataUrl];
     
-    // Create url connection and fire request
-    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    // 2
+    NSURLSession *session = [NSURLSession sharedSession];
+                             
+    NSURLSessionTask *task = [session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSLog(@"response == %@", response);
+        [self processData:data];
+    }];
+                             
+//    NSURLSessionDataTask *downloadTask = [[NSURLSession sharedSession] dataTaskWithURL:url      completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+//                                              // 4: Handle response here
+//                                          }];
+    
+    // 3
+    [task resume];
+}
+
+-(void)processData:(NSData *)data
+{
+    NSString* stockString;
+    stockString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+    
+    NSLog(@"%@", stockString);
+    
+    NSArray *stockPrices = [stockString componentsSeparatedByString:@"\n"];
+    
+    self.stockQuotes =@{@"Apple": stockPrices[0],
+                        @"Samsung": stockPrices[1],
+                        @"SpaceX": stockPrices[2],
+                        @"Bill's": stockPrices[3],
+                        };
+    
+    NSLog(@"%@ money", [self.stockQuotes objectForKey:@"Apple"]);
+    
+    ////    self.jsonDictionary = [[NSDictionary alloc]init];
+    ////
+    ////    self.jsonDictionary = [NSJSONSerialization JSONObjectWithData:_responseData
+    ////                                                          options:0
+    ////                                                            error:nil];
+    ////
+    ////    NSLog(@"%@", self.jsonDictionary);
+    
+    [self.tableView reloadData];
 }
 
 
@@ -183,62 +230,62 @@
 #pragma mark - NSURLconnection delegate methods
 
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    // A response has been received, this is where we initialize the instance var you created
-    // so that we can append data to it in the didReceiveData method
-    // Furthermore, this method is called each time there is a redirect so reinitializing it
-    // also serves to clear it
-    NSLog(@"DidReceiveResponse");
-    _responseData = [[NSMutableData alloc] init];
-    
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    // Append the new data to the instance variable you declared
-    NSLog(@"DidReceiveData");
-    [_responseData appendData:data];
-    
-}
-//
-//- (NSCachedURLResponse *)connection:(NSURLConnection *)connection
-//                  willCacheResponse:(NSCachedURLResponse*)cachedResponse {
-//    // Return nil to indicate not necessary to store a cached response for this connection
-//    return nil;
+//- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+//    // A response has been received, this is where we initialize the instance var you created
+//    // so that we can append data to it in the didReceiveData method
+//    // Furthermore, this method is called each time there is a redirect so reinitializing it
+//    // also serves to clear it
+//    NSLog(@"DidReceiveResponse");
+//    _responseData = [[NSMutableData alloc] init];
+//    
 //}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    
-    NSString* stockString;
-    stockString = [[NSString alloc] initWithData:_responseData encoding:NSASCIIStringEncoding];
-    
-    NSLog(@"%@", stockString);
-    
-    NSArray *stockPrices = [stockString componentsSeparatedByString:@"\n"];
-    
-    self.stockQuotes =@{@"Apple": stockPrices[0],
-                        @"Samsung": stockPrices[1],
-                        @"SpaceX": stockPrices[2],
-                        @"Bill's": stockPrices[3],
-                        };
-    
-    NSLog(@"%@ money", [self.stockQuotes objectForKey:@"Apple"]);
-    
-    [self.tableView reloadData];
-    
-    
-//    self.jsonDictionary = [[NSDictionary alloc]init];
+//
+//- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+//    // Append the new data to the instance variable you declared
+//    NSLog(@"DidReceiveData");
+//    [_responseData appendData:data];
 //    
-//    self.jsonDictionary = [NSJSONSerialization JSONObjectWithData:_responseData
-//                                                          options:0
-//                                                            error:nil];
+//}
+////
+////- (NSCachedURLResponse *)connection:(NSURLConnection *)connection
+////                  willCacheResponse:(NSCachedURLResponse*)cachedResponse {
+////    // Return nil to indicate not necessary to store a cached response for this connection
+////    return nil;
+////}
+//
+//- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 //    
-//    NSLog(@"%@", self.jsonDictionary);
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    // The request has failed for some reason!
-    // Check the error var
-}
+//    NSString* stockString;
+//    stockString = [[NSString alloc] initWithData:_responseData encoding:NSASCIIStringEncoding];
+//    
+//    NSLog(@"%@", stockString);
+//    
+//    NSArray *stockPrices = [stockString componentsSeparatedByString:@"\n"];
+//    
+//    self.stockQuotes =@{@"Apple": stockPrices[0],
+//                        @"Samsung": stockPrices[1],
+//                        @"SpaceX": stockPrices[2],
+//                        @"Bill's": stockPrices[3],
+//                        };
+//    
+//    NSLog(@"%@ money", [self.stockQuotes objectForKey:@"Apple"]);
+//    
+//    [self.tableView reloadData];
+//    
+//    
+////    self.jsonDictionary = [[NSDictionary alloc]init];
+////    
+////    self.jsonDictionary = [NSJSONSerialization JSONObjectWithData:_responseData
+////                                                          options:0
+////                                                            error:nil];
+////    
+////    NSLog(@"%@", self.jsonDictionary);
+//}
+//
+//- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+//    // The request has failed for some reason!
+//    // Check the error var
+//}
 
 
 #pragma mark - Table view data source
