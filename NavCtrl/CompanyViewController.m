@@ -144,14 +144,15 @@
     
 //    // Create the request.
 //    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://finance.yahoo.com/d/quotes.csv?s=AAPL+GOOG+TSLA+WFM&f=a"]];
-//    
-////     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.google.com/finance/info?q=NSE:AAPL,SSNLF,TSLA,AHFP.json"]];
-//    
+//
+//     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.google.com/finance/info?q=NSE:AAPL,SSNLF,TSLA,AHFP.json"]];
+//
 //    // Create url connection and fire request
 //    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     
     // 1
-    NSString *dataUrl = @"http://finance.yahoo.com/d/quotes.csv?s=AAPL+GOOG+TSLA+WFM&f=a";
+//    NSString *dataUrl2 = @"http://www.google.com/finance/info?q=NSE:TSLA,AAPL";
+   NSString *dataUrl = @"http://finance.yahoo.com/d/quotes.csv?s=AAPL+GOOG+TSLA+WFM&f=a";
     NSURL *url = [NSURL URLWithString:dataUrl];
     
     // 2
@@ -168,6 +169,8 @@
     
     // 3
     [task resume];
+    [self.tableView reloadData];
+
 }
 
 -(void)processData:(NSData *)data
@@ -186,16 +189,41 @@
                         };
     
     NSLog(@"%@ money", [self.stockQuotes objectForKey:@"Apple"]);
+    NSLog(@"%@ money", [self.stockQuotes objectForKey:@"Samsung"]);
+
     
-    ////    self.jsonDictionary = [[NSDictionary alloc]init];
-    ////
-    ////    self.jsonDictionary = [NSJSONSerialization JSONObjectWithData:_responseData
-    ////                                                          options:0
-    ////                                                            error:nil];
-    ////
-    ////    NSLog(@"%@", self.jsonDictionary);
+    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+
     
-    [self.tableView reloadData];
+    
+                             //GETTING DATA USING JSON TO NSDICTIONARY
+    
+    
+    
+//    NSString* stockString2;
+//    stockString2 = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+//    
+//    stockString2 = [stockString2 substringFromIndex:3];
+//    
+//    NSLog(@"%@", stockString2);
+//    
+//    //can check what the object is from the data using debugger using type ID
+//    NSData *data2 = [stockString2 dataUsingEncoding:NSUTF8StringEncoding];
+//    id rtn =  [NSJSONSerialization JSONObjectWithData:data2 options:0 error:nil];
+//
+//
+//    
+//    NSError *error;
+//
+//    
+//    self.dictionaryArray = [NSJSONSerialization JSONObjectWithData:data2 options:0 error:&error];
+//    
+//    self.jsonDictionary = self.dictionaryArray[0];
+//    
+//    NSLog(@"dictionary = %@", self.jsonDictionary);
+//    NSLog(@"%@", [self.jsonDictionary objectForKey:@"l_cur"]);
+    
+    
 }
 
 
@@ -219,8 +247,6 @@
         _companyFormViewController = [[CompanyFormViewController alloc]init];
     }
     
-    NSLog(@"%@ money2222", [self.stockQuotes objectForKey:@"Apple"]);
-
     
     [self.navigationController
      pushViewController:self.companyFormViewController
