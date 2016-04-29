@@ -40,7 +40,7 @@
 		53F31D161CD1758700984E4E /* EditFormViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F31D141CD1758700984E4E /* EditFormViewController.xib */; };
 		53F31D1A1CD1E43600984E4E /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F31D181CD1E43600984E4E /* EditViewController.m */; };
 		53F31D1B1CD1E43600984E4E /* EditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F31D191CD1E43600984E4E /* EditViewController.xib */; };
-		53F31D1D1CD27CF300984E4E /* Question-mark.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 53F31D1C1CD27CF300984E4E /* Question-mark.jpg */; };
+		53F31D1F1CD283E600984E4E /* Question-mark.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 53F31D1E1CD283E600984E4E /* Question-mark.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,7 +101,7 @@
 		53F31D171CD1E43600984E4E /* EditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditViewController.h; sourceTree = "<group>"; };
 		53F31D181CD1E43600984E4E /* EditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditViewController.m; sourceTree = "<group>"; };
 		53F31D191CD1E43600984E4E /* EditViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditViewController.xib; sourceTree = "<group>"; };
-		53F31D1C1CD27CF300984E4E /* Question-mark.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "Question-mark.jpg"; path = "../../../../Downloads/Question-mark.jpg"; sourceTree = "<group>"; };
+		53F31D1E1CD283E600984E4E /* Question-mark.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Question-mark.jpg"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -214,7 +214,7 @@
 				483796CC1BCBF7C70062D5AB /* ParentViewController */,
 				483796CD1BCBF7EB0062D5AB /* ProductViewController */,
 				48A656C618163BF200746D36 /* Images.xcassets */,
-				53F31D1C1CD27CF300984E4E /* Question-mark.jpg */,
+				53F31D1E1CD283E600984E4E /* Question-mark.jpg */,
 				53681C4A1CC56B4400F1E0FC /* samsung.gif */,
 				53681C521CC570FC00F1E0FC /* spacex-logo.jpg */,
 				53681C501CC5709B00F1E0FC /* cheese.png */,
@@ -332,7 +332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				53F31D1B1CD1E43600984E4E /* EditViewController.xib in Resources */,
-				53F31D1D1CD27CF300984E4E /* Question-mark.jpg in Resources */,
+				53F31D1F1CD283E600984E4E /* Question-mark.jpg in Resources */,
 				48A656EE1816468000746D36 /* Sunflower.gif in Resources */,
 				53681C4B1CC56B4400F1E0FC /* samsung.gif in Resources */,
 				48A656E718163C1B00746D36 /* CompanyViewController.xib in Resources */,
