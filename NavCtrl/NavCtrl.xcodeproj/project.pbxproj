@@ -41,6 +41,8 @@
 		53F31D1A1CD1E43600984E4E /* EditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F31D181CD1E43600984E4E /* EditViewController.m */; };
 		53F31D1B1CD1E43600984E4E /* EditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F31D191CD1E43600984E4E /* EditViewController.xib */; };
 		53F31D1F1CD283E600984E4E /* Question-mark.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 53F31D1E1CD283E600984E4E /* Question-mark.jpg */; };
+		53F31D621CDA741900984E4E /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F31D611CDA741900984E4E /* libsqlite3.0.tbd */; };
+		53F31D641CDA7FE400984E4E /* NavController.db in Resources */ = {isa = PBXBuildFile; fileRef = 53F31D631CDA745500984E4E /* NavController.db */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -102,6 +104,8 @@
 		53F31D181CD1E43600984E4E /* EditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditViewController.m; sourceTree = "<group>"; };
 		53F31D191CD1E43600984E4E /* EditViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditViewController.xib; sourceTree = "<group>"; };
 		53F31D1E1CD283E600984E4E /* Question-mark.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Question-mark.jpg"; sourceTree = "<group>"; };
+		53F31D611CDA741900984E4E /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		53F31D631CDA745500984E4E /* NavController.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = NavController.db; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +113,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53F31D621CDA741900984E4E /* libsqlite3.0.tbd in Frameworks */,
 				53681C581CC6C8B600F1E0FC /* WebKit.framework in Frameworks */,
 				48A656B718163BF200746D36 /* CoreGraphics.framework in Frameworks */,
 				48A656B918163BF200746D36 /* UIKit.framework in Frameworks */,
@@ -155,6 +160,7 @@
 				53681C5A1CC94A2200F1E0FC /* Company.m */,
 				53681C5F1CC94A4600F1E0FC /* Product.h */,
 				53681C601CC94A4600F1E0FC /* Product.m */,
+				53F31D631CDA745500984E4E /* NavController.db */,
 			);
 			name = ParentViewController;
 			sourceTree = "<group>";
@@ -198,6 +204,7 @@
 		48A656B318163BF200746D36 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				53F31D611CDA741900984E4E /* libsqlite3.0.tbd */,
 				53681C571CC6C8B500F1E0FC /* WebKit.framework */,
 				48A656B418163BF200746D36 /* Foundation.framework */,
 				48A656B618163BF200746D36 /* CoreGraphics.framework */,
@@ -331,6 +338,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53F31D641CDA7FE400984E4E /* NavController.db in Resources */,
 				53F31D1B1CD1E43600984E4E /* EditViewController.xib in Resources */,
 				53F31D1F1CD283E600984E4E /* Question-mark.jpg in Resources */,
 				48A656EE1816468000746D36 /* Sunflower.gif in Resources */,

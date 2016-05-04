@@ -15,12 +15,15 @@
 //@property (nonatomic, readonly, copy) NSArray *allCompanies;
 @property (nonatomic, retain) NSMutableArray *allCompanies;
 
-+(instancetype)sharedCompanies;
++(instancetype)sharedDAO;
 -(void)createCompany:(NSString *)companyName;
 -(void)createProductWithName:(NSString *)productName
                   productURL:(NSString *)productURL
        companyNameForProduct:(NSString *)companyNameForProduct;
--(void)createCompanyAndProducts;
+-(void)copyDatabaseIfNotExist;
 -(void)addToDAO:(Company *)company;
+-(void)readDatabase;
+-(void)deleteCompanyData:(NSString *)deleteQuery;
+
 
 @end

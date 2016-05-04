@@ -50,7 +50,7 @@
     
     
     
-    [[DataAccessObject sharedCompanies]createProductWithName:self.productTextfield.text productURL:self.productURLtextfield.text companyNameForProduct:self.productViewController.title];
+    [[DataAccessObject sharedDAO]createProductWithName:self.productTextfield.text productURL:self.productURLtextfield.text companyNameForProduct:self.productViewController.title];
     
 //    for (Company *element in [[DataAccessObject sharedCompanies]allCompanies]){
 //        if (element.companyName == self.productViewController.title) {

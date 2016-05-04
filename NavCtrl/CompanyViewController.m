@@ -46,8 +46,8 @@
     
     
     //Create a DOA and put your info in companylist array
-    [[DataAccessObject sharedCompanies]createCompanyAndProducts];
-    self.companyList = [[DataAccessObject sharedCompanies]allCompanies];
+    [[DataAccessObject sharedDAO] copyDatabaseIfNotExist];
+    self.companyList = [[DataAccessObject sharedDAO] allCompanies];
 
     
     
@@ -325,7 +325,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [[[DataAccessObject sharedCompanies]allCompanies]count];
+    return [[[DataAccessObject sharedDAO]allCompanies]count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -356,7 +356,7 @@
         cell.detailTextLabel.text =[self.stockQuotes objectForKey:@"Apple"];
     }
     
-    else if ([cell.textLabel.text  isEqual:@"Bill's cheese factory"]) {
+    else if ([cell.textLabel.text  isEqual:@"Bill’s cheese factory"]) {
         [[cell imageView] setImage: [UIImage imageNamed:@"cheese.png"]];
         cell.detailTextLabel.text =[self.stockQuotes objectForKey:@"Bill's"];
     }
@@ -381,15 +381,24 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
+    if (editingStyle == UITableViewCellEditingStyleDelete){
+        
+        NSArray *kompanies = [[DataAccessObject sharedDAO]allCompanies];
+        
+        Company *kompany = [kompanies objectAtIndex:indexPath.row];
+        [[DataAccessObject sharedDAO]deleteCompanyData:[NSString stringWithFormat:@"DELETE FROM Company WHERE companyName IS '%s'", [kompany.companyName UTF8String]]];
+        
+        
         [self.companyList removeObjectAtIndex:indexPath.row];
-
-
+        
+        
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    
-    
-    
-    [tableView reloadData];
+        
+        
+        [tableView reloadData];
+    }
 }
+
 
 -(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
     return YES;

@@ -11,7 +11,8 @@
 #import "CompanyViewController.h"
 #import "DataAccessObject.h"
 
-@interface CompanyFormViewController ()
+
+@interface CompanyFormViewController () 
 
 
 @end
@@ -59,7 +60,9 @@
 - (IBAction)doneButton:(id)sender {
     NSString *kompanyName = self.companyTextfield.text;
     
-    [[DataAccessObject sharedCompanies]createCompany:kompanyName];
+    [[DataAccessObject sharedDAO]createCompany:kompanyName];
+
+    
     
     [self.navigationController popToRootViewControllerAnimated:YES];
 }

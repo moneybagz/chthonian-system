@@ -9,30 +9,35 @@
 #import "DataAccessObject.h"
 #import "Company.h"
 #import "Product.h"
+#import "sqlite3.h"
 
-@interface DataAccessObject ()
-//@property (nonatomic) NSMutableArray *privateCompanies;
+@interface DataAccessObject () {
+    //@property (nonatomic) NSMutableArray *privateCompanies;
+    sqlite3 *companyDB;
+    NSString *dbPathString;
+}
+
 @end
 
 @implementation DataAccessObject
 
-+(instancetype)sharedCompanies
++(instancetype)sharedDAO
 {
-    static DataAccessObject *sharedCompanies;
+    static DataAccessObject *sharedDAO;
     
-    if (!sharedCompanies) {
+    if (!sharedDAO) {
         
-        sharedCompanies =[[self alloc]initPrivate];
-
+        sharedDAO =[[self alloc]initPrivate];
+        
     }
     
-    return sharedCompanies;
+    return sharedDAO;
 }
 
 -(instancetype)init
 {
     [NSException raise:@"Singleton"
-                format:@"Use +[DataAccessObject sharedCompanies]"];
+                format:@"Use +[DataAccessObject sharedDAO]"];
     
     return nil;
 }
@@ -58,7 +63,35 @@
     Company *company = [[Company alloc]initWithCompanyName:companyName];
     
     [self.allCompanies addObject:company];
+    
+    NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *docPath = [path objectAtIndex:0];
+    dbPathString = [docPath stringByAppendingPathComponent:@"NavController.db"];
+
+    char *error;
+
+
+    if(sqlite3_open([dbPathString UTF8String], &companyDB) == SQLITE_OK) {
+
+        DataAccessObject *dao = [DataAccessObject sharedDAO];
+
+        NSString *insertStmt = [NSString stringWithFormat:@"INSERT INTO Company (id, companyName) VALUES ('%lu','%s')", (dao.allCompanies.count),[companyName UTF8String]];
+
+
+        const char *insert_stmt = [insertStmt UTF8String];
+        //NSLog(@"Add Person button click..");
+        if (sqlite3_exec(companyDB, insert_stmt, NULL, NULL, &error) == SQLITE_OK) {
+
+            NSLog(@"Company added to DB");
+            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Add Company Complete" message:@"Company added to DB" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil];
+            [alert show];
+        }
+        sqlite3_close(companyDB);
+    }
 }
+
+
+
 
 -(void)addToDAO:(Company *)company
 {
@@ -81,83 +114,67 @@
     }
 }
 
--(void)createCompanyAndProducts
+-(void)copyDatabaseIfNotExist
 {
-    //Create product objects
-        Product *ipad = [[Product alloc]init];
-        ipad.productName =@"iPad";
-        ipad.productUrl =@"http://www.apple.com/ipad/";
-        Product *ipod = [[Product alloc]init];
-        ipod.productName =@"iPod";
-        ipod.productUrl =@"http://www.apple.com/ipod/";
-        Product *iphone = [[Product alloc]init];
-        iphone.productName =@"iPhone";
-        iphone.productUrl =@"http://www.apple.com/iphone/";
+    NSError *copyError;
+    NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *docPath = [path objectAtIndex:0];
+    dbPathString = [docPath stringByAppendingPathComponent:@"NavController.db"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
     
-        Product *galaxyS4 = [[Product alloc]init];
-        galaxyS4.productName =@"Galaxy S4";
-        galaxyS4.productUrl =@"http://www.samsung.com/us/mobile/cell-phones/SCH-I545ZKPVZW";
-        Product *galaxyNote = [[Product alloc]init];
-        galaxyNote.productName =@"Galaxy Note";
-        galaxyNote.productUrl =@"http://www.samsung.com/us/mobile/cell-phones/SM-N920AZKAATT";
-        Product *galaxyTab = [[Product alloc]init];
-        galaxyTab.productName =@"Galaxy Tab";
-        galaxyTab.productUrl =@"http://www.samsung.com/us/mobile/galaxy-tab/SM-T230NZWAXAR";
-    
-        Product *falcon9rocket = [[Product alloc]init];
-        falcon9rocket.productName =@"Falcon 9 Rocket";
-        falcon9rocket.productUrl =@"http://www.spacex.com/falcon9";
-        Product *dragonCapsule = [[Product alloc]init];
-        dragonCapsule.productName =@"Dragon Capsule";
-        dragonCapsule.productUrl =@"http://www.spacex.com/dragon";
-        Product *falconHeavy = [[Product alloc]init];
-        falconHeavy.productName =@"Falcon Heavy";
-        falconHeavy.productUrl =@"http://www.spacex.com/falcon-heavy";
-    
-        Product *swiss = [[Product alloc]init];
-        swiss.productName =@"Swiss";
-        swiss.productUrl =@"http://www.cheese.com/swiss/";
-        Product *gruyere = [[Product alloc]init];
-        gruyere.productName =@"Gruyere";
-        gruyere.productUrl =@"http://www.cheese.com/gruyere/";
-        Product *roqueforte = [[Product alloc]init];
-        roqueforte.productName =@"Roqueforte";
-        roqueforte.productUrl =@"http://www.cheese.com/roquefort/";
+    if (![fileManager fileExistsAtPath:dbPathString])
+    {
+        NSString *dataPath = [[NSBundle mainBundle] pathForResource:@"NavController" ofType:@"db"];
+        [fileManager copyItemAtPath:dataPath toPath:dbPathString error:&copyError];
+        if (copyError) {
+            NSLog(@"ERROR: %@", copyError.localizedDescription);
+        }
+    }
     
     
-        //Create company objects and fill them with product objects
-        Company *appleMobileDevices = [[Company alloc]init];
-        appleMobileDevices.companyName =@"Apple mobile devices";
-        appleMobileDevices.products = [[NSMutableArray alloc]init];
-        [appleMobileDevices.products addObject:ipad];
-        [appleMobileDevices.products addObject:ipod];
-        [appleMobileDevices.products addObject:iphone];
     
-        Company *samsungMobileDevices = [[Company alloc]init];
-        samsungMobileDevices.companyName =@"Samsung mobile devices";
-        samsungMobileDevices.products = [[NSMutableArray alloc]init];
-        [samsungMobileDevices.products addObject:galaxyS4];
-        [samsungMobileDevices.products addObject:galaxyNote];
-        [samsungMobileDevices.products addObject:galaxyTab];
-    
-        Company *spaceX = [[Company alloc]init];
-        spaceX.companyName =@"SpaceX";
-        spaceX.products = [[NSMutableArray alloc]init];
-        [spaceX.products addObject:falcon9rocket];
-        [spaceX.products addObject:dragonCapsule];
-        [spaceX.products addObject:falconHeavy];
-    
-        Company *billsCheeseFactory = [[Company alloc]init];
-        billsCheeseFactory.companyName =@"Bill's cheese factory";
-        billsCheeseFactory.products = [[NSMutableArray alloc]init];
-        [billsCheeseFactory.products addObject:swiss];
-        [billsCheeseFactory.products addObject:gruyere];
-        [billsCheeseFactory.products addObject:roqueforte];
-    
-    [self.allCompanies addObject:appleMobileDevices];
-    [self.allCompanies addObject:samsungMobileDevices];
-    [self.allCompanies addObject:spaceX];
-    [self.allCompanies addObject:billsCheeseFactory];
+    [self readDatabase];
 }
+
+-(void)readDatabase {
+    sqlite3_stmt *statement ;
+    NSLog(@"%@",dbPathString);
+    if (sqlite3_open([dbPathString UTF8String], &companyDB)==SQLITE_OK)
+    {
+        [self.allCompanies removeAllObjects];
+        NSString *querySQL = [NSString stringWithFormat:@"SELECT * from Company"];
+        const char *query_sql = [querySQL UTF8String];
+        int sql_status = sqlite3_prepare(companyDB, query_sql, -1, &statement, NULL);
+        if (sql_status == SQLITE_OK)
+        {
+            while (sqlite3_step(statement)== SQLITE_ROW)
+            {
+//                const unsigned char* companyId = sqlite3_column_text(statement, 0);
+                int companyId2 = sqlite3_column_int(statement, 0);
+                NSString *name = [[NSString alloc]initWithUTF8String:(const char *)sqlite3_column_text(statement, 1)];
+                
+                Company *company = [[Company alloc] initWithCompanyName:name];
+//                company.companyId = *companyId - 48;
+                company.companyId = companyId2;
+                [self.allCompanies addObject:company];
+                
+            }
+        }
+    }
+    //[[self myTableView]reloadData];
+}
+
+-(void)deleteCompanyData:(NSString *)deleteQuery
+{
+    char *error;
+    if (sqlite3_exec(companyDB, [deleteQuery UTF8String], NULL, NULL, &error)==SQLITE_OK)
+    {
+        NSLog(@"Company Deleted");
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Delete" message:@"Company Deleted" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil];
+        [alert show];
+    }
+}
+
+
 
 @end
