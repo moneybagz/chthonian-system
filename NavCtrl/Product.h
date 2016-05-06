@@ -12,5 +12,6 @@
 
 @property (nonatomic, retain) NSString *productName;
 @property (nonatomic, retain) NSString *productUrl;
+@property int productID;
 
 @end

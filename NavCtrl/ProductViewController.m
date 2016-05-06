@@ -12,6 +12,7 @@
 #import "Product.h"
 #import "ProductFormViewController.h"
 #import "EditFormViewController.h"
+#import "DataAccessObject.h"
 
 @interface ProductViewController ()
 
@@ -37,6 +38,9 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    
+    
     
 
     
@@ -129,6 +133,10 @@
                                               initWithCustomView:self.toolbar];
     [super viewWillAppear:animated];
     
+    
+    [[DataAccessObject sharedDAO]readDatabaseProducts:self.ID];
+    self.products = [[DataAccessObject sharedDAO] allProducts];
+    
 
     [self.tableView reloadData];
 }
@@ -166,13 +174,15 @@
     //cell.textLabel.text = [self.products objectAtIndex:[indexPath row]];
     
     Product *product = [self.products objectAtIndex:[indexPath row]];
+    
+    
     cell.textLabel.text = product.productName;
     
     if ([self.title  isEqualToString:@"Apple mobile devices"]) {
         [[cell imageView] setImage: [UIImage imageNamed:@"apple.gif"]];
     } else if ([self.title  isEqualToString:@"Samsung mobile devices"]) {
         [[cell imageView] setImage: [UIImage imageNamed:@"samsung.gif"]];
-    } else if ([self.title  isEqualToString:@"Bill's cheese factory"]) {
+    } else if ([self.title  isEqualToString:@"Bill’s cheese factory"]) {
         cell.imageView.image = [UIImage imageNamed:@"cheese.png"];
     } else if ([self.title  isEqualToString:@"SpaceX"]) {
         cell.imageView.image = [UIImage imageNamed:@"spacex-logo.jpg"];
@@ -181,18 +191,34 @@
     }
     
     
-    
     return cell;
     
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.products removeObjectAtIndex:indexPath.row];
+//    [self.products removeObjectAtIndex:indexPath.row];
+//    
+//    
+//    
+//    [self.tableView reloadData];
     
-    
-    
-    [self.tableView reloadData];
+    if (editingStyle == UITableViewCellEditingStyleDelete){
+        
+        NSArray *productz = [[DataAccessObject sharedDAO]allProducts];
+        
+        Product *product = [productz objectAtIndex:indexPath.row];
+        [[DataAccessObject sharedDAO]deleteData2:[NSString stringWithFormat:@"DELETE FROM Product WHERE productName IS '%s'", [product.productName UTF8String]]];
+        
+        
+        [self.products removeObjectAtIndex:indexPath.row];
+        
+        
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+        
+        [tableView reloadData];
+    }
 }
 
 -(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {

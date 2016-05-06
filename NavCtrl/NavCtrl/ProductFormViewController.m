@@ -46,17 +46,11 @@
 }
 
 - (IBAction)doneButton:(id)sender {
-    //NSString *productName = self.productTextfield.text;
     
     
     
     [[DataAccessObject sharedDAO]createProductWithName:self.productTextfield.text productURL:self.productURLtextfield.text companyNameForProduct:self.productViewController.title];
     
-//    for (Company *element in [[DataAccessObject sharedCompanies]allCompanies]){
-//        if (element.companyName == self.productViewController.title) {
-//            NSLog(@"%@", element.products);
-//        }
-//    }
     
    [self.navigationController popToViewController:self.productViewController animated:YES];
 }

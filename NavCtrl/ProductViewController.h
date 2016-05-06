@@ -18,7 +18,12 @@
 @property (nonatomic, retain) IBOutlet EditFormViewController *editFormViewController;
 
 @property (nonatomic, retain) UIToolbar *toolbar;
-@property (nonatomic) BOOL editor;
+//@property (nonatomic) BOOL editor;
+
+@property int ID;
+
+
+
 
 
 @end

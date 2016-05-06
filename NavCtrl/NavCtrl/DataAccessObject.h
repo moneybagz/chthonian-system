@@ -14,6 +14,9 @@
 
 //@property (nonatomic, readonly, copy) NSArray *allCompanies;
 @property (nonatomic, retain) NSMutableArray *allCompanies;
+@property (nonatomic, retain) NSMutableArray *allProducts;
+@property (nonatomic, retain) NSString *dbPathString;
+
 
 +(instancetype)sharedDAO;
 -(void)createCompany:(NSString *)companyName;
@@ -23,7 +26,10 @@
 -(void)copyDatabaseIfNotExist;
 -(void)addToDAO:(Company *)company;
 -(void)readDatabase;
--(void)deleteCompanyData:(NSString *)deleteQuery;
+-(void)readDatabaseProducts:(int)productID;
+-(void)deleteData:(NSString *)deleteQuery;
+-(void)deleteData2:(NSString *)deleteQuery;
+
 
 
 @end
