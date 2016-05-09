@@ -64,9 +64,9 @@
 
 -(void)createCompany:(NSString *)companyName
 {
-    Company *company = [[Company alloc]initWithCompanyName:companyName];
-    
-    [self.allCompanies addObject:company];
+//    Company *company = [[Company alloc]initWithCompanyName:companyName];
+//
+//    [self.allCompanies addObject:company];
     
     NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *docPath = [path objectAtIndex:0];
@@ -95,6 +95,7 @@
         }
         sqlite3_close(companyDB);
     }
+    [self readDatabase];
 }
 
 
@@ -109,18 +110,18 @@
                   productURL:(NSString *)productURL
        companyNameForProduct:(NSString *)companyNameForProduct
 {
-    Product *product = [[Product alloc]init];
+//    Product *product = [[Product alloc]init];
+//    
+//    product.productName = productName;
+//    product.productUrl = productURL;
     
-    product.productName = productName;
-    product.productUrl = productURL;
-    
-    [self.allProducts addObject:product];
+//    [self.allProducts addObject:product];
 
     
     //had to make class extension for kompany in if statement
     for (Company *element in self.allCompanies){
         if (element.companyName == companyNameForProduct) {
-            [element.products addObject:product];
+//            [element.products addObject:product];
             kompany = element;
         }
     }
@@ -130,7 +131,7 @@
     NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *docPath = [path objectAtIndex:0];
     self.dbPathString = [docPath stringByAppendingPathComponent:@"NavController.db"];
-    
+    ;
     char *error;
     
     
@@ -138,9 +139,12 @@
         
         NSString *insertStmt = [NSString stringWithFormat:@"INSERT INTO Product (company_id, productName, productURL) VALUES ('%d','%s','%s')", kompany.companyId, [productName UTF8String], [productURL UTF8String]];
         
+        NSLog(@"%d, %@, %@", kompany.companyId, productName, productURL);
         
         const char *insert_stmt = [insertStmt UTF8String];
+        
 
+        //After product is put in database, ViewWillAppear will call readProductDatabase to fill the ProductViewController property array with new products that will be called be opened by the tableCell method
         if (sqlite3_exec(companyDB, insert_stmt, NULL, NULL, &error) == SQLITE_OK) {
             
             NSLog(@"Product added to DB");
@@ -230,7 +234,10 @@
 -(void)deleteData:(NSString *)deleteQuery
 {
     char *error;
-    if (sqlite3_exec(companyDB, [deleteQuery UTF8String], NULL, NULL, &error)==SQLITE_OK)
+    
+    NSString *SQLquery = [NSString stringWithFormat:@"DELETE FROM Company WHERE companyName IS '%s'", [deleteQuery UTF8String]];
+    
+    if (sqlite3_exec(companyDB, [SQLquery UTF8String], NULL, NULL, &error)==SQLITE_OK)
     {
         NSLog(@"Company Deleted");
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Delete" message:@"Company Deleted" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil];
@@ -238,16 +245,73 @@
     }
 }
 
--(void)deleteData2:(NSString *)deleteQuery
+-(void)deleteData2:(int)deleteQuery
 {
     char *error;
-    if (sqlite3_exec(companyDB, [deleteQuery UTF8String], NULL, NULL, &error)==SQLITE_OK)
+    
+    NSString *SQLquery = [NSString stringWithFormat:@"DELETE FROM Product WHERE company_id IS '%d'",deleteQuery];
+
+    
+    if (sqlite3_exec(companyDB, [SQLquery UTF8String], NULL, NULL, &error)==SQLITE_OK)
     {
         NSLog(@"Product Deleted");
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Delete" message:@"Product(s) Deleted" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil];
         [alert show];
     }
 }
+
+-(void)deleteData3:(NSString *)deleteQuery
+{
+    char *error;
+    
+    NSString *SQLquery = [NSString stringWithFormat:@"DELETE FROM Product WHERE productName IS '%s'",[deleteQuery UTF8String]];
+    
+    
+    if (sqlite3_exec(companyDB, [SQLquery UTF8String], NULL, NULL, &error)==SQLITE_OK)
+    {
+        NSLog(@"Product Deleted");
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Delete" message:@"Product Deleted" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil];
+        [alert show];
+    }
+}
+
+-(void)editCompanyNameSQL:(NSString *)nameChange :(NSString *)companyName
+{
+    char *error;
+    
+    NSString *changeName = [NSString stringWithFormat:@"UPDATE Company SET companyNAME = '%s' WHERE companyName is '%s'",[nameChange UTF8String], [companyName UTF8String]];
+    
+    
+    if (sqlite3_exec(companyDB, [changeName UTF8String], NULL, NULL, &error)==SQLITE_OK)
+    {
+        NSLog(@"Company Name changed");
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"NAME CHANGED" message:@"You Have Changed The Company Name" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil];
+        [alert show];
+    }
+}
+
+-(void)editProductNameSQL:(NSString *)nameChange :(NSString *)productURL :(NSString *) productName
+{
+    char *error;
+    
+    //Handles changing the product name
+    NSString *changeName = [NSString stringWithFormat:@"UPDATE Product SET productName = '%s' WHERE productName is '%s'",[nameChange UTF8String], [productName UTF8String]];
+    
+    //Handles changing the URL
+    NSString *changeURL = [NSString stringWithFormat:@"UPDATE Product SET productURL = '%s' WHERE productName is '%s'", [productURL UTF8String], [productName UTF8String]];
+    
+    sqlite3_exec(companyDB, [changeURL UTF8String], NULL, NULL, &error);
+
+    
+    if (sqlite3_exec(companyDB, [changeName UTF8String], NULL, NULL, &error)==SQLITE_OK)
+    {
+        NSLog(@"Product Name changed");
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"NAME CHANGED" message:@"You Have Changed The Product Name" delegate:self cancelButtonTitle:@"Close" otherButtonTitles:nil];
+        [alert show];
+        
+    }
+}
+
 
 
 @end

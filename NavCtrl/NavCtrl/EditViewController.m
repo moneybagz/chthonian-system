@@ -8,6 +8,7 @@
 
 #import "EditViewController.h"
 #import "Company.h"
+#import "DataAccessObject.h"
 
 
 @interface EditViewController ()
@@ -33,6 +34,9 @@
     [super dealloc];
 }
 - (IBAction)doneButton:(id)sender {
+    
+    [[DataAccessObject sharedDAO]editCompanyNameSQL:self.changeNameTextfield.text
+                                                   :self.company.companyName];
     
     self.company.companyName = self.changeNameTextfield.text;
     

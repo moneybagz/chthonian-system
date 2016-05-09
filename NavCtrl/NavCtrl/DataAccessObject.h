@@ -28,8 +28,9 @@
 -(void)readDatabase;
 -(void)readDatabaseProducts:(int)productID;
 -(void)deleteData:(NSString *)deleteQuery;
--(void)deleteData2:(NSString *)deleteQuery;
-
-
+-(void)deleteData2:(int)deleteQuery;
+-(void)deleteData3:(NSString *)deleteQuery;
+-(void)editCompanyNameSQL:(NSString *)nameChange :(NSString *)companyName;
+-(void)editProductNameSQL:(NSString *)nameChange :(NSString *)productName :(NSString *) productURL;
 
 @end

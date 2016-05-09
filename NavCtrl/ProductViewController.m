@@ -197,18 +197,14 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    [self.products removeObjectAtIndex:indexPath.row];
-//    
-//    
-//    
-//    [self.tableView reloadData];
+
     
     if (editingStyle == UITableViewCellEditingStyleDelete){
         
         NSArray *productz = [[DataAccessObject sharedDAO]allProducts];
         
         Product *product = [productz objectAtIndex:indexPath.row];
-        [[DataAccessObject sharedDAO]deleteData2:[NSString stringWithFormat:@"DELETE FROM Product WHERE productName IS '%s'", [product.productName UTF8String]]];
+        [[DataAccessObject sharedDAO]deleteData3:product.productName];
         
         
         [self.products removeObjectAtIndex:indexPath.row];

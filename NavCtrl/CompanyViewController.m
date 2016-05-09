@@ -386,15 +386,16 @@
         NSArray *kompanies = [[DataAccessObject sharedDAO]allCompanies];
         
         Company *kompany = [kompanies objectAtIndex:indexPath.row];
-        [[DataAccessObject sharedDAO]deleteData:[NSString stringWithFormat:@"DELETE FROM Company WHERE companyName IS '%s'", [kompany.companyName UTF8String]]];
+        [[DataAccessObject sharedDAO]deleteData:kompany.companyName];
         
-        [[DataAccessObject sharedDAO]deleteData2:[NSString stringWithFormat:@"DELETE FROM Product WHERE company_id IS '%d'", kompany.companyId]];
+        [[DataAccessObject sharedDAO]deleteData2:kompany.companyId];
         
         
         [self.companyList removeObjectAtIndex:indexPath.row];
         
         
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
         
         
         [tableView reloadData];

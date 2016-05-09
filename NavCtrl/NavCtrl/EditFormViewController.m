@@ -8,6 +8,7 @@
 
 #import "EditFormViewController.h"
 #import "Product.h"
+#import "DataAccessObject.h"
 
 @interface EditFormViewController ()
 
@@ -44,9 +45,10 @@
 }
 - (IBAction)doneButton:(id)sender {
     
+    [[DataAccessObject sharedDAO]editProductNameSQL:self.changeNameTextfield.text :self.changeURLtextfield.text :self.product.productName];
     
-    self.product.productName = self.changeNameTextfield.text;
-    self.product.productUrl = self.changeURLtextfield.text;
+//    self.product.productName = self.changeNameTextfield.text;
+//    self.product.productUrl = self.changeURLtextfield.text;
     
     [self.navigationController popToViewController:self.productViewController animated:YES];
 }
