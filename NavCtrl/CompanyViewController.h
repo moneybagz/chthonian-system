@@ -23,6 +23,7 @@
 @property (nonatomic, retain) IBOutlet  CompanyFormViewController *companyFormViewController;
 @property (nonatomic, retain) IBOutlet  EditViewController *editViewController;
 //@property (nonatomic, retain) Company *kompany;
+@property (nonatomic, retain) UIBarButtonItem *doneButton;
 @property (nonatomic, retain) UIToolbar *toolbar;
 @property (nonatomic, retain) NSDictionary *jsonDictionary;
 @property (nonatomic, retain) NSDictionary *stockQuotes;

@@ -33,12 +33,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    
-    NSLog(@"%@", [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://download.finance.yahoo.com/d/quotes.csv?s=BP.L&f=sl1d1t1c1ohgv&e=.csv"]]);
 
 
-//    NSLog(@"%@", [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://download.finance.yahoo.com/d/quotes.csv?s=AAPL+GOOG+MSFT=pder=.csv"]]);
     
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
@@ -48,23 +44,52 @@
     //Create a DOA and put your info in companylist array
     [[DataAccessObject sharedDAO] copyDatabaseIfNotExist];
     self.companyList = [[DataAccessObject sharedDAO] allCompanies];
-
-    
-    
-
-    
-//    if (!self.kompany) {
-//        self.kompany = [[Company alloc]init];
-//    }
-    
-
  
     
     self.title = @"Mobile device makers";
     
+}
+
+
+// method called by toolbar button edit button
+-(void)editPlease
+{
+    
+    [self.tableView setEditing:YES animated:YES];
+    
+    self.tableView.allowsSelectionDuringEditing = YES;
+    
+    // create a done button to replace toolbar
+    self.doneButton = [[UIBarButtonItem alloc ] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
+    
+    [self.navigationItem.rightBarButtonItem release];
+    self.navigationItem.rightBarButtonItem = self.doneButton;
+    
+    //INSTRUMENT RELEASE 2
+//    [doneButton release];
+}
+
+// method called by done button to end editing mode
+-(void)done
+{
+    [self.tableView setEditing:NO animated:YES];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                              initWithCustomView:self.toolbar];
+    
+}
+
+
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.tableView reloadData];
+    
     //Create a toolbar so you can have more than 2 buttons in Navbar
     self.toolbar = [[UIToolbar alloc]
-                          initWithFrame:CGRectMake(0, 0, 100, 45)];
+                    initWithFrame:CGRectMake(0, 0, 100, 45)];
     [self.toolbar setBarStyle: UIBarStyleDefault];
     
     // create an array for the buttons
@@ -98,60 +123,9 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
                                               initWithCustomView:self.toolbar];
     [self.toolbar release];
-    
-    
-    
-    
-}
 
-
-// method called by toolbar button edit button
--(void)editPlease
-{
-    
-    [self.tableView setEditing:YES animated:YES];
-    
-    self.tableView.allowsSelectionDuringEditing = YES;
-    
-    // create a done button to replace toolbar
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc ] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
-    
-    
-    self.navigationItem.rightBarButtonItem = doneButton;
-}
-
-// method called by done button to end editing mode
--(void)done
-{
-    [self.tableView setEditing:NO animated:YES];
-    
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
-                                              initWithCustomView:self.toolbar];
-    
-}
-
-
-
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    [self.tableView reloadData];
-    
-    
-    
-    
-    
-//    // Create the request.
-//    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://finance.yahoo.com/d/quotes.csv?s=AAPL+GOOG+TSLA+WFM&f=a"]];
-//
-//     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.google.com/finance/info?q=NSE:AAPL,SSNLF,TSLA,AHFP.json"]];
-//
-//    // Create url connection and fire request
-//    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:request delegate:self];
     
     // 1
-//    NSString *dataUrl2 = @"http://www.google.com/finance/info?q=NSE:TSLA,AAPL";
    NSString *dataUrl = @"http://finance.yahoo.com/d/quotes.csv?s=AAPL+GOOG+TSLA+WFM&f=a";
     NSURL *url = [NSURL URLWithString:dataUrl];
     
@@ -162,12 +136,8 @@
         NSLog(@"response == %@", response);
         [self processData:data];
     }];
-                             
-//    NSURLSessionDataTask *downloadTask = [[NSURLSession sharedSession] dataTaskWithURL:url      completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-//                                              // 4: Handle response here
-//                                          }];
     
-    // 3
+    
     [task resume];
     [self.tableView reloadData];
 
@@ -190,39 +160,12 @@
     
     NSLog(@"%@ money", [self.stockQuotes objectForKey:@"Apple"]);
     NSLog(@"%@ money", [self.stockQuotes objectForKey:@"Samsung"]);
-
     
+    //My first memory leak to be released via instruments stack trace
+    [stockString release];
+
+    //i forget why i needed this
     [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
-
-    
-    
-                             //GETTING DATA USING JSON TO NSDICTIONARY
-    
-    
-    
-//    NSString* stockString2;
-//    stockString2 = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-//    
-//    stockString2 = [stockString2 substringFromIndex:3];
-//    
-//    NSLog(@"%@", stockString2);
-//    
-//    //can check what the object is from the data using debugger using type ID
-//    NSData *data2 = [stockString2 dataUsingEncoding:NSUTF8StringEncoding];
-//    id rtn =  [NSJSONSerialization JSONObjectWithData:data2 options:0 error:nil];
-//
-//
-//    
-//    NSError *error;
-//
-//    
-//    self.dictionaryArray = [NSJSONSerialization JSONObjectWithData:data2 options:0 error:&error];
-//    
-//    self.jsonDictionary = self.dictionaryArray[0];
-//    
-//    NSLog(@"dictionary = %@", self.jsonDictionary);
-//    NSLog(@"%@", [self.jsonDictionary objectForKey:@"l_cur"]);
-    
     
 }
 
@@ -247,6 +190,7 @@
         _companyFormViewController = [[CompanyFormViewController alloc]init];
     }
     
+    [self.navigationItem.rightBarButtonItem release];
     
     [self.navigationController
      pushViewController:self.companyFormViewController
@@ -386,18 +330,17 @@
         NSArray *kompanies = [[DataAccessObject sharedDAO]allCompanies];
         
         Company *kompany = [kompanies objectAtIndex:indexPath.row];
-        [[DataAccessObject sharedDAO]deleteData:kompany.companyName];
         
-        [[DataAccessObject sharedDAO]deleteData2:kompany.companyId];
+
         
         
-        [self.companyList removeObjectAtIndex:indexPath.row];
+        [[DataAccessObject sharedDAO]deleteCompany:kompany];
         
+        
+//        [self.companyList removeObjectAtIndex:indexPath.row];
         
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        
-        
-        
+
         [tableView reloadData];
     }
 }
@@ -496,15 +439,16 @@
         
             
             
-            self.editViewController.company = self.companyList[indexPath.row];
+        self.editViewController.company = self.companyList[indexPath.row];
             
             
-            [self.tableView setEditing:NO animated:YES];
+        [self.tableView setEditing:NO animated:YES];
             
-            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
-                                                      initWithCustomView:self.toolbar];
-            
-            [self.navigationController pushViewController:self.editViewController animated:YES];
+
+        
+        [self.navigationItem.rightBarButtonItem release];
+        
+        [self.navigationController pushViewController:self.editViewController animated:YES];
         
     } else {
     //if not in editing mode continue to ProductViewController
@@ -517,6 +461,7 @@
     //self.productViewController.products = company.products;
     self.productViewController.ID= company.companyId;
     
+    [self.navigationItem.rightBarButtonItem release];
     
     [self.navigationController
         pushViewController:self.productViewController

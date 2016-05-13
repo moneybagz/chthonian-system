@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @class ProductViewController;
+@class Product;
 
 @interface ProductFormViewController : UIViewController
 
@@ -15,6 +16,7 @@
 @property (retain, nonatomic) IBOutlet UITextField *productURLtextfield;
 @property (retain, nonatomic) IBOutlet UITextField *companyTextfield;
 @property (retain, nonatomic) ProductViewController *productViewController;
+@property int companyID;
 
 
 

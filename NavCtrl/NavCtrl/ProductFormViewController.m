@@ -49,7 +49,7 @@
     
     
     
-    [[DataAccessObject sharedDAO]createProductWithName:self.productTextfield.text productURL:self.productURLtextfield.text companyNameForProduct:self.productViewController.title];
+    [[DataAccessObject sharedDAO]createProductWithName:self.productTextfield.text productURL:self.productURLtextfield.text companyID:self.companyID];
     
     
    [self.navigationController popToViewController:self.productViewController animated:YES];

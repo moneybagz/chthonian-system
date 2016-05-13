@@ -17,13 +17,21 @@
     if (self) {
         _companyName = name;
         
-        _products = [[NSMutableArray alloc]init];
+//        _products = [[NSMutableArray alloc]init];
     }
     
     
     return self;
 }
 
+-(void)dealloc{
+    //release all instance variables
+    
+    [super dealloc];
+    
+//    [self.companyId release];
+    [self.companyName release];
+}
 
 
 

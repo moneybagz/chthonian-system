@@ -45,7 +45,7 @@
 }
 - (IBAction)doneButton:(id)sender {
     
-    [[DataAccessObject sharedDAO]editProductNameSQL:self.changeNameTextfield.text :self.changeURLtextfield.text :self.product.productName];
+    [[DataAccessObject sharedDAO]editProductNameSQL:self.changeNameTextfield.text :self.changeURLtextfield.text :self.product];
     
 //    self.product.productName = self.changeNameTextfield.text;
 //    self.product.productUrl = self.changeURLtextfield.text;

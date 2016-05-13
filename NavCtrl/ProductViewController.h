@@ -13,11 +13,14 @@
 
 @interface ProductViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, retain) NSMutableArray *products;
+@property (nonatomic, retain) NSMutableArray *buttons;
 
 @property (nonatomic, retain) IBOutlet ProductFormViewController *productFormViewController;
 @property (nonatomic, retain) IBOutlet EditFormViewController *editFormViewController;
 
 @property (nonatomic, retain) UIToolbar *toolbar;
+@property (nonatomic, retain) UIBarButtonItem *doneButton;
+@property (nonatomic, retain) UIBarButtonItem *buttonWithToolbar;
 //@property (nonatomic) BOOL editor;
 
 @property int ID;

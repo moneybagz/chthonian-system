@@ -33,28 +33,27 @@
 {
     [super viewDidLoad];
 
+    
+    
+//    [[DataAccessObject sharedDAO]readDatabaseProducts:self.ID];
+//    self.products = [[DataAccessObject sharedDAO] allProducts];
+
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-    
-    
-    
-
-    
+//    self.navigationItem.rightBarButtonItem = self.editButtonItem;
     // create a toolbar where we can place some buttons
     self.toolbar = [[UIToolbar alloc]
                     initWithFrame:CGRectMake(0, 0, 100, 45)];
     [self.toolbar setBarStyle: UIBarStyleDefault];
     
     // create an array for the buttons
-    NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
+    self.buttons = [[NSMutableArray alloc] initWithCapacity:3];
     
     
     UIBarButtonItem *addBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewProductForm:)];
-    [buttons addObject:addBtn];
+    [self.buttons addObject:addBtn];
     [addBtn release];
     
     // create a spacer between the buttons
@@ -62,29 +61,29 @@
                                initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
                                target:nil
                                action:nil];
-    [buttons addObject:spacer];
+    [self.buttons addObject:spacer];
     [spacer release];
     
     // create a standard delete button with the trash icon
     UIBarButtonItem *editBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPlease)];
-    [buttons addObject:editBtn];
+    [self.buttons addObject:editBtn];
     self.navigationItem.rightBarButtonItem = editBtn;
-
+    
     [editBtn release];
     
-    
-    
     // put the buttons in the toolbar and release them
-    [self.toolbar setItems:buttons animated:NO];
-    [buttons release];
+    [self.toolbar setItems:self.buttons animated:NO];
+    [self.buttons release];
     
     // place the toolbar into the navigation bar
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
-                                              initWithCustomView:self.toolbar];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.toolbar];
     
     [self.toolbar release];
     
     
+    
+    
+    [self.navigationItem.backBarButtonItem setAction:@selector(leftButtonSelected:)];
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
@@ -95,12 +94,18 @@
     {
         // Your code for entering edit mode goes here
         self.tableView.allowsSelectionDuringEditing = YES;
-        UIBarButtonItem *doneButton = [[UIBarButtonItem alloc ] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
-        self.navigationItem.rightBarButtonItem = doneButton;
-    } else {
-        // Your code for exiting edit mode goes here
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.toolbar];
+        self.doneButton = [[UIBarButtonItem alloc ] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
+//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.toolbar];
+        [self.navigationItem.rightBarButtonItem release];
+        self.navigationItem.rightBarButtonItem = self.doneButton;
     }
+//    else {
+//        // Your code for exiting edit mode goes here
+////        [self.navigationItem.rightBarButtonItem release];
+//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.toolbar];
+//        
+////        [self.toolbar release];
+//    }
 }
 
 -(void)editPlease
@@ -112,6 +117,9 @@
 -(void)done
 {
     [self.tableView setEditing:NO animated:YES];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.toolbar];
+
 }
 
 -(IBAction)addNewProductForm:(id)sender
@@ -121,24 +129,44 @@
     }
     
     self.productFormViewController.productViewController = self;
+    
+    self.productFormViewController.companyID = self.ID;
+    
+//    [self.navigationItem.rightBarButtonItem release];
+    
     [self.navigationController
      pushViewController:self.productFormViewController
      animated:YES];
 }
 
+//-(void)viewDidDisappear:(BOOL)animated{
+//    [self.navigationItem.rightBarButtonItem release];
+//}
+
+//-(void)viewDidDisappear:(BOOL)animated
+//{
+//    [self.navigationItem.rightBarButtonItem release];
+//}
+
 - (void)viewWillAppear:(BOOL)animated {
     [self.tableView setEditing:NO animated:YES];
     self.editing = NO;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
-                                              initWithCustomView:self.toolbar];
-    [super viewWillAppear:animated];
-    
     
     [[DataAccessObject sharedDAO]readDatabaseProducts:self.ID];
     self.products = [[DataAccessObject sharedDAO] allProducts];
     
+    [super viewWillAppear:animated];
+    
+       [self.tableView reloadData];
+}
 
-    [self.tableView reloadData];
+-(void) leftButtonSelected:(id)sender {
+    
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.toolbar];
+    
+    [self.navigationItem.rightBarButtonItem release];
+    
+    [self.navigationController popViewControllerAnimated:NO];
 }
 
 - (void)didReceiveMemoryWarning
@@ -173,6 +201,8 @@
     // Configure the cell...
     //cell.textLabel.text = [self.products objectAtIndex:[indexPath row]];
     
+    self.products = [[DataAccessObject sharedDAO] allProducts];
+    
     Product *product = [self.products objectAtIndex:[indexPath row]];
     
     
@@ -204,10 +234,10 @@
         NSArray *productz = [[DataAccessObject sharedDAO]allProducts];
         
         Product *product = [productz objectAtIndex:indexPath.row];
-        [[DataAccessObject sharedDAO]deleteData3:product.productName];
+        [[DataAccessObject sharedDAO]deleteSingleProductWithPrimaryKey:product];
         
         
-        [self.products removeObjectAtIndex:indexPath.row];
+//        [self.products removeObjectAtIndex:indexPath.row];
         
         
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -292,6 +322,11 @@
             self.editFormViewController.productViewController = self;
         }
             self.editFormViewController.product = self.products[indexPath.row];
+        // Pass the id information so you can edit in DAO
+        self.editFormViewController.product.companyID = self.ID;
+        
+//        [self.navigationItem.rightBarButtonItem release];
+        
             [self.navigationController pushViewController:self.editFormViewController animated:YES];
     } else {
         WebViewController *wvc = [[WebViewController alloc] initWithNibName:nil bundle:nil];
@@ -303,7 +338,7 @@
         wvc.url = product.productUrl;
         
         
-        // Pass the selected object to the new view controller.
+//        [self.navigationItem.rightBarButtonItem release];
         
         // Push the view controller.
         [self.navigationController pushViewController:wvc animated:YES];

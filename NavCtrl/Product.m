@@ -10,4 +10,16 @@
 
 @implementation Product
 
+-(void)dealloc{
+    //release all instance variables
+    
+    
+    
+    [self.productName release];
+    [self.productUrl release];
+    
+    [super dealloc];
+
+}
+
 @end
