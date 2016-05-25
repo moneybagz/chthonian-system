@@ -7,10 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-@interface Company : NSObject
 
-@property int companyId;
+@interface Company : NSManagedObject
+
+@property int primaryKey;
 @property (nonatomic, retain) NSString *companyName;
 //@property (nonatomic, retain) NSMutableArray *products;
 

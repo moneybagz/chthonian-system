@@ -9,6 +9,7 @@
 #import "NavControllerAppDelegate.h"
 #import "CompanyViewController.h"
 #import "ProductViewController.h"
+#import "DataAccessObject.h"
 
 @implementation NavControllerAppDelegate
 
@@ -71,6 +72,8 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    
+     [[DataAccessObject sharedDAO]saveContext];
 }
 
 @end

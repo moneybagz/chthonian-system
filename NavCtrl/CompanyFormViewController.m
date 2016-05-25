@@ -58,13 +58,19 @@
     [super dealloc];
 }
 - (IBAction)doneButton:(id)sender {
-    NSString *kompanyName = self.companyTextfield.text;
+//    NSString *kompanyName = self.companyTextfield.text;
     
-    [[DataAccessObject sharedDAO]createCompany:kompanyName];
+    
+    NSNumber *pk = [NSNumber numberWithInt:[[NSDate date] timeIntervalSince1970]];
+    NSLog(@"PK: %@", pk);
+    
+    [[DataAccessObject sharedDAO]createCompany:pk name:self.companyTextfield.text];
 
     
     
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
+
+
 
 @end

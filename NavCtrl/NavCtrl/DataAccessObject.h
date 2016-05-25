@@ -19,17 +19,20 @@
 
 
 +(instancetype)sharedDAO;
--(void)createCompany:(NSString *)companyName;
--(void)createProductWithName:(NSString *)productName
-                  productURL:(NSString *)productURL
-       companyNameForProduct:(NSString *)companyNameForProduct;
--(void)copyDatabaseIfNotExist;
--(void)addToDAO:(Company *)company;
--(void)readDatabase;
--(void)readDatabaseProducts:(int)companyID;
--(void)deleteCompany:(Company *)kompany;
--(void)deleteSingleProductWithPrimaryKey:(Product *)product;
--(void)editCompanyNameSQL:(NSString *)nameChange :(Company *)kompany;
--(void)editProductNameSQL:(NSString *)nameChange :(NSString *)urlChange :(Product *)product;
+//-(void)createCompany:(NSString *)companyName;
+//-(void)createProductWithName:(NSString *)productName
+//                  productURL:(NSString *)productURL
+//       companyNameForProduct:(NSString *)companyNameForProduct;
+//-(void)copyDatabaseIfNotExist;
+//-(void)addToDAO:(Company *)company;
+
+- (void)saveContext;
+- (NSManagedObjectContext *)managedObjectContext;
+- (NSManagedObjectModel *)managedObjectModel;
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator;
+- (NSURL *)applicationDocumentsDirectory;
+-(void)createCompany:(NSNumber*)primaryKey name:(NSString*)companyName;
+-(void) reloadDataFromContext;
+-(void)deleteCompany:(int)index;
 
 @end

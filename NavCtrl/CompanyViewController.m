@@ -34,7 +34,7 @@
 {
     [super viewDidLoad];
 
-
+//    [[DataAccessObject sharedDAO]
     
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
@@ -42,8 +42,8 @@
     
     
     //Create a DOA and put your info in companylist array
-    [[DataAccessObject sharedDAO] copyDatabaseIfNotExist];
-    self.companyList = [[DataAccessObject sharedDAO] allCompanies];
+//    [[DataAccessObject sharedDAO] copyDatabaseIfNotExist];
+//    self.companyList = [[DataAccessObject sharedDAO] allCompanies];
  
     
     self.title = @"Mobile device makers";
@@ -85,8 +85,36 @@
 {
     [super viewWillAppear:animated];
     
-    [self.tableView reloadData];
+    [[DataAccessObject sharedDAO]reloadDataFromContext];
+    self.companyList = [[DataAccessObject sharedDAO] allCompanies];
     
+    [self.tableView reloadData];
+
+    [self setToolbar];
+    
+    
+
+    
+    // 1
+   NSString *dataUrl = @"http://finance.yahoo.com/d/quotes.csv?s=AAPL+GOOG+TSLA+WFM&f=a";
+    NSURL *url = [NSURL URLWithString:dataUrl];
+    
+    // 2
+    NSURLSession *session = [NSURLSession sharedSession];
+                             
+    NSURLSessionTask *task = [session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        //NSLog(@"response == %@", response);
+        [self processData:data];
+    }];
+    
+    
+    [task resume];
+    [self.tableView reloadData];
+
+}
+
+-(void)setToolbar
+{
     //Create a toolbar so you can have more than 2 buttons in Navbar
     self.toolbar = [[UIToolbar alloc]
                     initWithFrame:CGRectMake(0, 0, 100, 45)];
@@ -123,24 +151,6 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
                                               initWithCustomView:self.toolbar];
     [self.toolbar release];
-
-    
-    // 1
-   NSString *dataUrl = @"http://finance.yahoo.com/d/quotes.csv?s=AAPL+GOOG+TSLA+WFM&f=a";
-    NSURL *url = [NSURL URLWithString:dataUrl];
-    
-    // 2
-    NSURLSession *session = [NSURLSession sharedSession];
-                             
-    NSURLSessionTask *task = [session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSLog(@"response == %@", response);
-        [self processData:data];
-    }];
-    
-    
-    [task resume];
-    [self.tableView reloadData];
-
 }
 
 -(void)processData:(NSData *)data
@@ -148,7 +158,7 @@
     NSString* stockString;
     stockString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
     
-    NSLog(@"%@", stockString);
+    //NSLog(@"%@", stockString);
     
     NSArray *stockPrices = [stockString componentsSeparatedByString:@"\n"];
     
@@ -158,8 +168,8 @@
                         @"Bill's": stockPrices[3],
                         };
     
-    NSLog(@"%@ money", [self.stockQuotes objectForKey:@"Apple"]);
-    NSLog(@"%@ money", [self.stockQuotes objectForKey:@"Samsung"]);
+//    NSLog(@"%@ money", [self.stockQuotes objectForKey:@"Apple"]);
+//    NSLog(@"%@ money", [self.stockQuotes objectForKey:@"Samsung"]);
     
     //My first memory leak to be released via instruments stack trace
     [stockString release];
@@ -286,6 +296,7 @@
     Company *company = [self.companyList objectAtIndex:[indexPath row]];
 
         cell.textLabel.text = company.companyName;
+    [[cell textLabel] setText: [company companyName] ];
     
 
 
@@ -300,7 +311,7 @@
         cell.detailTextLabel.text =[self.stockQuotes objectForKey:@"Apple"];
     }
     
-    else if ([cell.textLabel.text  isEqual:@"Bill’s cheese factory"]) {
+    else if ([cell.textLabel.text  isEqual:@"Clyffs delicioso CHEESE HOUSE!"]) {
         [[cell imageView] setImage: [UIImage imageNamed:@"cheese.png"]];
         cell.detailTextLabel.text =[self.stockQuotes objectForKey:@"Bill's"];
     }
@@ -327,20 +338,19 @@
     
     if (editingStyle == UITableViewCellEditingStyleDelete){
         
-        NSArray *kompanies = [[DataAccessObject sharedDAO]allCompanies];
-        
-        Company *kompany = [kompanies objectAtIndex:indexPath.row];
-        
+//        NSArray *kompanies = [[DataAccessObject sharedDAO]allCompanies];
+//        
+//        Company *kompany = [kompanies objectAtIndex:indexPath.row];
 
+        NSLog(@"%d", (int)indexPath.row);
+        
+        [[DataAccessObject sharedDAO]deleteCompany:(int)indexPath.row];
         
         
-        [[DataAccessObject sharedDAO]deleteCompany:kompany];
-        
-        
-//        [self.companyList removeObjectAtIndex:indexPath.row];
+        [self.companyList removeObjectAtIndex:indexPath.row];
         
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-
+//
         [tableView reloadData];
     }
 }
@@ -459,7 +469,8 @@
     //pass company properties to ProductViewControllers properties
     self.productViewController.title = company.companyName;
     //self.productViewController.products = company.products;
-    self.productViewController.ID= company.companyId;
+        
+//    self.productViewController.ID= company.companyId; ////////////////////////
     
     [self.navigationItem.rightBarButtonItem release];
     
