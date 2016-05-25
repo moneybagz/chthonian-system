@@ -33,8 +33,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-//    [[DataAccessObject sharedDAO]
+    [[DataAccessObject sharedDAO]reloadDataFromContext];
+    [[DataAccessObject sharedDAO]hardcode];
     
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
@@ -311,7 +311,7 @@
         cell.detailTextLabel.text =[self.stockQuotes objectForKey:@"Apple"];
     }
     
-    else if ([cell.textLabel.text  isEqual:@"Clyffs delicioso CHEESE HOUSE!"]) {
+    else if ([cell.textLabel.text  isEqual:@"Clyff's CHEESE HOUSE!"]) {
         [[cell imageView] setImage: [UIImage imageNamed:@"cheese.png"]];
         cell.detailTextLabel.text =[self.stockQuotes objectForKey:@"Bill's"];
     }

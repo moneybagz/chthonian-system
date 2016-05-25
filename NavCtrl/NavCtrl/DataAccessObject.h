@@ -34,5 +34,7 @@
 -(void)createCompany:(NSNumber*)primaryKey name:(NSString*)companyName;
 -(void) reloadDataFromContext;
 -(void)deleteCompany:(int)index;
+-(void)hardcode;
+
 
 @end

@@ -20,6 +20,8 @@
 @property (nonatomic, strong) NSManagedObjectModel *managedObjectModel;
 @property (nonatomic, strong) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
+@property (nonatomic, strong) NSString *storeURLstring;
+
 @end
 
 @implementation DataAccessObject
@@ -114,6 +116,9 @@
     
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"NavController.sqlite"];
     NSLog(@"%@",storeURL);
+    
+    self.storeURLstring = [storeURL absoluteString];
+    NSLog(@"%@", self.storeURLstring);
     
     NSError *error = nil;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
@@ -215,6 +220,50 @@
     
     [self saveContext];
 
+}
+
+-(void)hardcode
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL secondRun = [defaults boolForKey:@"BoolFirstRun"];
+   
+    if (secondRun != YES) {
+    
+        Company *kompany = [NSEntityDescription insertNewObjectForEntityForName:@"Company" inManagedObjectContext:self.managedObjectContext];
+        
+        NSNumber *pk = [NSNumber numberWithInt:1];
+        
+        [kompany setValue:@"Apple mobile devices" forKey:@"companyName"];
+        [kompany setValue:pk forKey:@"primaryKey"];
+        
+        Company *kompany2 = [NSEntityDescription insertNewObjectForEntityForName:@"Company" inManagedObjectContext:self.managedObjectContext];
+        
+        NSNumber *pk2 = [NSNumber numberWithInt:2];
+        
+        [kompany2 setValue:@"Samsung mobile devices" forKey:@"companyName"];
+        [kompany2 setValue:pk2 forKey:@"primaryKey"];
+        
+        Company *kompany3 = [NSEntityDescription insertNewObjectForEntityForName:@"Company" inManagedObjectContext:self.managedObjectContext];
+        
+        NSNumber *pk3 = [NSNumber numberWithInt:3];
+        
+        [kompany3 setValue:@"SpaceX" forKey:@"companyName"];
+        [kompany3 setValue:pk3 forKey:@"primaryKey"];
+        
+        Company *kompany4 = [NSEntityDescription insertNewObjectForEntityForName:@"Company" inManagedObjectContext:self.managedObjectContext];
+        
+        NSNumber *pk4 = [NSNumber numberWithInt:3];
+        
+        [kompany4 setValue:@"Clyff's CHEESE HOUSE!" forKey:@"companyName"];
+        [kompany4 setValue:pk4 forKey:@"primaryKey"];
+        
+        
+        
+        [defaults setBool:YES forKey:@"BoolFirstRun"];
+        
+        
+        [self saveContext];
+    }
 }
 
 
