@@ -33,8 +33,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[DataAccessObject sharedDAO]reloadDataFromContext];
     [[DataAccessObject sharedDAO]hardcode];
+    [[DataAccessObject sharedDAO]fetchDataCompanies];
+
     
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
@@ -85,7 +86,6 @@
 {
     [super viewWillAppear:animated];
     
-    [[DataAccessObject sharedDAO]reloadDataFromContext];
     self.companyList = [[DataAccessObject sharedDAO] allCompanies];
     
     [self.tableView reloadData];
@@ -344,11 +344,13 @@
 
         NSLog(@"%d", (int)indexPath.row);
         
+//        [self.companyList removeObjectAtIndex:indexPath.row];
+
+        
         [[DataAccessObject sharedDAO]deleteCompany:(int)indexPath.row];
+        self.companyList = [[DataAccessObject sharedDAO]allCompanies];
         
-        
-        [self.companyList removeObjectAtIndex:indexPath.row];
-        
+            
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 //
         [tableView reloadData];

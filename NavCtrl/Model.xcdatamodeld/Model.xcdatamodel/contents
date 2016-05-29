@@ -2,9 +2,16 @@
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10171" systemVersion="15A284" minimumToolsVersion="Xcode 7.0">
     <entity name="Company" syncable="YES">
         <attribute name="companyName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="primaryKey" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="primaryKey" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <relationship name="products" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Product" inverseName="company" inverseEntity="Product" syncable="YES"/>
+    </entity>
+    <entity name="Product" syncable="YES">
+        <attribute name="productName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="productURL" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="company" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Company" inverseName="products" inverseEntity="Company" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Company" positionX="-54" positionY="-9" width="128" height="75"/>
+        <element name="Company" positionX="-54" positionY="-9" width="128" height="90"/>
+        <element name="Product" positionX="-54" positionY="9" width="128" height="90"/>
     </elements>
 </model>

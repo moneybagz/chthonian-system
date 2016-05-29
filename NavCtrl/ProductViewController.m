@@ -41,9 +41,14 @@
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
  
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-//    self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    // create a toolbar where we can place some buttons
+    [self createToolbar];
+    
+    
+    [self.navigationItem.backBarButtonItem setAction:@selector(leftButtonSelected:)];
+}
+
+-(void)createToolbar
+{
     self.toolbar = [[UIToolbar alloc]
                     initWithFrame:CGRectMake(0, 0, 100, 45)];
     [self.toolbar setBarStyle: UIBarStyleDefault];
@@ -79,11 +84,6 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.toolbar];
     
     [self.toolbar release];
-    
-    
-    
-    
-    [self.navigationItem.backBarButtonItem setAction:@selector(leftButtonSelected:)];
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
@@ -95,17 +95,10 @@
         // Your code for entering edit mode goes here
         self.tableView.allowsSelectionDuringEditing = YES;
         self.doneButton = [[UIBarButtonItem alloc ] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
-//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.toolbar];
+
         [self.navigationItem.rightBarButtonItem release];
         self.navigationItem.rightBarButtonItem = self.doneButton;
     }
-//    else {
-//        // Your code for exiting edit mode goes here
-////        [self.navigationItem.rightBarButtonItem release];
-//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.toolbar];
-//        
-////        [self.toolbar release];
-//    }
 }
 
 -(void)editPlease
@@ -132,27 +125,19 @@
     
     self.productFormViewController.companyID = self.ID;
     
-//    [self.navigationItem.rightBarButtonItem release];
+    self.productFormViewController.companyName = self.title;
     
     [self.navigationController
      pushViewController:self.productFormViewController
      animated:YES];
 }
 
-//-(void)viewDidDisappear:(BOOL)animated{
-//    [self.navigationItem.rightBarButtonItem release];
-//}
-
-//-(void)viewDidDisappear:(BOOL)animated
-//{
-//    [self.navigationItem.rightBarButtonItem release];
-//}
 
 - (void)viewWillAppear:(BOOL)animated {
     [self.tableView setEditing:NO animated:YES];
     self.editing = NO;
     
-    [[DataAccessObject sharedDAO]readDatabaseProducts:self.ID];
+    [[DataAccessObject sharedDAO]fetchDataProductsWithCompanyName:self.title];
     self.products = [[DataAccessObject sharedDAO] allProducts];
     
     [super viewWillAppear:animated];
@@ -212,7 +197,7 @@
         [[cell imageView] setImage: [UIImage imageNamed:@"apple.gif"]];
     } else if ([self.title  isEqualToString:@"Samsung mobile devices"]) {
         [[cell imageView] setImage: [UIImage imageNamed:@"samsung.gif"]];
-    } else if ([self.title  isEqualToString:@"Bill’s cheese factory"]) {
+    } else if ([self.title  isEqualToString:@"Clyff's CHEESE HOUSE!"]) {
         cell.imageView.image = [UIImage imageNamed:@"cheese.png"];
     } else if ([self.title  isEqualToString:@"SpaceX"]) {
         cell.imageView.image = [UIImage imageNamed:@"spacex-logo.jpg"];

@@ -49,7 +49,9 @@
     
     
     
-    [[DataAccessObject sharedDAO]createProductWithName:self.productTextfield.text productURL:self.productURLtextfield.text companyID:self.companyID];
+//    [[DataAccessObject sharedDAO]createProductWithName:self.productTextfield.text productURL:self.productURLtextfield.text companyID:self.companyID];
+    
+    [[DataAccessObject sharedDAO]createProductWithName:self.productTextfield.text productURL:self.productURLtextfield.text companyNameForProduct:self.companyName];
     
     
    [self.navigationController popToViewController:self.productViewController animated:YES];

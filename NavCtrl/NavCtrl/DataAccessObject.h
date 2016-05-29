@@ -32,8 +32,13 @@
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator;
 - (NSURL *)applicationDocumentsDirectory;
 -(void)createCompany:(NSNumber*)primaryKey name:(NSString*)companyName;
--(void) reloadDataFromContext;
+-(void)createProductWithName:(NSString *)productName
+                  productURL:(NSString *)productURL
+       companyNameForProduct:(NSString *)companyNameForProduct;
+-(void)fetchDataCompanies;
+-(void)fetchDataProductsWithCompanyName:(NSString *)companyName;
 -(void)deleteCompany:(int)index;
+-(void)editCompanyName:(NSString *)nameChange :(NSString *)companyName;
 -(void)hardcode;
 
 

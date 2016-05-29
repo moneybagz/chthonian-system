@@ -160,26 +160,79 @@
 
 -(void)createCompany:(NSNumber*)primaryKey name:(NSString*)companyName
 {
+
+    // Create Company
+    NSEntityDescription *entityCompany1 = [NSEntityDescription entityForName:@"Company" inManagedObjectContext:self.managedObjectContext];
+    NSManagedObject *kompany1 = [[NSManagedObject alloc] initWithEntity:entityCompany1 insertIntoManagedObjectContext:self.managedObjectContext];
     
-    //Add this object to the contex. Nothing happens till it is saved
-    Company *kompany = [NSEntityDescription insertNewObjectForEntityForName:@"Company" inManagedObjectContext:self.managedObjectContext];
-    
-    [kompany setValue:companyName forKey:@"companyName"];
-    [kompany setValue:primaryKey forKey:@"primaryKey"];
+    [kompany1 setValue:companyName forKey:@"companyName"];
+    [kompany1 setValue:primaryKey forKey:@"primaryKey"];
     
     
-//    [self.allCompanies addObject:kompany];
+    [self.allCompanies addObject:kompany1];
     
     [self saveContext];
 }
 
--(void) reloadDataFromContext
+-(void)createProductWithName:(NSString *)productName
+                  productURL:(NSString *)productURL
+       companyNameForProduct:(NSString *)companyNameForProduct
+{
+    
+    // Create Company
+    NSEntityDescription *entityProduct = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:self.managedObjectContext];
+    NSManagedObject *product = [[NSManagedObject alloc] initWithEntity:entityProduct insertIntoManagedObjectContext:self.managedObjectContext];
+    
+    [product setValue:productName forKey:@"productName"];
+    [product setValue:productURL forKey:@"productURL"];
+    
+    
+    
+    
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc]init];
+    
+    //A predicate template can also be used
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %@", @"companyName", companyNameForProduct];
+    [request setPredicate:p];
+    
+    
+    NSEntityDescription *e = [[self.managedObjectModel entitiesByName] objectForKey:@"Company"];
+    [request setEntity:e];
+    NSError *error = nil;
+    
+    
+    //This gets data only from context, not from store
+    NSArray *result = [self.managedObjectContext executeFetchRequest:request error:&error];
+    
+    if(!result)
+    {
+        [NSException raise:@"Fetch Failed" format:@"Reason: %@", [error localizedDescription]];
+    }
+    
+//    //empty allproducts before filling with values
+//    [self.allProducts removeAllObjects];
+    
+    for (NSManagedObject *companyElement in result){
+        
+        
+        NSMutableSet *products = [companyElement mutableSetValueForKey:@"products"];
+        [products addObject:product];
+        
+//            [self.allProducts addObject:product];
+    }
+    [self saveContext];
+}
+
+
+-(void)fetchDataCompanies
 {
     
     NSFetchRequest *request = [[NSFetchRequest alloc]init];
     
     //A predicate template can also be used
-    NSPredicate *p = [NSPredicate predicateWithFormat:@"primaryKey >=0 and companyName MATCHES '.*'"];
+//    NSPredicate *p = [NSPredicate predicateWithFormat:@"primaryKey >=0 and companyName MATCHES '.*'"];
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"companyName MATCHES '.*'"];
     [request setPredicate:p];
     
     
@@ -204,16 +257,75 @@
     }
     
     [self.allCompanies removeAllObjects];
+    
+    for (NSManagedObject *element in result) {
+        
+        Company *kompany = [[Company alloc]init];
+        kompany.companyName = [element valueForKey:@"companyName"];
+        kompany.primaryKey = [element valueForKey:@"primaryKey"];
+        NSLog(@"name:%@ key:%d", kompany.companyName, kompany.primaryKey);
+    }
+    
+    [self.allCompanies removeAllObjects];
 
     self.allCompanies = [[NSMutableArray alloc]initWithArray:result];
 //    [self setEmployees:[[NSMutableArray alloc]initWithArray:result]];
 }
 
+-(void)fetchDataProductsWithCompanyName:(NSString *)companyName
+{
+    NSFetchRequest *request = [[NSFetchRequest alloc]init];
+    
+    //A predicate template can also be used
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %@", @"companyName", companyName];
+    [request setPredicate:p];
+    
+    
+    
+    //Change ascending  YES/NO and validate
+//    NSSortDescriptor *sortByName = [[NSSortDescriptor alloc]
+//                                    initWithKey:@"primaryKey" ascending:YES];
+//    
+//    [request setSortDescriptors:[NSArray arrayWithObject:sortByName]];
+    
+    NSEntityDescription *e = [[self.managedObjectModel entitiesByName] objectForKey:@"Company"];
+    [request setEntity:e];
+    NSError *error = nil;
+    
+    
+    //This gets data only from context, not from store
+    NSArray *result = [self.managedObjectContext executeFetchRequest:request error:&error];
+    
+    if(!result)
+    {
+        [NSException raise:@"Fetch Failed" format:@"Reason: %@", [error localizedDescription]];
+    }
+    
+    //empty allproducts before filling with values
+    [self.allProducts removeAllObjects];
+    
+    for (NSManagedObject *companyElement in result){
+        
+        //use keyvalue coding to get the array of products in Company relationship "products"
+        NSArray * products = [companyElement valueForKey:@"products"];
+        for(NSManagedObject *productElement in products){
+            Product *product = [[Product alloc]init];
+            product.productName = [productElement valueForKey:@"productName"];
+            product.productUrl = [productElement valueForKey:@"productURL"];
+            NSLog(@"name:%@ url:%@", product.productName, product.productUrl);
+            
+            [self.allProducts addObject:product];
+        }
+    }
+}
+
+
 -(void)deleteCompany:(int)index
 {
     
-    
     Company *kompany = [[self allCompanies] objectAtIndex:index];
+    
+    [self.allCompanies removeObjectAtIndex:index];
     
     //Remove object from context
     [self.managedObjectContext deleteObject:kompany];
@@ -222,41 +334,228 @@
 
 }
 
+-(void)editCompanyName:(NSString *)nameChange :(NSString *)companyName
+{
+    NSFetchRequest *request = [[NSFetchRequest alloc]init];
+    
+    //A predicate template can also be used
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %@", @"companyName", companyName];
+    [request setPredicate:p];
+    
+    NSEntityDescription *e = [[self.managedObjectModel entitiesByName] objectForKey:@"Company"];
+    [request setEntity:e];
+    NSError *error = nil;
+    
+    
+    //This gets data only from context, not from store
+    NSArray *result = [self.managedObjectContext executeFetchRequest:request error:&error];
+    
+    if(!result)
+    {
+        [NSException raise:@"Fetch Failed" format:@"Reason: %@", [error localizedDescription]];
+    }
+    
+    
+    for (NSManagedObject *companyElement in result){
+        
+        [companyElement setValue:nameChange forKey:@"companyName"];
+    }
+    
+    [self saveContext];
+}
+
 -(void)hardcode
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    BOOL secondRun = [defaults boolForKey:@"BoolFirstRun"];
+    BOOL pastFirstRun = [defaults boolForKey:@"BoolFirstRun"];
    
-    if (secondRun != YES) {
+    //make sure hardcode only occurs during first run
+    if (pastFirstRun == NO) {
     
-        Company *kompany = [NSEntityDescription insertNewObjectForEntityForName:@"Company" inManagedObjectContext:self.managedObjectContext];
+  
         
+        
+        
+        
+        // Create Company
+        NSEntityDescription *entityCompany1 = [NSEntityDescription entityForName:@"Company" inManagedObjectContext:self.managedObjectContext];
+        NSManagedObject *kompany1 = [[NSManagedObject alloc] initWithEntity:entityCompany1 insertIntoManagedObjectContext:self.managedObjectContext];
+        
+        // Set company name and primary key
         NSNumber *pk = [NSNumber numberWithInt:1];
         
-        [kompany setValue:@"Apple mobile devices" forKey:@"companyName"];
-        [kompany setValue:pk forKey:@"primaryKey"];
+        [kompany1 setValue:@"Apple mobile devices" forKey:@"companyName"];
+        [kompany1 setValue:pk forKey:@"primaryKey"];
         
-        Company *kompany2 = [NSEntityDescription insertNewObjectForEntityForName:@"Company" inManagedObjectContext:self.managedObjectContext];
         
+        NSEntityDescription *entityCompany2 = [NSEntityDescription entityForName:@"Company" inManagedObjectContext:self.managedObjectContext];
+        NSManagedObject *kompany2 = [[NSManagedObject alloc] initWithEntity:entityCompany2 insertIntoManagedObjectContext:self.managedObjectContext];
+        
+        // Set company name and primary key
         NSNumber *pk2 = [NSNumber numberWithInt:2];
         
         [kompany2 setValue:@"Samsung mobile devices" forKey:@"companyName"];
         [kompany2 setValue:pk2 forKey:@"primaryKey"];
         
-        Company *kompany3 = [NSEntityDescription insertNewObjectForEntityForName:@"Company" inManagedObjectContext:self.managedObjectContext];
         
+        NSEntityDescription *entityCompany3 = [NSEntityDescription entityForName:@"Company" inManagedObjectContext:self.managedObjectContext];
+        NSManagedObject *kompany3 = [[NSManagedObject alloc] initWithEntity:entityCompany3 insertIntoManagedObjectContext:self.managedObjectContext];
+        
+        // Set company name and primary key
         NSNumber *pk3 = [NSNumber numberWithInt:3];
         
         [kompany3 setValue:@"SpaceX" forKey:@"companyName"];
         [kompany3 setValue:pk3 forKey:@"primaryKey"];
         
-        Company *kompany4 = [NSEntityDescription insertNewObjectForEntityForName:@"Company" inManagedObjectContext:self.managedObjectContext];
         
-        NSNumber *pk4 = [NSNumber numberWithInt:3];
+        NSEntityDescription *entityCompany4 = [NSEntityDescription entityForName:@"Company" inManagedObjectContext:self.managedObjectContext];
+        NSManagedObject *kompany4 = [[NSManagedObject alloc] initWithEntity:entityCompany4 insertIntoManagedObjectContext:self.managedObjectContext];
+        
+        // Set company name and primary key
+        NSNumber *pk4 = [NSNumber numberWithInt:4];
         
         [kompany4 setValue:@"Clyff's CHEESE HOUSE!" forKey:@"companyName"];
         [kompany4 setValue:pk4 forKey:@"primaryKey"];
         
+        
+        
+                                      //Create Products
+        
+        // Create Product
+        NSEntityDescription *entityProduct1 = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:self.managedObjectContext];
+        NSManagedObject *product1 = [[NSManagedObject alloc] initWithEntity:entityProduct1 insertIntoManagedObjectContext:self.managedObjectContext];
+        
+        // Set Product name and product url
+        [product1 setValue:@"iPad" forKey:@"productName"];
+        [product1 setValue:@"http://www.apple.com/ipad/" forKey:@"productURL"];
+        
+        
+        // Create Product
+        NSEntityDescription *entityProduct2 = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:self.managedObjectContext];
+        NSManagedObject *product2 = [[NSManagedObject alloc] initWithEntity:entityProduct2 insertIntoManagedObjectContext:self.managedObjectContext];
+        
+        // Set Product name and product url
+        [product2 setValue:@"iPod" forKey:@"productName"];
+        [product2 setValue:@"http://www.apple.com/ipod/" forKey:@"productURL"];
+ 
+        
+        // Create Product
+        NSEntityDescription *entityProduct3 = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:self.managedObjectContext];
+        NSManagedObject *product3 = [[NSManagedObject alloc] initWithEntity:entityProduct3 insertIntoManagedObjectContext:self.managedObjectContext];
+        
+        // Set Product name and product url
+        [product3 setValue:@"iPhone" forKey:@"productName"];
+        [product3 setValue:@"http://www.apple.com/iphone/" forKey:@"productURL"];
+        
+        //now add products to NSMutableset in Company(entity) products(relationship)
+        NSMutableSet *productsForApple = [kompany1 mutableSetValueForKey:@"products"];
+        [productsForApple addObject:product1];
+        [productsForApple addObject:product2];
+        [productsForApple addObject:product3];
+        
+        
+        // Create Product
+        NSEntityDescription *entityProduct4 = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:self.managedObjectContext];
+        NSManagedObject *product4 = [[NSManagedObject alloc] initWithEntity:entityProduct4 insertIntoManagedObjectContext:self.managedObjectContext];
+        
+        // Set Product name and product url
+        [product4 setValue:@"Galaxy S4" forKey:@"productName"];
+        [product4 setValue:@"http://www.samsung.com/us/mobile/cell-phones/SCH-I545ZKPVZW" forKey:@"productURL"];
+        
+        
+        // Create Product
+        NSEntityDescription *entityProduct5 = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:self.managedObjectContext];
+        NSManagedObject *product5 = [[NSManagedObject alloc] initWithEntity:entityProduct5 insertIntoManagedObjectContext:self.managedObjectContext];
+        
+        // Set Product name and product url
+        [product5 setValue:@"Galaxy Note" forKey:@"productName"];
+        [product5 setValue:@"http://www.samsung.com/us/mobile/cell-phones/SM-N920AZKAATT" forKey:@"productURL"];
+        
+        
+        // Create Product
+        NSEntityDescription *entityProduct6 = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:self.managedObjectContext];
+        NSManagedObject *product6 = [[NSManagedObject alloc] initWithEntity:entityProduct6 insertIntoManagedObjectContext:self.managedObjectContext];
+        
+        // Set Product name and product url
+        [product6 setValue:@"Galaxy Tab" forKey:@"productName"];
+        [product6 setValue:@"http://www.samsung.com/us/mobile/galaxy-tab/SM-T230NZWAXAR" forKey:@"productURL"];
+        
+        //now add products to NSMutableset in Company(entity) products(relationship)
+        NSMutableSet *productsForSamsung = [kompany2 mutableSetValueForKey:@"products"];
+        [productsForSamsung addObject:product4];
+        [productsForSamsung addObject:product5];
+        [productsForSamsung addObject:product6];
+        
+        // Create Product
+        NSEntityDescription *entityProduct7 = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:self.managedObjectContext];
+        NSManagedObject *product7 = [[NSManagedObject alloc] initWithEntity:entityProduct7 insertIntoManagedObjectContext:self.managedObjectContext];
+        
+        // Set Product name and product url
+        [product7 setValue:@"Falcon 9 Rocket" forKey:@"productName"];
+        [product7 setValue:@"http://www.spacex.com/falcon9" forKey:@"productURL"];
+        
+        
+        // Create Product
+        NSEntityDescription *entityProduct8 = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:self.managedObjectContext];
+        NSManagedObject *product8 = [[NSManagedObject alloc] initWithEntity:entityProduct8 insertIntoManagedObjectContext:self.managedObjectContext];
+        
+        // Set Product name and product url
+        [product8 setValue:@"Dragon Capsule" forKey:@"productName"];
+        [product8 setValue:@"http://www.spacex.com/dragon" forKey:@"productURL"];
+        
+        
+        // Create Product
+        NSEntityDescription *entityProduct9 = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:self.managedObjectContext];
+        NSManagedObject *product9 = [[NSManagedObject alloc] initWithEntity:entityProduct9 insertIntoManagedObjectContext:self.managedObjectContext];
+        
+        // Set Product name and product url
+        [product9 setValue:@"Falcon Heavy" forKey:@"productName"];
+        [product9 setValue:@"http://www.spacex.com/falcon-heavy" forKey:@"productURL"];
+        
+        //now add products to NSMutableset in Company(entity) products(relationship)
+        NSMutableSet *productsForSpaceX = [kompany3 mutableSetValueForKey:@"products"];
+        [productsForSpaceX addObject:product7];
+        [productsForSpaceX addObject:product8];
+        [productsForSpaceX addObject:product9];
+        
+        
+        // Create Product
+        NSEntityDescription *entityProduct10 = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:self.managedObjectContext];
+        NSManagedObject *product10 = [[NSManagedObject alloc] initWithEntity:entityProduct10 insertIntoManagedObjectContext:self.managedObjectContext];
+        
+        // Set Product name and product url
+        [product10 setValue:@"Swiss" forKey:@"productName"];
+        [product10 setValue:@"http://www.cheese.com/swiss/" forKey:@"productURL"];
+        
+        
+        // Create Product
+        NSEntityDescription *entityProduct11 = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:self.managedObjectContext];
+        NSManagedObject *product11 = [[NSManagedObject alloc] initWithEntity:entityProduct11 insertIntoManagedObjectContext:self.managedObjectContext];
+        
+        // Set Product name and product url
+        [product11 setValue:@"Gruyere" forKey:@"productName"];
+        [product11 setValue:@"http://www.cheese.com/gruyere/" forKey:@"productURL"];
+        
+        
+        // Create Product
+        NSEntityDescription *entityProduct12 = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:self.managedObjectContext];
+        NSManagedObject *product12 = [[NSManagedObject alloc] initWithEntity:entityProduct12 insertIntoManagedObjectContext:self.managedObjectContext];
+        
+        // Set Product name and product url
+        [product12 setValue:@"Roqueforte" forKey:@"productName"];
+        [product12 setValue:@"http://www.cheese.com/roquefort/" forKey:@"productURL"];
+        
+        //now add products to NSMutableset in Company(entity) products(relationship)
+        NSMutableSet *productsForCheeseCo = [kompany4 mutableSetValueForKey:@"products"];
+        [productsForCheeseCo addObject:product10];
+        [productsForCheeseCo addObject:product11];
+        [productsForCheeseCo addObject:product12];
+        
+        
+        
+        
+        
+
         
         
         [defaults setBool:YES forKey:@"BoolFirstRun"];

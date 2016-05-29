@@ -10,11 +10,11 @@
 #import <CoreData/CoreData.h>
 
 
-@interface Company : NSManagedObject
+@interface Company : NSObject
 
 @property int primaryKey;
 @property (nonatomic, retain) NSString *companyName;
-//@property (nonatomic, retain) NSMutableArray *products;
+@property (nonatomic, retain) NSMutableArray *products;
 
 -(instancetype)initWithCompanyName:(NSString *)name;
 
