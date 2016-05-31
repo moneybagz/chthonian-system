@@ -45,10 +45,12 @@
 }
 - (IBAction)doneButton:(id)sender {
     
-    [[DataAccessObject sharedDAO]editProductNameSQL:self.changeNameTextfield.text :self.changeURLtextfield.text :self.product];
+//    [[DataAccessObject sharedDAO]editProductNameSQL:self.changeNameTextfield.text :self.changeURLtextfield.text :self.product];
     
 //    self.product.productName = self.changeNameTextfield.text;
 //    self.product.productUrl = self.changeURLtextfield.text;
+    
+    [[DataAccessObject sharedDAO]editProdutNameAndUrl:self.changeNameTextfield.text URL:self.changeURLtextfield.text productPrimaryKey:self.product.primaryKey];
     
     [self.navigationController popToViewController:self.productViewController animated:YES];
 }

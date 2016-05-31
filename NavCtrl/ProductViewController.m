@@ -123,7 +123,7 @@
     
     self.productFormViewController.productViewController = self;
     
-    self.productFormViewController.companyID = self.ID;
+    self.productFormViewController.companyPrimaryKey = self.companyPrimaryKey;
     
     self.productFormViewController.companyName = self.title;
     
@@ -137,7 +137,7 @@
     [self.tableView setEditing:NO animated:YES];
     self.editing = NO;
     
-    [[DataAccessObject sharedDAO]fetchDataProductsWithCompanyName:self.title];
+    [[DataAccessObject sharedDAO]fetchDataProductsWithCompanyName:self.companyPrimaryKey];
     self.products = [[DataAccessObject sharedDAO] allProducts];
     
     [super viewWillAppear:animated];
@@ -219,14 +219,11 @@
         NSArray *productz = [[DataAccessObject sharedDAO]allProducts];
         
         Product *product = [productz objectAtIndex:indexPath.row];
-        [[DataAccessObject sharedDAO]deleteSingleProductWithPrimaryKey:product];
         
+        [[DataAccessObject sharedDAO]deleteProductWithPrimaryKey:product.primaryKey];
         
-//        [self.products removeObjectAtIndex:indexPath.row];
-        
-        
+        [self.products removeObject:product];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        
         
         [tableView reloadData];
     }
@@ -308,7 +305,7 @@
         }
             self.editFormViewController.product = self.products[indexPath.row];
         // Pass the id information so you can edit in DAO
-        self.editFormViewController.product.companyID = self.ID;
+        self.editFormViewController.product.companyID = self.companyPrimaryKey;
         
 //        [self.navigationItem.rightBarButtonItem release];
         

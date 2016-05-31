@@ -36,7 +36,7 @@
 - (IBAction)doneButton:(id)sender {
     
     [[DataAccessObject sharedDAO]editCompanyName:self.changeNameTextfield.text
-                                                :self.company.companyName];
+                                                :self.company.primaryKey];
     
     self.company.companyName = self.changeNameTextfield.text;
     

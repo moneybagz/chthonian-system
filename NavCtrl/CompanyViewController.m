@@ -34,7 +34,7 @@
 {
     [super viewDidLoad];
     [[DataAccessObject sharedDAO]hardcode];
-    [[DataAccessObject sharedDAO]fetchDataCompanies];
+//    [[DataAccessObject sharedDAO]fetchDataCompanies];
 
     
     // Uncomment the following line to preserve selection between presentations.
@@ -86,6 +86,8 @@
 {
     [super viewWillAppear:animated];
     
+    [[DataAccessObject sharedDAO]fetchDataCompanies];
+
     self.companyList = [[DataAccessObject sharedDAO] allCompanies];
     
     [self.tableView reloadData];
@@ -338,19 +340,19 @@
     
     if (editingStyle == UITableViewCellEditingStyleDelete){
         
-//        NSArray *kompanies = [[DataAccessObject sharedDAO]allCompanies];
-//        
-//        Company *kompany = [kompanies objectAtIndex:indexPath.row];
+        NSArray *kompanies = [[DataAccessObject sharedDAO]allCompanies];
+        
+        Company *kompany = [kompanies objectAtIndex:indexPath.row];
 
-        NSLog(@"%d", (int)indexPath.row);
+//        NSLog(@"%d", (int)indexPath.row);
         
 //        [self.companyList removeObjectAtIndex:indexPath.row];
 
+        [[DataAccessObject sharedDAO]deleteCompanyWithPrimaryKey:kompany.primaryKey];
+//        self.companyList = [[DataAccessObject sharedDAO]allCompanies];
         
-        [[DataAccessObject sharedDAO]deleteCompany:(int)indexPath.row];
-        self.companyList = [[DataAccessObject sharedDAO]allCompanies];
+        [self.companyList removeObject:kompany];
         
-            
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 //
         [tableView reloadData];
@@ -367,17 +369,17 @@
 //method to be able move cells
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
+//    Company *kompany1 = self.companyList[fromIndexPath.row];
+//    Company *kompany2 = self.companyList[toIndexPath.row];
 
+
+    [[DataAccessObject sharedDAO]moveRowFromIndex:(int)fromIndexPath.row toIndex:(int)toIndexPath.row];
     
     NSString * company = [self.companyList objectAtIndex:fromIndexPath.row];
     [company retain];
     
-    
-    
     NSInteger fromIndex = fromIndexPath.row;
     NSInteger toIndex = toIndexPath.row;
-    
-
     
     [self.companyList removeObjectAtIndex:fromIndex];
     [self.companyList insertObject:company atIndex:toIndex];
@@ -472,7 +474,7 @@
     self.productViewController.title = company.companyName;
     //self.productViewController.products = company.products;
         
-//    self.productViewController.ID= company.companyId; ////////////////////////
+    self.productViewController.companyPrimaryKey = company.primaryKey; ////////////////////////
     
     [self.navigationItem.rightBarButtonItem release];
     

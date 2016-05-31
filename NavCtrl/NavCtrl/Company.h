@@ -13,6 +13,7 @@
 @interface Company : NSObject
 
 @property int primaryKey;
+@property int orderValue;
 @property (nonatomic, retain) NSString *companyName;
 @property (nonatomic, retain) NSMutableArray *products;
 

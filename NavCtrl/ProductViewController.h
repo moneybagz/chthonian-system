@@ -23,7 +23,7 @@
 @property (nonatomic, retain) UIBarButtonItem *buttonWithToolbar;
 //@property (nonatomic) BOOL editor;
 
-@property int ID;
+@property int companyPrimaryKey;
 
 
 
