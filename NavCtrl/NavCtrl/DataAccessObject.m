@@ -177,7 +177,8 @@
 
 -(void)createProductWithName:(NSString *)productName
                   productURL:(NSString *)productURL
-       companyPrimaryKey:(NSInteger *)companyPrimaryKey
+           companyPrimaryKey:(int)companyPrimaryKey
+                productCount:(int)productCount
 {
     
     // Create Product
@@ -189,7 +190,8 @@
     [product setValue:productName forKey:@"productName"];
     [product setValue:productURL forKey:@"productURL"];
     [product setValue:pk forKey:@"primaryKey"];
-    
+    [product setValue:[NSNumber numberWithInt:productCount+1] forKey:@"orderValue"];
+
     
     
     
@@ -197,7 +199,7 @@
     NSFetchRequest *request = [[NSFetchRequest alloc]init];
     
     //A predicate template can also be used
-    NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %d", @"primaryKey", (int)companyPrimaryKey];
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %d", @"primaryKey", companyPrimaryKey];
     [request setPredicate:p];
     
     
@@ -289,10 +291,10 @@
     
     
 //    Change ascending  YES/NO and validate
-//    NSSortDescriptor *sortByName = [[NSSortDescriptor alloc]
-//                                    initWithKey:@"primaryKey" ascending:YES];
-//    
-//    [request setSortDescriptors:[NSArray arrayWithObject:sortByName]];
+    NSSortDescriptor *sortByKey = [[NSSortDescriptor alloc]
+                                    initWithKey:@"orderValue" ascending:YES];
+    
+    [request setSortDescriptors:[NSArray arrayWithObject:sortByKey]];
     
     NSEntityDescription *e = [[self.managedObjectModel entitiesByName] objectForKey:@"Company"];
     [request setEntity:e];
@@ -316,21 +318,29 @@
         
         //use keyvalue coding to get the array of products in Company relationship "products"
         NSArray * products = [companyElement valueForKey:@"products"];
+        
+//        [products sortedArrayUsingDescriptors:sortByKey]];
         for(NSManagedObject *productElement in products){
             Product *product = [[Product alloc]init];
             product.productName = [productElement valueForKey:@"productName"];
             product.productUrl = [productElement valueForKey:@"productURL"];
             product.primaryKey = [[productElement valueForKey:@"primaryKey"]intValue];
-            NSLog(@"name:%@ url:%@ %d", product.productName, product.productUrl, product.primaryKey);
+            product.orderValue = [[productElement valueForKey:@"orderValue"]intValue];
+            NSLog(@"name:%@ url:%@ %d orderVAL:%d", product.productName, product.productUrl, product.primaryKey, product.orderValue);
             
             [self.allProducts addObject:product];
         }
     }
     
-    NSSortDescriptor *sortByKey = [[NSSortDescriptor alloc]initWithKey:@"primaryKey" ascending:YES];
-
-    [self.allProducts sortUsingDescriptors:[NSArray arrayWithObject:sortByKey]];
-
+//    NSSortDescriptor *sortByKey = [[NSSortDescriptor alloc]initWithKey:@"orderValue" ascending:YES];
+//
+//    [self.allProducts sortUsingDescriptors:[NSArray arrayWithObject:sortByKey]];
+//    
+//    [self.allProducts sortedArrayUsingDescriptors:sortByKey];
+    
+    NSArray *sortDescriptors = @[sortByKey];
+    NSArray *sortedArray = [self.allProducts sortedArrayUsingDescriptors:sortDescriptors];
+    self.allProducts = [sortedArray mutableCopy];
 
 }
 
@@ -389,15 +399,20 @@
 }
 
 -(void)deleteProductWithPrimaryKey:(int)productPrimaryKey
+                 companyPrimaryKey:(int)companyPrimaryKey
 {
     NSFetchRequest *request = [[NSFetchRequest alloc]init];
     
     //A predicate template can also be used
-    NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %d", @"primaryKey", productPrimaryKey];
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %d", @"primaryKey", companyPrimaryKey];
     [request setPredicate:p];
     
+    NSSortDescriptor *sortByKey = [[NSSortDescriptor alloc]
+                                   initWithKey:@"orderValue" ascending:YES];
     
-    NSEntityDescription *e = [[self.managedObjectModel entitiesByName] objectForKey:@"Product"];
+    [request setSortDescriptors:[NSArray arrayWithObject:sortByKey]];
+    
+    NSEntityDescription *e = [[self.managedObjectModel entitiesByName] objectForKey:@"Company"];
     [request setEntity:e];
     NSError *error = nil;
     
@@ -412,11 +427,27 @@
     
     //empty allproducts before filling with values
 //    [self.allProducts removeAllObjects];
-    
-    for (NSManagedObject *productElement in result){
+    int i = 0;
+    for (NSManagedObject *companyElement in result){
         
-        [self.managedObjectContext deleteObject:productElement];
+//        [self.managedObjectContext deleteObject:productElement];
+        NSArray *products = [companyElement valueForKey:@"products"];
         
+        //sort the array for order values
+        NSMutableArray *productz = [products mutableCopy];
+        NSArray *sortDescriptors = @[sortByKey];
+        NSArray *sortedArray = [productz sortedArrayUsingDescriptors:sortDescriptors];
+        
+        for(NSManagedObject *productElement in sortedArray){
+            if ([[productElement valueForKey:@"primaryKey"]intValue] == productPrimaryKey ) {
+                [self.managedObjectContext deleteObject:productElement];
+            } else {
+                [productElement setValue:[NSNumber numberWithInt:++i] forKey:@"orderValue"];
+            }
+            NSLog(@"%d!!!!!!!!!!!!!!!!!!!", [[productElement valueForKey:@"orderValue"]intValue]);
+            
+            
+        }
     }
     
     [self saveContext];
@@ -488,7 +519,7 @@
     [self saveContext];
 }
 
--(void)moveRowFromIndex:(int)fromIndex toIndex:(int)toIndex
+-(void)companyMoveRowFromIndex:(int)fromIndex toIndex:(int)toIndex
 {
     NSFetchRequest *request = [[NSFetchRequest alloc]init];
     
@@ -570,7 +601,76 @@
 //        }
     }
     [self saveContext];
+}
 
+-(void)productMoveRowFromIndex:(int)fromIndex
+                       toIndex:(int)toIndex
+             companyPrimaryKey:(int)companyPrimaryKey
+{
+    NSFetchRequest *request = [[NSFetchRequest alloc]init];
+    
+    //A predicate template can also be used
+    //    NSPredicate *p = [NSPredicate predicateWithFormat:@"primaryKey >=0 and companyName MATCHES '.*'"];
+    NSPredicate *p = [NSPredicate predicateWithFormat:@"%K == %d", @"primaryKey", companyPrimaryKey];
+    [request setPredicate:p];
+    
+    NSSortDescriptor *sortByKey = [[NSSortDescriptor alloc]
+                                   initWithKey:@"orderValue" ascending:YES];
+    
+    [request setSortDescriptors:[NSArray arrayWithObject:sortByKey]];
+    
+    
+    NSEntityDescription *e = [[self.managedObjectModel entitiesByName] objectForKey:@"Company"];
+    [request setEntity:e];
+    NSError *error = nil;
+    
+    
+    //This gets data only from context, not from store
+    NSArray *result = [self.managedObjectContext executeFetchRequest:request error:&error];
+    
+    if(!result)
+    {
+        [NSException raise:@"Fetch Failed" format:@"Reason: %@", [error localizedDescription]];
+    }
+    
+    fromIndex = fromIndex +1;
+    toIndex = toIndex +1;
+    NSLog(@"fromIndex:%d, toIndex:%d", fromIndex, toIndex);
+    
+    for (NSManagedObject *companyElement in result) {
+        
+        NSArray *products = [companyElement valueForKey:@"products"];
+        
+        //sort the array for order values
+        NSMutableArray *productz = [products mutableCopy];
+        NSArray *sortDescriptors = @[sortByKey];
+        NSArray *sortedArray = [productz sortedArrayUsingDescriptors:sortDescriptors];
+        
+        for(NSManagedObject *productElement in sortedArray){
+            
+            if ([[productElement valueForKey:@"orderValue"]intValue] == fromIndex) {
+                [productElement setValue:[NSNumber numberWithInt:toIndex] forKey:@"orderValue"];
+            }
+            
+            else if (fromIndex < toIndex) {
+                if (([[productElement valueForKey:@"orderValue"]intValue] > fromIndex) && ([[productElement valueForKey:@"orderValue"]intValue] <= toIndex)) {
+                    int order = [[productElement valueForKey:@"orderValue"]intValue];
+                    [productElement setValue:[NSNumber numberWithInt:order - 1] forKey:@"orderValue"];
+                }
+            }
+            
+            else if (toIndex < fromIndex) {
+                if (([[productElement valueForKey:@"orderValue"]intValue] >= toIndex) && ([[productElement valueForKey:@"orderValue"]intValue] < fromIndex)) {
+                    int order = [[productElement valueForKey:@"orderValue"]intValue];
+                    [productElement setValue:[NSNumber numberWithInt:order + 1] forKey:@"orderValue"];
+                }
+            }
+            
+            NSLog(@"%d*******", [[productElement valueForKey:@"orderValue"]intValue]);
+            
+        }
+    }
+    [self saveContext];
 }
 
 -(void)hardcode
@@ -644,7 +744,7 @@
         [product1 setValue:@"iPad" forKey:@"productName"];
         [product1 setValue:@"http://www.apple.com/ipad/" forKey:@"productURL"];
         [product1 setValue:[NSNumber numberWithInt:1] forKey:@"primaryKey"];
-        
+        [product1 setValue:[NSNumber numberWithInt:1] forKey:@"orderValue"];
         
         // Create Product
         NSEntityDescription *entityProduct2 = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:self.managedObjectContext];
@@ -654,6 +754,7 @@
         [product2 setValue:@"iPod" forKey:@"productName"];
         [product2 setValue:@"http://www.apple.com/ipod/" forKey:@"productURL"];
         [product2 setValue:[NSNumber numberWithInt:2] forKey:@"primaryKey"];
+        [product2 setValue:[NSNumber numberWithInt:2] forKey:@"orderValue"];
 
  
         
@@ -665,13 +766,16 @@
         [product3 setValue:@"iPhone" forKey:@"productName"];
         [product3 setValue:@"http://www.apple.com/iphone/" forKey:@"productURL"];
         [product3 setValue:[NSNumber numberWithInt:3] forKey:@"primaryKey"];
+        [product3 setValue:[NSNumber numberWithInt:3] forKey:@"orderValue"];
 
+        
         
         //now add products to NSMutableset in Company(entity) products(relationship)
         NSMutableSet *productsForApple = [kompany1 mutableSetValueForKey:@"products"];
         [productsForApple addObject:product1];
         [productsForApple addObject:product2];
         [productsForApple addObject:product3];
+
         
         
         // Create Product
@@ -682,6 +786,8 @@
         [product4 setValue:@"Galaxy S4" forKey:@"productName"];
         [product4 setValue:@"http://www.samsung.com/us/mobile/cell-phones/SCH-I545ZKPVZW" forKey:@"productURL"];
         [product4 setValue:[NSNumber numberWithInt:4] forKey:@"primaryKey"];
+        [product4 setValue:[NSNumber numberWithInt:4] forKey:@"orderValue"];
+
 
         
         
@@ -693,6 +799,8 @@
         [product5 setValue:@"Galaxy Note" forKey:@"productName"];
         [product5 setValue:@"http://www.samsung.com/us/mobile/cell-phones/SM-N920AZKAATT" forKey:@"productURL"];
         [product5 setValue:[NSNumber numberWithInt:5] forKey:@"primaryKey"];
+        [product5 setValue:[NSNumber numberWithInt:5] forKey:@"orderValue"];
+
 
         
         
@@ -704,6 +812,8 @@
         [product6 setValue:@"Galaxy Tab" forKey:@"productName"];
         [product6 setValue:@"http://www.samsung.com/us/mobile/galaxy-tab/SM-T230NZWAXAR" forKey:@"productURL"];
         [product6 setValue:[NSNumber numberWithInt:6] forKey:@"primaryKey"];
+        [product6 setValue:[NSNumber numberWithInt:6] forKey:@"orderValue"];
+
         
         //now add products to NSMutableset in Company(entity) products(relationship)
         NSMutableSet *productsForSamsung = [kompany2 mutableSetValueForKey:@"products"];
@@ -719,6 +829,8 @@
         [product7 setValue:@"Falcon 9 Rocket" forKey:@"productName"];
         [product7 setValue:@"http://www.spacex.com/falcon9" forKey:@"productURL"];
         [product7 setValue:[NSNumber numberWithInt:7] forKey:@"primaryKey"];
+        [product7 setValue:[NSNumber numberWithInt:7] forKey:@"orderValue"];
+
 
         
         
@@ -730,6 +842,8 @@
         [product8 setValue:@"Dragon Capsule" forKey:@"productName"];
         [product8 setValue:@"http://www.spacex.com/dragon" forKey:@"productURL"];
         [product8 setValue:[NSNumber numberWithInt:8] forKey:@"primaryKey"];
+        [product8 setValue:[NSNumber numberWithInt:8] forKey:@"orderValue"];
+
 
         
         
@@ -741,6 +855,8 @@
         [product9 setValue:@"Falcon Heavy" forKey:@"productName"];
         [product9 setValue:@"http://www.spacex.com/falcon-heavy" forKey:@"productURL"];
         [product9 setValue:[NSNumber numberWithInt:9] forKey:@"primaryKey"];
+        [product9 setValue:[NSNumber numberWithInt:9] forKey:@"orderValue"];
+
 
         
         //now add products to NSMutableset in Company(entity) products(relationship)
@@ -758,6 +874,8 @@
         [product10 setValue:@"Swiss" forKey:@"productName"];
         [product10 setValue:@"http://www.cheese.com/swiss/" forKey:@"productURL"];
         [product10 setValue:[NSNumber numberWithInt:10] forKey:@"primaryKey"];
+        [product10 setValue:[NSNumber numberWithInt:10] forKey:@"orderValue"];
+
 
         
         
@@ -769,6 +887,8 @@
         [product11 setValue:@"Gruyere" forKey:@"productName"];
         [product11 setValue:@"http://www.cheese.com/gruyere/" forKey:@"productURL"];
         [product11 setValue:[NSNumber numberWithInt:11] forKey:@"primaryKey"];
+        [product11 setValue:[NSNumber numberWithInt:11] forKey:@"orderValue"];
+
 
         
         
@@ -780,6 +900,8 @@
         [product12 setValue:@"Roqueforte" forKey:@"productName"];
         [product12 setValue:@"http://www.cheese.com/roquefort/" forKey:@"productURL"];
         [product12 setValue:[NSNumber numberWithInt:12] forKey:@"primaryKey"];
+        [product12 setValue:[NSNumber numberWithInt:12] forKey:@"orderValue"];
+
 
         
         //now add products to NSMutableset in Company(entity) products(relationship)

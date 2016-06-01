@@ -34,16 +34,21 @@
 -(void)createCompany:(NSNumber*)primaryKey name:(NSString*)companyName;
 -(void)createProductWithName:(NSString *)productName
                   productURL:(NSString *)productURL
-           companyPrimaryKey:(NSString *)companyPrimaryKey;
+           companyPrimaryKey:(int)companyPrimaryKey
+                productCount:(int)productCount;
 -(void)fetchDataCompanies;
 -(void)fetchDataProductsWithCompanyName:(int)companyPrimaryKey;
 -(void)deleteCompanyWithPrimaryKey:(int)companyPrimaryKey;
--(void)deleteProductWithPrimaryKey:(int)productPrimaryKey;
+-(void)deleteProductWithPrimaryKey:(int)productPrimaryKey
+                 companyPrimaryKey:(int)companyPrimaryKey;
 -(void)editCompanyName:(NSString *)nameChange :(int)companyPrimaryKey;
 -(void)editProdutNameAndUrl:(NSString *)nameChange
                         URL:(NSString *)urlChange
           productPrimaryKey:(int)productPrimaryKey;
--(void)moveRowFromIndex:(int)fromIndex toIndex:(int)toIndex;
+-(void)companyMoveRowFromIndex:(int)fromIndex toIndex:(int)toIndex;
+-(void)productMoveRowFromIndex:(int)fromIndex
+                       toIndex:(int)toIndex
+             companyPrimaryKey:(int)companyPrimaryKey;
 -(void)hardcode;
 
 

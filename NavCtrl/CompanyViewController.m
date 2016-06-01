@@ -373,7 +373,7 @@
 //    Company *kompany2 = self.companyList[toIndexPath.row];
 
 
-    [[DataAccessObject sharedDAO]moveRowFromIndex:(int)fromIndexPath.row toIndex:(int)toIndexPath.row];
+    [[DataAccessObject sharedDAO]companyMoveRowFromIndex:(int)fromIndexPath.row toIndex:(int)toIndexPath.row];
     
     NSString * company = [self.companyList objectAtIndex:fromIndexPath.row];
     [company retain];

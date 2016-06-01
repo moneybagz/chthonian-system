@@ -14,9 +14,10 @@
 
 @property (retain, nonatomic) IBOutlet UITextField *productTextfield;
 @property (retain, nonatomic) IBOutlet UITextField *productURLtextfield;
-@property (retain, nonatomic) IBOutlet UITextField *companyTextfield;
+//@property (retain, nonatomic) IBOutlet UITextField *companyTextfield;
 @property (retain, nonatomic) ProductViewController *productViewController;
 @property int companyPrimaryKey;
+@property int productCount;
 @property (retain, nonatomic) NSString *companyName;
 
 

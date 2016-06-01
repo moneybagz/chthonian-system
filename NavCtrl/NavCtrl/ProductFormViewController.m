@@ -41,17 +41,13 @@
 - (void)dealloc {
     [_productTextfield release];
     [_productURLtextfield release];
-    [_companyTextfield release];
+//    [_companyTextfield release];
     [super dealloc];
 }
 
 - (IBAction)doneButton:(id)sender {
     
-    
-    
-//    [[DataAccessObject sharedDAO]createProductWithName:self.productTextfield.text productURL:self.productURLtextfield.text companyID:self.companyID];
-    
-    [[DataAccessObject sharedDAO]createProductWithName:self.productTextfield.text productURL:self.productURLtextfield.text companyPrimaryKey:self.companyPrimaryKey];
+    [[DataAccessObject sharedDAO]createProductWithName:self.productTextfield.text productURL:self.productURLtextfield.text companyPrimaryKey:self.companyPrimaryKey productCount:self.productCount];
     
    [self.navigationController popToViewController:self.productViewController animated:YES];
 }

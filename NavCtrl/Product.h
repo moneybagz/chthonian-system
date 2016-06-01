@@ -14,5 +14,6 @@
 @property (nonatomic, retain) NSString *productUrl;
 @property int companyID;
 @property int primaryKey;
+@property int orderValue;
 
 @end

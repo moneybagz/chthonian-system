@@ -127,6 +127,8 @@
     
     self.productFormViewController.companyName = self.title;
     
+    self.productFormViewController.productCount = (int)[self.products count];
+    
     [self.navigationController
      pushViewController:self.productFormViewController
      animated:YES];
@@ -220,7 +222,7 @@
         
         Product *product = [productz objectAtIndex:indexPath.row];
         
-        [[DataAccessObject sharedDAO]deleteProductWithPrimaryKey:product.primaryKey];
+        [[DataAccessObject sharedDAO]deleteProductWithPrimaryKey:product.primaryKey companyPrimaryKey:self.companyPrimaryKey];
         
         [self.products removeObject:product];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -236,6 +238,7 @@
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
     
+    [[DataAccessObject sharedDAO]productMoveRowFromIndex:(int)fromIndexPath.row toIndex:(int)toIndexPath.row companyPrimaryKey:self.companyPrimaryKey];
     
     NSString * product = [self.products objectAtIndex:fromIndexPath.row];
     
