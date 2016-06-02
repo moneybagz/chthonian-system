@@ -78,7 +78,7 @@
             abort();
         }
     }
-    NSLog(@"WORKED?");
+    [self undoBounds:0];
 }
 
 - (NSManagedObjectContext *)managedObjectContext
@@ -92,6 +92,10 @@
         _managedObjectContext = [[NSManagedObjectContext alloc] init];
         [_managedObjectContext setPersistentStoreCoordinator:coordinator];
     }
+    
+    //undo manager added to boilerplate code
+    self.managedObjectContext.undoManager = [[NSUndoManager alloc] init];
+    
     return _managedObjectContext;
 }
 
@@ -103,7 +107,6 @@
     NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"Model" withExtension:@"momd"];
     _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     
-//    [self setModel:[NSManagedObjectModel mergedModelFromBundles:nil]];
     
     return _managedObjectModel;
 }
@@ -169,10 +172,10 @@
     [kompany1 setValue:primaryKey forKey:@"primaryKey"];
     [kompany1 setValue:[NSNumber numberWithInt:(int)self.allCompanies.count + 1] forKey:@"orderValue"];
     NSLog(@"%d", (int)self.allCompanies.count + 1);
+        
+    [self undoBounds:1];
     
-//    [self.allCompanies addObject:kompany1];
-    
-    [self saveContext];
+//    [self saveContext];
 }
 
 -(void)createProductWithName:(NSString *)productName
@@ -193,7 +196,8 @@
     [product setValue:[NSNumber numberWithInt:productCount+1] forKey:@"orderValue"];
 
     
-    
+//    [self.allProducts addObject:product];
+
     
     
     NSFetchRequest *request = [[NSFetchRequest alloc]init];
@@ -227,7 +231,9 @@
         
 //            [self.allProducts addObject:product];
     }
-    [self saveContext];
+    [self undoBounds:1];
+
+//    [self saveContext];
 }
 
 
@@ -394,7 +400,19 @@
         NSLog(@"%d!!!!!!!!!!!!!!!!!!!", [[companyElement valueForKey:@"orderValue"]intValue]);
     }
     
-    [self saveContext];
+//    NSMutableArray *discardedItems = [NSMutableArray array];
+//    
+//    for (Company *element in self.allCompanies){
+//        
+//        if (element.primaryKey == companyPrimaryKey) {
+//            [discardedItems addObject:element];
+//        }
+//    }
+//    [self.allCompanies removeObjectsInArray:discardedItems];
+
+    [self undoBounds:1];
+
+//    [self saveContext];
 
 }
 
@@ -450,7 +468,9 @@
         }
     }
     
-    [self saveContext];
+    [self undoBounds:1];
+
+//    [self saveContext];
 }
 
 -(void)editCompanyName:(NSString *)nameChange :(int)companyPrimaryKey
@@ -480,7 +500,17 @@
         [companyElement setValue:nameChange forKey:@"companyName"];
     }
     
-    [self saveContext];
+    
+    for (Company *element in self.allCompanies){
+        
+        if (element.primaryKey == companyPrimaryKey) {
+            element.companyName = nameChange;
+        }
+    }
+    
+    [self undoBounds:1];
+
+//    [self saveContext];
 }
 
 -(void)editProdutNameAndUrl:(NSString *)nameChange
@@ -515,8 +545,9 @@
 
     }
     
-    
-    [self saveContext];
+    [self undoBounds:1];
+
+//    [self saveContext];
 }
 
 -(void)companyMoveRowFromIndex:(int)fromIndex toIndex:(int)toIndex
@@ -572,35 +603,11 @@
         }
         
         NSLog(@"%d*******", [[element valueForKey:@"orderValue"]intValue]);
-        
-//        if (kompany1.companyName == [element valueForKey:@"companyName"]) {
-//            [element setValue:[NSNumber numberWithInt:kompany2.primaryKey]  forKey:@"primaryKey"];
-//            NSLog(@" %@ %d", kompany1.companyName, (int)[element valueForKey:@"primaryKey"]);
-//        }
-//    
-//        else if (kompany2.companyName == [element valueForKey:@"companyName"]) {
-//            [element setValue:[NSNumber numberWithInt:kompany1.primaryKey] forKey:@"primaryKey"];
-//            NSLog(@" %@ %d", kompany2.companyName, (int)[element valueForKey:@"primaryKey"]);
-        
-//        if ([[lister itemOrder] integerValue] == fromRow) { // the item that moved
-//            NSNumber *orderNumber = [[NSNumber alloc] initWithInteger:toRow];
-//            [lister setItemOrder:orderNumber];
-//            [orderNumber release];
-//        } else {
-//            NSInteger orderNewInt;
-//            if (fromRow < toRow) {
-//                orderNewInt = [[lister itemOrder] integerValue] -1;
-//            } else {
-//                orderNewInt = [[lister itemOrder] integerValue] +1;
-//            }
-//            NSNumber *orderNumber = [[NSNumber alloc] initWithInteger:orderNewInt];
-//            [lister setItemOrder:orderNumber];
-//            [orderNumber release];
-//        }
 
-//        }
     }
-    [self saveContext];
+    [self undoBounds:1];
+
+//    [self saveContext];
 }
 
 -(void)productMoveRowFromIndex:(int)fromIndex
@@ -670,7 +677,9 @@
             
         }
     }
-    [self saveContext];
+    [self undoBounds:1];
+
+//    [self saveContext];
 }
 
 -(void)hardcode
@@ -924,7 +933,42 @@
     }
 }
 
+-(void)undoManagerCompanies
+{
+    
+    if (self.undoLimit > 0){
+        [self.managedObjectContext undo];
+        --self.undoLimit;
+    }else {
+        NSLog(@"nothing to undo");
+    }
+    
+   
+}
 
+-(void)undoManagerProducts
+{
+    if (self.undoLimit > 0){
+        [self.managedObjectContext undo];
+        --self.undoLimit;
+    }
+    else {
+        NSLog(@"nothing to undo!!!!!!!!!!!!!!!!!!!!!!");
+    }
+}
+
+-(void)undoBounds:(int)multiplier
+{
+    //multiplier acts as a bool
+    //if save calls undoBounds multiplier = 0 else multiplier = 1
+    static int bounds = 0;
+    
+    ++bounds;
+    
+    bounds = bounds * multiplier;
+    
+    self.undoLimit = bounds;
+}
 
 
 

@@ -16,7 +16,7 @@
 @property (nonatomic, retain) NSMutableArray *allCompanies;
 @property (nonatomic, retain) NSMutableArray *allProducts;
 @property (nonatomic, retain) NSString *dbPathString;
-
+@property int undoLimit;
 
 +(instancetype)sharedDAO;
 //-(void)createCompany:(NSString *)companyName;
@@ -50,6 +50,8 @@
                        toIndex:(int)toIndex
              companyPrimaryKey:(int)companyPrimaryKey;
 -(void)hardcode;
+-(void)undoManagerCompanies;
+-(void)undoManagerProducts;
 
 
 @end

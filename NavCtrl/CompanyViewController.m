@@ -34,7 +34,10 @@
 {
     [super viewDidLoad];
     [[DataAccessObject sharedDAO]hardcode];
+//
 //    [[DataAccessObject sharedDAO]fetchDataCompanies];
+//    
+//    self.companyList = [[DataAccessObject sharedDAO] allCompanies];
 
     
     // Uncomment the following line to preserve selection between presentations.
@@ -119,11 +122,11 @@
 {
     //Create a toolbar so you can have more than 2 buttons in Navbar
     self.toolbar = [[UIToolbar alloc]
-                    initWithFrame:CGRectMake(0, 0, 100, 45)];
+                    initWithFrame:CGRectMake(0, 0, 200, 45)];
     [self.toolbar setBarStyle: UIBarStyleDefault];
     
     // create an array for the buttons
-    NSMutableArray* buttons = [[NSMutableArray alloc] initWithCapacity:3];
+    NSMutableArray* buttons = [[NSMutableArray alloc]init];
     
     // create an add button to add companies
     UIBarButtonItem *addBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewCompanyForm:)];
@@ -143,7 +146,30 @@
     [buttons addObject:editBtn];
     [editBtn release];
     
+    // create a spacer between the buttons
+    UIBarButtonItem *spacer2 = [[UIBarButtonItem alloc]
+                               initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                               target:nil
+                               action:nil];
+    [buttons addObject:spacer2];
+//    [spacer release];
     
+    UIBarButtonItem *undoBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemUndo target:self action:@selector(undo)];
+    [buttons addObject:undoBtn];
+//    [addBtn release];
+    
+    UIBarButtonItem *spacer3 = [[UIBarButtonItem alloc]
+                                initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                target:nil
+                                action:nil];
+    [buttons addObject:spacer3];
+    //    [spacer release];
+    
+    UIBarButtonItem *saveBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(save)];
+    [buttons addObject:saveBtn];
+    //    [addBtn release];
+    
+
     
     // put the buttons in the toolbar and release them
     [self.toolbar setItems:buttons animated:NO];
@@ -182,8 +208,20 @@
 }
 
 
+-(void)undo
+{
+    
+    [[DataAccessObject sharedDAO]undoManagerCompanies];
+    
+    [[DataAccessObject sharedDAO]fetchDataCompanies];
+    
+    [self.tableView reloadData];
+}
 
-
+-(void)save
+{
+    [[DataAccessObject sharedDAO]saveContext];
+}
 
 
 
@@ -346,12 +384,12 @@
 
 //        NSLog(@"%d", (int)indexPath.row);
         
-//        [self.companyList removeObjectAtIndex:indexPath.row];
+        [self.companyList removeObjectAtIndex:indexPath.row];
 
         [[DataAccessObject sharedDAO]deleteCompanyWithPrimaryKey:kompany.primaryKey];
 //        self.companyList = [[DataAccessObject sharedDAO]allCompanies];
         
-        [self.companyList removeObject:kompany];
+//        [self.companyList removeObject:kompany];
         
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 //

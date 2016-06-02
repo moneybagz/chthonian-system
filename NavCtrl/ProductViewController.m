@@ -41,7 +41,6 @@
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
  
-    [self createToolbar];
     
     
     [self.navigationItem.backBarButtonItem setAction:@selector(leftButtonSelected:)];
@@ -49,16 +48,62 @@
 
 -(void)createToolbar
 {
+//    self.toolbar = [[UIToolbar alloc]
+//                    initWithFrame:CGRectMake(0, 0, 100, 45)];
+//    [self.toolbar setBarStyle: UIBarStyleDefault];
+//    
+//    // create an array for the buttons
+//    self.buttons = [[NSMutableArray alloc] initWithCapacity:3];
+//    
+//    
+//    UIBarButtonItem *addBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewProductForm:)];
+//    [self.buttons addObject:addBtn];
+//    [addBtn release];
+//    
+//    // create a spacer between the buttons
+//    UIBarButtonItem *spacer = [[UIBarButtonItem alloc]
+//                               initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+//                               target:nil
+//                               action:nil];
+//    [self.buttons addObject:spacer];
+//    [spacer release];
+//    
+//    // create a standard delete button with the trash icon
+//    UIBarButtonItem *editBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPlease)];
+//    [self.buttons addObject:editBtn];
+//    self.navigationItem.rightBarButtonItem = editBtn;
+//    
+//    [editBtn release];
+//    
+//    // put the buttons in the toolbar and release them
+//    [self.toolbar setItems:self.buttons animated:NO];
+//    [self.buttons release];
+//    
+//    // place the toolbar into the navigation bar
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.toolbar];
+//    
+//    [self.toolbar release];
+//    
+//    
+//    
+//    
+//    [self.navigationItem.backBarButtonItem setAction:@selector(leftButtonSelected:)];
+    
+    
+    
+    
+    
+    //Create a toolbar so you can have more than 2 buttons in Navbar
     self.toolbar = [[UIToolbar alloc]
-                    initWithFrame:CGRectMake(0, 0, 100, 45)];
+                    initWithFrame:CGRectMake(0, 0, 200, 45)];
     [self.toolbar setBarStyle: UIBarStyleDefault];
     
     // create an array for the buttons
-    self.buttons = [[NSMutableArray alloc] initWithCapacity:3];
+    NSMutableArray* buttons = [[NSMutableArray alloc]init];
     
-    
+    // create an add button to add companies
     UIBarButtonItem *addBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewProductForm:)];
-    [self.buttons addObject:addBtn];
+    [buttons addObject:addBtn];
     [addBtn release];
     
     // create a spacer between the buttons
@@ -66,24 +111,61 @@
                                initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
                                target:nil
                                action:nil];
-    [self.buttons addObject:spacer];
+    [buttons addObject:spacer];
     [spacer release];
     
-    // create a standard delete button with the trash icon
+    // create a edit button to edit company name
     UIBarButtonItem *editBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPlease)];
-    [self.buttons addObject:editBtn];
-    self.navigationItem.rightBarButtonItem = editBtn;
-    
+    [buttons addObject:editBtn];
     [editBtn release];
     
+    // create a spacer between the buttons
+    UIBarButtonItem *spacer2 = [[UIBarButtonItem alloc]
+                                initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                target:nil
+                                action:nil];
+    [buttons addObject:spacer2];
+    //    [spacer release];
+    
+    UIBarButtonItem *undoBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemUndo target:self action:@selector(undo)];
+    [buttons addObject:undoBtn];
+    //    [addBtn release];
+    
+    UIBarButtonItem *spacer3 = [[UIBarButtonItem alloc]
+                                initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                target:nil
+                                action:nil];
+    [buttons addObject:spacer3];
+    //    [spacer release];
+    
+    UIBarButtonItem *saveBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(save)];
+    [buttons addObject:saveBtn];
+    //    [addBtn release];
+    
+    
+    
     // put the buttons in the toolbar and release them
-    [self.toolbar setItems:self.buttons animated:NO];
-    [self.buttons release];
+    [self.toolbar setItems:buttons animated:NO];
+    [buttons release];
     
     // place the toolbar into the navigation bar
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:self.toolbar];
-    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                              initWithCustomView:self.toolbar];
     [self.toolbar release];
+}
+
+-(void)undo
+{
+    [[DataAccessObject sharedDAO]undoManagerProducts];
+    
+    [[DataAccessObject sharedDAO]fetchDataProductsWithCompanyName:self.companyPrimaryKey];
+    
+    [self.tableView reloadData];
+}
+
+-(void)save
+{
+    [[DataAccessObject sharedDAO]saveContext];
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
@@ -136,6 +218,8 @@
 
 
 - (void)viewWillAppear:(BOOL)animated {
+    [self createToolbar];
+    
     [self.tableView setEditing:NO animated:YES];
     self.editing = NO;
     
