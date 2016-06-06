@@ -11,7 +11,7 @@
 @class EditFormViewController;
 
 
-@interface ProductViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
+@interface ProductViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (nonatomic, retain) NSMutableArray *products;
 @property (nonatomic, retain) NSMutableArray *buttons;
 
@@ -24,6 +24,11 @@
 //@property (nonatomic) BOOL editor;
 
 @property int companyPrimaryKey;
+
+@property (strong, retain) UICollectionView *cv;
+@property BOOL customEditingMode;
+@property BOOL deleteMode;
+
 
 
 

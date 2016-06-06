@@ -44,6 +44,8 @@
 		53F31D1F1CD283E600984E4E /* Question-mark.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 53F31D1E1CD283E600984E4E /* Question-mark.jpg */; };
 		53F31D621CDA741900984E4E /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F31D611CDA741900984E4E /* libsqlite3.0.tbd */; };
 		53F31D641CDA7FE400984E4E /* NavController.db in Resources */ = {isa = PBXBuildFile; fileRef = 53F31D631CDA745500984E4E /* NavController.db */; };
+		53F709771D03B6CA004A2DAE /* CollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F709761D03B6CA004A2DAE /* CollectionCell.xib */; };
+		53F7097A1D03BF58004A2DAE /* CollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F709791D03BF58004A2DAE /* CollectionCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,6 +110,9 @@
 		53F31D1E1CD283E600984E4E /* Question-mark.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Question-mark.jpg"; sourceTree = "<group>"; };
 		53F31D611CDA741900984E4E /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		53F31D631CDA745500984E4E /* NavController.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = NavController.db; sourceTree = "<group>"; };
+		53F709761D03B6CA004A2DAE /* CollectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CollectionCell.xib; sourceTree = "<group>"; };
+		53F709781D03BF58004A2DAE /* CollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollectionCell.h; sourceTree = "<group>"; };
+		53F709791D03BF58004A2DAE /* CollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CollectionCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +161,9 @@
 				53F31D041CD00C2000984E4E /* CompanyFormViewController.h */,
 				53F31D051CD00C2000984E4E /* CompanyFormViewController.m */,
 				53F31D061CD00C2000984E4E /* CompanyFormViewController.xib */,
+				53F709781D03BF58004A2DAE /* CollectionCell.h */,
+				53F709791D03BF58004A2DAE /* CollectionCell.m */,
+				53F709761D03B6CA004A2DAE /* CollectionCell.xib */,
 				53681C621CC98B9400F1E0FC /* DataAccessObject.h */,
 				53681C631CC98B9400F1E0FC /* DataAccessObject.m */,
 				5305E6951CF62BFA0095851B /* Model.xcdatamodeld */,
@@ -341,6 +349,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53F709771D03B6CA004A2DAE /* CollectionCell.xib in Resources */,
 				53F31D641CDA7FE400984E4E /* NavController.db in Resources */,
 				53F31D1B1CD1E43600984E4E /* EditViewController.xib in Resources */,
 				53F31D1F1CD283E600984E4E /* Question-mark.jpg in Resources */,
@@ -384,6 +393,7 @@
 				48A656C518163BF200746D36 /* NavControllerAppDelegate.m in Sources */,
 				53F31D071CD00C2000984E4E /* CompanyFormViewController.m in Sources */,
 				48A656C118163BF200746D36 /* main.m in Sources */,
+				53F7097A1D03BF58004A2DAE /* CollectionCell.m in Sources */,
 				5305E6971CF62BFA0095851B /* Model.xcdatamodeld in Sources */,
 				48A656EB18163F8700746D36 /* ProductViewController.m in Sources */,
 			);
@@ -512,6 +522,7 @@
 				INFOPLIST_FILE = "NavCtrl/NavCtrl-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "qcd.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -527,6 +538,7 @@
 				INFOPLIST_FILE = "NavCtrl/NavCtrl-Info.plist";
 				PRODUCT_BUNDLE_IDENTIFIER = "qcd.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

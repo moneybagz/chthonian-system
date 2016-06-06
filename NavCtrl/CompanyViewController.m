@@ -13,8 +13,11 @@
 #import "DataAccessObject.h"
 #import "CompanyFormViewController.h"
 #import "EditViewController.h"
+#import "CollectionCell.h"
 
 @interface CompanyViewController ()
+
+@property (strong, retain) UICollectionView *cv;
 
 @end
 
@@ -34,6 +37,11 @@
 {
     [super viewDidLoad];
     [[DataAccessObject sharedDAO]hardcode];
+    
+    
+    //remove tableview line separaters
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+
 //
 //    [[DataAccessObject sharedDAO]fetchDataCompanies];
 //    
@@ -52,18 +60,161 @@
     
     self.title = @"Mobile device makers";
     
+
+    UICollectionViewFlowLayout *vfl= [[UICollectionViewFlowLayout alloc]init];
+    
+    self.cv = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height - 20) collectionViewLayout:vfl];
+
+
+    self.cv.backgroundColor = [UIColor whiteColor];
+    
+    
+
+    self.cv.delegate = self;
+    self.cv.dataSource = self;
+    
+    // Code below is for a default cell
+//    [[cv registerClass:[UICollectionViewCell class]] forCellWithReuseIdentifier:@"cell"];
+
+    //lets use this code to use our custom cell
+    [self.cv registerNib:[UINib nibWithNibName:@"CollectionCell" bundle:[NSBundle mainBundle]]
+    forCellWithReuseIdentifier:@"CollectionCell"];
+
+    [self.view addSubview:self.cv];
+    
+}
+//
+#pragma mark - collection view methods
+
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    // REMEMBER initialize your custom UICollectionViewCell  (COLLECTIONCELL) class not the default
+    CollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CollectionCell" forIndexPath:indexPath];
+    
+    cell.companyViewController = self;
+    
+    if (self.customEditingMode == NO) {
+        [cell.editLabel setHidden:YES];
+        [cell.nameLabel setHidden:YES];
+    } else {
+        [cell.editLabel setHidden:NO];
+        [cell.nameLabel setHidden:NO];
+    }
+    
+    if (self.deleteMode == NO) {
+        [cell.deleteLabel setHidden:YES];
+    } else {
+        [cell.deleteLabel setHidden:NO];
+    }
+
+    
+    Company *company = [self.companyList objectAtIndex:[indexPath row]];
+
+    [cell.collectionCompanyLabel setText:company.companyName];
+    
+    
+    // next time use else if
+    if ([cell.collectionCompanyLabel.text  isEqual:@"SpaceX"]) {
+        [cell.collectionViewLogo setImage: [UIImage imageNamed:@"spacex-logo.jpg"]];
+        cell.collectionStockLabel.text =[self.stockQuotes objectForKey:@"SpaceX"];
+    }
+    
+    else if ([cell.collectionCompanyLabel.text  isEqual:@"Apple mobile devices"]) {
+        [cell.collectionViewLogo setImage: [UIImage imageNamed:@"apple.gif"]];
+        cell.collectionStockLabel.text =[self.stockQuotes objectForKey:@"Apple"];
+    }
+    
+    else if ([cell.collectionCompanyLabel.text  isEqual:@"Clyff's CHEESE HOUSE!"]) {
+        [cell.collectionViewLogo setImage: [UIImage imageNamed:@"cheese.png"]];
+        cell.collectionStockLabel.text =[self.stockQuotes objectForKey:@"Bill's"];
+    }
+    
+    else if ([cell.collectionCompanyLabel.text  isEqual:@"Samsung mobile devices"]) {
+        [cell.collectionViewLogo setImage: [UIImage imageNamed:@"samsung.gif"]];
+        cell.collectionStockLabel.text =[self.stockQuotes objectForKey:@"Samsung"];
+        
+    } else {
+        [cell.collectionViewLogo setImage:[UIImage imageNamed:@"Question-mark.jpg"]];
+    }
+    
+    return cell;
+}
+//
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return self.companyList.count;
+}
+//
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return CGSizeMake(150, 190);
+}
+//
+-(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return UIEdgeInsetsMake(10, 10, 10, 5);
+}
+//
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.customEditingMode == YES){
+        
+        if (!self.editViewController) {
+                self.editViewController = [[EditViewController alloc]init];
+            }
+        
+        self.editViewController.company = self.companyList[indexPath.row];
+        
+        self.customEditingMode = NO;
+        
+       [self.navigationController pushViewController:self.editViewController animated:YES];
+    }
+    else if (self.deleteMode == YES){
+        
+        NSArray *kompanies = [[DataAccessObject sharedDAO]allCompanies];
+        
+        Company *kompany = [kompanies objectAtIndex:indexPath.row];
+        
+        [self.companyList removeObjectAtIndex:indexPath.row];
+        
+        [[DataAccessObject sharedDAO]deleteCompanyWithPrimaryKey:kompany.primaryKey];
+        
+        [self.cv reloadData];
+    }
+    else {
+        Company *company = self.companyList[indexPath.row];
+    
+        self.productViewController.title = company.companyName;
+    
+        self.productViewController.companyPrimaryKey = company.primaryKey; ////////////////////////
+        
+        NSLog(@"%d&&&&&&&&&&&&&&&&&&&&&&&", self.productViewController.companyPrimaryKey);
+    
+        [self.navigationItem.rightBarButtonItem release];
+    
+        [self.navigationController
+            pushViewController:self.productViewController
+            animated:YES];
+    }
 }
 
-
 // method called by toolbar button edit button
+
+#pragma mark - my methods
+
+
 -(void)editPlease
 {
     
-    [self.tableView setEditing:YES animated:YES];
+    self.customEditingMode = YES;
     
-    self.tableView.allowsSelectionDuringEditing = YES;
+    [self.cv reloadData];
     
-    // create a done button to replace toolbar
+//    [self.navigationController pushViewController:self.editViewController animated:YES];
+
+    
+//     create a done button to replace toolbar
     self.doneButton = [[UIBarButtonItem alloc ] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
     
     [self.navigationItem.rightBarButtonItem release];
@@ -76,7 +227,11 @@
 // method called by done button to end editing mode
 -(void)done
 {
-    [self.tableView setEditing:NO animated:YES];
+//    [self.tableView setEditing:NO animated:YES];
+    self.customEditingMode = NO;
+    self.deleteMode = NO;
+    
+    [self.cv reloadData];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
                                               initWithCustomView:self.toolbar];
@@ -93,7 +248,7 @@
 
     self.companyList = [[DataAccessObject sharedDAO] allCompanies];
     
-    [self.tableView reloadData];
+    [self.cv reloadData];
 
     [self setToolbar];
     
@@ -122,7 +277,7 @@
 {
     //Create a toolbar so you can have more than 2 buttons in Navbar
     self.toolbar = [[UIToolbar alloc]
-                    initWithFrame:CGRectMake(0, 0, 200, 45)];
+                    initWithFrame:CGRectMake(0, 0, 250, 45)];
     [self.toolbar setBarStyle: UIBarStyleDefault];
     
     // create an array for the buttons
@@ -154,15 +309,26 @@
     [buttons addObject:spacer2];
 //    [spacer release];
     
-    UIBarButtonItem *undoBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemUndo target:self action:@selector(undo)];
-    [buttons addObject:undoBtn];
-//    [addBtn release];
+    UIBarButtonItem *deleteBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(trash)];
+    [buttons addObject:deleteBtn];
+    [deleteBtn release];
     
+    // create a spacer between the buttons
     UIBarButtonItem *spacer3 = [[UIBarButtonItem alloc]
                                 initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
                                 target:nil
                                 action:nil];
     [buttons addObject:spacer3];
+    
+    UIBarButtonItem *undoBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemUndo target:self action:@selector(undo)];
+    [buttons addObject:undoBtn];
+//    [addBtn release];
+    
+    UIBarButtonItem *spacer4 = [[UIBarButtonItem alloc]
+                                initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace
+                                target:nil
+                                action:nil];
+    [buttons addObject:spacer4];
     //    [spacer release];
     
     UIBarButtonItem *saveBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(save)];
@@ -196,17 +362,35 @@
                         @"Bill's": stockPrices[3],
                         };
     
+    NSLog(@"%@***********************", [self.stockQuotes objectForKey:@"SpaceX"]);
+
+    
 //    NSLog(@"%@ money", [self.stockQuotes objectForKey:@"Apple"]);
 //    NSLog(@"%@ money", [self.stockQuotes objectForKey:@"Samsung"]);
     
     //My first memory leak to be released via instruments stack trace
     [stockString release];
 
-    //i forget why i needed this
+    //i forget why i needed this. (now i remember syncing asyncronous call with tableviewcell stock price)
     [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    
+    //Switch reloading of data to collection view
+    [self.cv performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
     
 }
 
+-(void)trash
+{
+    self.deleteMode = YES;
+    
+    [self.cv reloadData];
+    
+    //     create a done button to replace toolbar
+    self.doneButton = [[UIBarButtonItem alloc ] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
+    
+    [self.navigationItem.rightBarButtonItem release];
+    self.navigationItem.rightBarButtonItem = self.doneButton;
+}
 
 -(void)undo
 {
@@ -310,220 +494,220 @@
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    // Return the number of sections.
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    // Return the number of rows in the section.
-    return [[[DataAccessObject sharedDAO]allCompanies]count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-    }
-    
- 
-
-
-    Company *company = [self.companyList objectAtIndex:[indexPath row]];
-
-        cell.textLabel.text = company.companyName;
-    [[cell textLabel] setText: [company companyName] ];
-    
-
-
-    // next time use else if
-    if ([cell.textLabel.text  isEqual:@"SpaceX"]) {
-        [[cell imageView] setImage: [UIImage imageNamed:@"spacex-logo.jpg"]];
-        cell.detailTextLabel.text =[self.stockQuotes objectForKey:@"SpaceX"];
-    }
-    
-    else if ([cell.textLabel.text  isEqual:@"Apple mobile devices"]) {
-        [[cell imageView] setImage: [UIImage imageNamed:@"apple.gif"]];
-        cell.detailTextLabel.text =[self.stockQuotes objectForKey:@"Apple"];
-    }
-    
-    else if ([cell.textLabel.text  isEqual:@"Clyff's CHEESE HOUSE!"]) {
-        [[cell imageView] setImage: [UIImage imageNamed:@"cheese.png"]];
-        cell.detailTextLabel.text =[self.stockQuotes objectForKey:@"Bill's"];
-    }
-    
-    else if ([cell.textLabel.text  isEqual:@"Samsung mobile devices"]) {
-        [[cell imageView] setImage: [UIImage imageNamed:@"samsung.gif"]];
-        //cell.detailTextLabel.text =@"WFM %@", [self.stockQuotes objectForKey:@"Samsung"];
-        cell.detailTextLabel.text =[self.stockQuotes objectForKey:@"Samsung"];
-
-    }
-    
-    else if (![cell.textLabel.text  isEqual:@"Samsung mobile devices"] && ![cell.textLabel.text  isEqual:@"Bill's cheese factory"] && ![cell.textLabel.text  isEqual:@"Apple mobile devices"] && ![cell.textLabel.text  isEqual:@"SpaceX"]){
-        [[cell imageView] setImage: [UIImage imageNamed:@"Question-mark.jpg"]];
-    }
-    return cell;
-    
-    
-    
-}
-
-// method to remove company cells
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete){
-        
-        NSArray *kompanies = [[DataAccessObject sharedDAO]allCompanies];
-        
-        Company *kompany = [kompanies objectAtIndex:indexPath.row];
-
-//        NSLog(@"%d", (int)indexPath.row);
-        
-        [self.companyList removeObjectAtIndex:indexPath.row];
-
-        [[DataAccessObject sharedDAO]deleteCompanyWithPrimaryKey:kompany.primaryKey];
-//        self.companyList = [[DataAccessObject sharedDAO]allCompanies];
-        
-//        [self.companyList removeObject:kompany];
-        
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-//
-        [tableView reloadData];
-    }
-}
-
-
-
-
--(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-
-//method to be able move cells
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-//    Company *kompany1 = self.companyList[fromIndexPath.row];
-//    Company *kompany2 = self.companyList[toIndexPath.row];
-
-
-    [[DataAccessObject sharedDAO]companyMoveRowFromIndex:(int)fromIndexPath.row toIndex:(int)toIndexPath.row];
-    
-    NSString * company = [self.companyList objectAtIndex:fromIndexPath.row];
-    [company retain];
-    
-    NSInteger fromIndex = fromIndexPath.row;
-    NSInteger toIndex = toIndexPath.row;
-    
-    [self.companyList removeObjectAtIndex:fromIndex];
-    [self.companyList insertObject:company atIndex:toIndex];
-    
-
-    
-    [company release];
-
-
-    
-    [tableView reloadData];
-}
-
-
-
-
-
-
- //Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-
-
-
-// Override to support editing the table view.
-//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 //{
-//    if (editingStyle == UITableViewCellEditingStyleDelete) {
-//        // Delete the row from the data source
-//        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-//    }   
-//    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-//        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-//    }   
+//    // Return the number of sections.
+//    return 1;
 //}
-
-
-
-// Override to support rearranging the table view.
-//- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+//
+//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 //{
+//    // Return the number of rows in the section.
+//    return [[[DataAccessObject sharedDAO]allCompanies]count];
+//}
+//
+//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    static NSString *CellIdentifier = @"Cell";
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//    if (cell == nil) {
+//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+//    }
+//    
+// 
+//
+//
+//    Company *company = [self.companyList objectAtIndex:[indexPath row]];
+//
+//        cell.textLabel.text = company.companyName;
+//    [[cell textLabel] setText: [company companyName] ];
+//    
+//
+//
+//    // next time use else if
+//    if ([cell.textLabel.text  isEqual:@"SpaceX"]) {
+//        [[cell imageView] setImage: [UIImage imageNamed:@"spacex-logo.jpg"]];
+//        cell.detailTextLabel.text =[self.stockQuotes objectForKey:@"SpaceX"];
+//    }
+//    
+//    else if ([cell.textLabel.text  isEqual:@"Apple mobile devices"]) {
+//        [[cell imageView] setImage: [UIImage imageNamed:@"apple.gif"]];
+//        cell.detailTextLabel.text =[self.stockQuotes objectForKey:@"Apple"];
+//    }
+//    
+//    else if ([cell.textLabel.text  isEqual:@"Clyff's CHEESE HOUSE!"]) {
+//        [[cell imageView] setImage: [UIImage imageNamed:@"cheese.png"]];
+//        cell.detailTextLabel.text =[self.stockQuotes objectForKey:@"Bill's"];
+//    }
+//    
+//    else if ([cell.textLabel.text  isEqual:@"Samsung mobile devices"]) {
+//        [[cell imageView] setImage: [UIImage imageNamed:@"samsung.gif"]];
+//        //cell.detailTextLabel.text =@"WFM %@", [self.stockQuotes objectForKey:@"Samsung"];
+//        cell.detailTextLabel.text =[self.stockQuotes objectForKey:@"Samsung"];
+//
+//    }
+//    
+//    else if (![cell.textLabel.text  isEqual:@"Samsung mobile devices"] && ![cell.textLabel.text  isEqual:@"Bill's cheese factory"] && ![cell.textLabel.text  isEqual:@"Apple mobile devices"] && ![cell.textLabel.text  isEqual:@"SpaceX"]){
+//        [[cell imageView] setImage: [UIImage imageNamed:@"Question-mark.jpg"]];
+//    }
+//    return cell;
+//    
+//    
 //    
 //}
-
-
-
-// Override to support conditional rearranging of the table view.
-//- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+//
+//// method to remove company cells
+//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 //{
-//    // Return NO if you do not want the item to be re-orderable.
+//    
+//    if (editingStyle == UITableViewCellEditingStyleDelete){
+//        
+//        NSArray *kompanies = [[DataAccessObject sharedDAO]allCompanies];
+//        
+//        Company *kompany = [kompanies objectAtIndex:indexPath.row];
+//
+////        NSLog(@"%d", (int)indexPath.row);
+//        
+//        [self.companyList removeObjectAtIndex:indexPath.row];
+//
+//        [[DataAccessObject sharedDAO]deleteCompanyWithPrimaryKey:kompany.primaryKey];
+////        self.companyList = [[DataAccessObject sharedDAO]allCompanies];
+//        
+////        [self.companyList removeObject:kompany];
+//        
+//        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+////
+//        [tableView reloadData];
+//    }
+//}
+//
+//
+//
+//
+//-(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
 //    return YES;
 //}
-
-
-
-#pragma mark - Table view delegate
-
-// method to index into chosen cell
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-
-
-    //display editView Controller if in editing mode
-    if (self.tableView.editing == YES) {
-        if (!self.editViewController) {
-            self.editViewController = [[EditViewController alloc]init];
-        }
-        
-            
-            
-        self.editViewController.company = self.companyList[indexPath.row];
-            
-            
-        [self.tableView setEditing:NO animated:YES];
-            
-
-        
-        [self.navigationItem.rightBarButtonItem release];
-        
-        [self.navigationController pushViewController:self.editViewController animated:YES];
-        
-    } else {
-    //if not in editing mode continue to ProductViewController
-    
-    
-    Company *company = self.companyList[indexPath.row];
-    
-    //pass company properties to ProductViewControllers properties
-    self.productViewController.title = company.companyName;
-    //self.productViewController.products = company.products;
-        
-    self.productViewController.companyPrimaryKey = company.primaryKey; ////////////////////////
-    
-    [self.navigationItem.rightBarButtonItem release];
-    
-    [self.navigationController
-        pushViewController:self.productViewController
-        animated:YES];
-        
-    }
-
-}
- 
+//
+////method to be able move cells
+//- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+//{
+////    Company *kompany1 = self.companyList[fromIndexPath.row];
+////    Company *kompany2 = self.companyList[toIndexPath.row];
+//
+//
+//    [[DataAccessObject sharedDAO]companyMoveRowFromIndex:(int)fromIndexPath.row toIndex:(int)toIndexPath.row];
+//    
+//    NSString * company = [self.companyList objectAtIndex:fromIndexPath.row];
+//    [company retain];
+//    
+//    NSInteger fromIndex = fromIndexPath.row;
+//    NSInteger toIndex = toIndexPath.row;
+//    
+//    [self.companyList removeObjectAtIndex:fromIndex];
+//    [self.companyList insertObject:company atIndex:toIndex];
+//    
+//
+//    
+//    [company release];
+//
+//
+//    
+//    [tableView reloadData];
+//}
+//
+//
+//
+//
+//
+//
+// //Override to support conditional editing of the table view.
+//- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    // Return NO if you do not want the specified item to be editable.
+//    return YES;
+//}
+//
+//
+//
+//// Override to support editing the table view.
+////- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+////{
+////    if (editingStyle == UITableViewCellEditingStyleDelete) {
+////        // Delete the row from the data source
+////        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+////    }   
+////    else if (editingStyle == UITableViewCellEditingStyleInsert) {
+////        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+////    }   
+////}
+//
+//
+//
+//// Override to support rearranging the table view.
+////- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+////{
+////    
+////}
+//
+//
+//
+//// Override to support conditional rearranging of the table view.
+////- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+////{
+////    // Return NO if you do not want the item to be re-orderable.
+////    return YES;
+////}
+//
+//
+//
+//#pragma mark - Table view delegate
+//
+//// method to index into chosen cell
+//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//
+//
+//    //display editView Controller if in editing mode
+//    if (self.tableView.editing == YES) {
+//        if (!self.editViewController) {
+//            self.editViewController = [[EditViewController alloc]init];
+//        }
+//        
+//            
+//            
+//        self.editViewController.company = self.companyList[indexPath.row];
+//            
+//            
+//        [self.tableView setEditing:NO animated:YES];
+//            
+//
+//        
+//        [self.navigationItem.rightBarButtonItem release];
+//        
+//        [self.navigationController pushViewController:self.editViewController animated:YES];
+//        
+//    } else {
+//    //if not in editing mode continue to ProductViewController
+//    
+//    
+//    Company *company = self.companyList[indexPath.row];
+//    
+//    //pass company properties to ProductViewControllers properties
+//    self.productViewController.title = company.companyName;
+//    //self.productViewController.products = company.products;
+//        
+//    self.productViewController.companyPrimaryKey = company.primaryKey; ////////////////////////
+//    
+//    [self.navigationItem.rightBarButtonItem release];
+//    
+//    [self.navigationController
+//        pushViewController:self.productViewController
+//        animated:YES];
+//        
+//    }
+//
+//}
+// 
 
 
 @end

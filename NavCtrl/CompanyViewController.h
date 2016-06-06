@@ -13,7 +13,7 @@
 @class Company;
 @class EditViewController;
 
-@interface CompanyViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, NSURLConnectionDelegate>
+@interface CompanyViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource, NSURLConnectionDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 {
     NSMutableData *_responseData;
@@ -28,5 +28,8 @@
 @property (nonatomic, retain) NSDictionary *jsonDictionary;
 @property (nonatomic, retain) NSDictionary *stockQuotes;
 @property (nonatomic, retain) NSArray *dictionaryArray;
+
+@property BOOL customEditingMode;
+@property BOOL deleteMode;
 
 @end
