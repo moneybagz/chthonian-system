@@ -15,10 +15,10 @@
     
     
     
-    [self.productName release];
-    [self.productUrl release];
+//    [self.productName release];
+//    [self.productUrl release];
     
-    [super dealloc];
+//    [super dealloc];
 
 }
 

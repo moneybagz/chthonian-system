@@ -31,7 +31,9 @@
 - (NSManagedObjectModel *)managedObjectModel;
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator;
 - (NSURL *)applicationDocumentsDirectory;
--(void)createCompany:(NSNumber*)primaryKey name:(NSString*)companyName;
+-(void)createCompany:(NSNumber*)primaryKey
+                name:(NSString*)companyName
+         stockSymbol:(NSString*)stockSymbol;
 -(void)createProductWithName:(NSString *)productName
                   productURL:(NSString *)productURL
            companyPrimaryKey:(int)companyPrimaryKey

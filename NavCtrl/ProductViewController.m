@@ -326,7 +326,7 @@ forCellWithReuseIdentifier:@"CollectionCell"];
     
     [[DataAccessObject sharedDAO]fetchDataProductsWithCompanyName:self.companyPrimaryKey];
     
-    [self.tableView reloadData];
+    [self.cv reloadData];
 }
 
 -(void)save

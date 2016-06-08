@@ -55,6 +55,7 @@
 
 - (void)dealloc {
     [_companyTextfield release];
+    [_stockSymbolTextfield release];
     [super dealloc];
 }
 - (IBAction)doneButton:(id)sender {
@@ -64,7 +65,9 @@
     NSNumber *pk = [NSNumber numberWithInt:[[NSDate date] timeIntervalSince1970]];
     NSLog(@"PK: %@", pk);
     
-    [[DataAccessObject sharedDAO]createCompany:pk name:self.companyTextfield.text];
+    
+    [[DataAccessObject sharedDAO]createCompany:pk name:self.companyTextfield.text stockSymbol:self.stockSymbolTextfield.text];
+
 
     
     
