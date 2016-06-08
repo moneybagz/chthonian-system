@@ -126,28 +126,35 @@
 
     [self.cell.collectionCompanyLabel setText:company.companyName];
     
+    [self.cell.collectionStockLabel setText:[self.stockPrices objectAtIndex:indexPath.row ]];
+    
     
     // next time use else if
     if ([self.cell.collectionCompanyLabel.text  isEqual:@"SpaceX"]) {
         [self.cell.collectionViewLogo setImage: [UIImage imageNamed:@"spacex-logo.jpg"]];
-        self.cell.collectionStockLabel.text =[self.stockQuotes objectForKey:@"SpaceX"];
     }
     
     else if ([self.cell.collectionCompanyLabel.text  isEqual:@"Apple mobile devices"]) {
         [self.cell.collectionViewLogo setImage: [UIImage imageNamed:@"apple.gif"]];
-        self.cell.collectionStockLabel.text =[self.stockQuotes objectForKey:@"Apple"];
     }
     
     else if ([self.cell.collectionCompanyLabel.text  isEqual:@"Clyff's CHEESE HOUSE!"]) {
         [self.cell.collectionViewLogo setImage: [UIImage imageNamed:@"cheese.png"]];
-        self.cell.collectionStockLabel.text =[self.stockQuotes objectForKey:@"Bill's"];
     }
     
     else if ([self.cell.collectionCompanyLabel.text  isEqual:@"Samsung mobile devices"]) {
         [self.cell.collectionViewLogo setImage: [UIImage imageNamed:@"samsung.gif"]];
-        self.cell.collectionStockLabel.text =[self.stockQuotes objectForKey:@"Samsung"];
-        
-    } else {
+    }
+    
+    else if ([self.cell.collectionCompanyLabel.text  isEqual:@"gummi Bears"]) {
+        [self.cell.collectionViewLogo setImage: [UIImage imageNamed:@"gummiBears.jpg"]];
+    }
+    
+    else if ([self.cell.collectionCompanyLabel.text  isEqual:@"lemon factory"]) {
+        [self.cell.collectionViewLogo setImage: [UIImage imageNamed:@"Lemon.png"]];
+    }
+    
+    else {
         [self.cell.collectionViewLogo setImage:[UIImage imageNamed:@"Question-mark.jpg"]];
     }
     
@@ -334,19 +341,11 @@
     
     //NSLog(@"%@", stockString);
     
-    NSArray *stockPrices = [stockString componentsSeparatedByString:@"\n"];
-    
-    self.stockQuotes =@{@"Apple": stockPrices[0],
-                        @"Samsung": stockPrices[1],
-                        @"SpaceX": stockPrices[2],
-                        @"Bill's": stockPrices[3],
-                        };
-    
-    NSLog(@"%@***********************", [self.stockQuotes objectForKey:@"SpaceX"]);
+    self.stockPrices = [stockString componentsSeparatedByString:@"\n"];
     
     
-    //    NSLog(@"%@ money", [self.stockQuotes objectForKey:@"Apple"]);
-    //    NSLog(@"%@ money", [self.stockQuotes objectForKey:@"Samsung"]);
+    
+
     
     //My first memory leak to be released via instruments stack trace
     [stockString release];

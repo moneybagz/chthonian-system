@@ -46,6 +46,8 @@
 		53F31D641CDA7FE400984E4E /* NavController.db in Resources */ = {isa = PBXBuildFile; fileRef = 53F31D631CDA745500984E4E /* NavController.db */; };
 		53F709771D03B6CA004A2DAE /* CollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F709761D03B6CA004A2DAE /* CollectionCell.xib */; };
 		53F7097A1D03BF58004A2DAE /* CollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F709791D03BF58004A2DAE /* CollectionCell.m */; };
+		53F8C8291D08929400458B3D /* gummiBears.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 53F8C8281D08929400458B3D /* gummiBears.jpg */; };
+		53F8C82B1D0895F000458B3D /* Lemon.png in Resources */ = {isa = PBXBuildFile; fileRef = 53F8C82A1D0895F000458B3D /* Lemon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -113,6 +115,8 @@
 		53F709761D03B6CA004A2DAE /* CollectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CollectionCell.xib; sourceTree = "<group>"; };
 		53F709781D03BF58004A2DAE /* CollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollectionCell.h; sourceTree = "<group>"; };
 		53F709791D03BF58004A2DAE /* CollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CollectionCell.m; sourceTree = "<group>"; };
+		53F8C8281D08929400458B3D /* gummiBears.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = gummiBears.jpg; sourceTree = "<group>"; };
+		53F8C82A1D0895F000458B3D /* Lemon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Lemon.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -232,7 +236,9 @@
 				483796CC1BCBF7C70062D5AB /* ParentViewController */,
 				483796CD1BCBF7EB0062D5AB /* ProductViewController */,
 				48A656C618163BF200746D36 /* Images.xcassets */,
+				53F8C8281D08929400458B3D /* gummiBears.jpg */,
 				53F31D1E1CD283E600984E4E /* Question-mark.jpg */,
+				53F8C82A1D0895F000458B3D /* Lemon.png */,
 				53681C4A1CC56B4400F1E0FC /* samsung.gif */,
 				53681C521CC570FC00F1E0FC /* spacex-logo.jpg */,
 				53681C501CC5709B00F1E0FC /* cheese.png */,
@@ -358,8 +364,10 @@
 				48A656E718163C1B00746D36 /* CompanyViewController.xib in Resources */,
 				48A656BF18163BF200746D36 /* InfoPlist.strings in Resources */,
 				53681C531CC570FC00F1E0FC /* spacex-logo.jpg in Resources */,
+				53F8C8291D08929400458B3D /* gummiBears.jpg in Resources */,
 				53681C491CC56B3600F1E0FC /* apple.gif in Resources */,
 				53681C511CC5709B00F1E0FC /* cheese.png in Resources */,
+				53F8C82B1D0895F000458B3D /* Lemon.png in Resources */,
 				53F31D161CD1758700984E4E /* EditFormViewController.xib in Resources */,
 				48A656C718163BF200746D36 /* Images.xcassets in Resources */,
 				53F31D111CD12A7900984E4E /* ProductFormViewController.xib in Resources */,
