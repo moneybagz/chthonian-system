@@ -13,6 +13,7 @@
 @interface CompanyFormViewController : UIViewController
 
 @property (retain, nonatomic) IBOutlet UITextField *companyTextfield;
+@property (retain, nonatomic) IBOutlet UITextField *stockSymbolTextfield;
 
 
 - (IBAction)doneButton:(id)sender;

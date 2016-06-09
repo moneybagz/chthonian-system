@@ -161,16 +161,19 @@
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
--(void)createCompany:(NSNumber*)primaryKey name:(NSString*)companyName
+-(void)createCompany:(NSNumber*)primaryKey
+                name:(NSString*)companyName
+         stockSymbol:(NSString*)stockSymbol
 {
 
     // Create Company
     NSEntityDescription *entityCompany1 = [NSEntityDescription entityForName:@"Company" inManagedObjectContext:self.managedObjectContext];
-    NSManagedObject *kompany1 = [[NSManagedObject alloc] initWithEntity:entityCompany1 insertIntoManagedObjectContext:self.managedObjectContext];
+    NSManagedObject *kompany = [[NSManagedObject alloc] initWithEntity:entityCompany1 insertIntoManagedObjectContext:self.managedObjectContext];
     
-    [kompany1 setValue:companyName forKey:@"companyName"];
-    [kompany1 setValue:primaryKey forKey:@"primaryKey"];
-    [kompany1 setValue:[NSNumber numberWithInt:(int)self.allCompanies.count + 1] forKey:@"orderValue"];
+    [kompany setValue:companyName forKey:@"companyName"];
+    [kompany setValue:primaryKey forKey:@"primaryKey"];
+    [kompany setValue:[NSNumber numberWithInt:(int)self.allCompanies.count + 1] forKey:@"orderValue"];
+    [kompany setValue:stockSymbol forKey:@"stockSymbol"];
     NSLog(@"%d", (int)self.allCompanies.count + 1);
         
     [self undoBounds:1];
@@ -276,6 +279,7 @@
         kompany.companyName = [element valueForKey:@"companyName"];
         kompany.primaryKey = [[element valueForKey:@"primaryKey"]intValue];
         kompany.orderValue = [[element valueForKey:@"orderValue"]intValue];
+        kompany.stockSymbol = [element valueForKey:@"stockSymbol"];
         NSLog(@"name:%@ key:%d ordervalue:%d", kompany.companyName, kompany.primaryKey, kompany.orderValue);
         [self.allCompanies addObject:kompany];
     }
@@ -694,7 +698,6 @@
         
         
         
-        
         // Create Company
         NSEntityDescription *entityCompany1 = [NSEntityDescription entityForName:@"Company" inManagedObjectContext:self.managedObjectContext];
         NSManagedObject *kompany1 = [[NSManagedObject alloc] initWithEntity:entityCompany1 insertIntoManagedObjectContext:self.managedObjectContext];
@@ -705,6 +708,7 @@
         [kompany1 setValue:@"Apple mobile devices" forKey:@"companyName"];
         [kompany1 setValue:pk forKey:@"primaryKey"];
         [kompany1 setValue:pk forKey:@"orderValue"];
+        [kompany1 setValue:@"AAPL" forKey:@"stockSymbol"];
         
         
         NSEntityDescription *entityCompany2 = [NSEntityDescription entityForName:@"Company" inManagedObjectContext:self.managedObjectContext];
@@ -716,6 +720,8 @@
         [kompany2 setValue:@"Samsung mobile devices" forKey:@"companyName"];
         [kompany2 setValue:pk2 forKey:@"primaryKey"];
         [kompany2 setValue:pk2 forKey:@"orderValue"];
+        [kompany2 setValue:@"GOOG" forKey:@"stockSymbol"];
+
 
         
         NSEntityDescription *entityCompany3 = [NSEntityDescription entityForName:@"Company" inManagedObjectContext:self.managedObjectContext];
@@ -727,6 +733,8 @@
         [kompany3 setValue:@"SpaceX" forKey:@"companyName"];
         [kompany3 setValue:pk3 forKey:@"primaryKey"];
         [kompany3 setValue:pk3 forKey:@"orderValue"];
+        [kompany3 setValue:@"TSLA" forKey:@"stockSymbol"];
+
 
         
         
@@ -739,6 +747,8 @@
         [kompany4 setValue:@"Clyff's CHEESE HOUSE!" forKey:@"companyName"];
         [kompany4 setValue:pk4 forKey:@"primaryKey"];
         [kompany4 setValue:pk4 forKey:@"orderValue"];
+        [kompany4 setValue:@"WFM" forKey:@"stockSymbol"];
+
 
         
         
@@ -940,7 +950,7 @@
         [self.managedObjectContext undo];
         --self.undoLimit;
     }else {
-        NSLog(@"nothing to undo");
+        NSLog(@"nothing to undo$$$$$$$$$$$$$$$$$$$$$$$$");
     }
     
    

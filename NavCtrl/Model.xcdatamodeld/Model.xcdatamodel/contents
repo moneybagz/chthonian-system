@@ -4,6 +4,7 @@
         <attribute name="companyName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="orderValue" optional="YES" attributeType="Integer 64" defaultValueString="0.0" syncable="YES"/>
         <attribute name="primaryKey" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="stockSymbol" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="products" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Product" inverseName="company" inverseEntity="Product" syncable="YES"/>
     </entity>
     <entity name="Product" syncable="YES">
@@ -14,7 +15,7 @@
         <relationship name="company" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Company" inverseName="products" inverseEntity="Company" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Company" positionX="-54" positionY="-9" width="128" height="105"/>
+        <element name="Company" positionX="-54" positionY="-9" width="128" height="120"/>
         <element name="Product" positionX="-54" positionY="9" width="128" height="120"/>
     </elements>
 </model>

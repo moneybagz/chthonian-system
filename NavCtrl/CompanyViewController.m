@@ -14,10 +14,15 @@
 #import "CompanyFormViewController.h"
 #import "EditViewController.h"
 #import "CollectionCell.h"
+#import "AFNetworking.h"
+#import "AFURLSessionManager.h"
 
 @interface CompanyViewController ()
 
-@property (strong, retain) UICollectionView *cv;
+@property (strong, retain) IBOutlet UICollectionView *cv;
+@property (strong, retain) CollectionCell *cell;
+@property (strong, retain) UIImageView *movingCell;
+@property (strong, retain) IBOutlet UICollectionViewFlowLayout *vfl;
 
 @end
 
@@ -61,10 +66,20 @@
     self.title = @"Mobile device makers";
     
 
-    UICollectionViewFlowLayout *vfl= [[UICollectionViewFlowLayout alloc]init];
-    
-    self.cv = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height - 20) collectionViewLayout:vfl];
+    self.vfl= [[UICollectionViewFlowLayout alloc]init];
+//
+    self.cv = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height - 20) collectionViewLayout:self.vfl];
 
+    
+
+//    self.vfl = [[UICollectionViewFlowLayout alloc] init];
+    [self.vfl setItemSize:CGSizeMake(300, 300)];
+//    [self.vfl setScrollDirection:UICollectionViewScrollDirectionHorizontal];
+//    self.vfl.minimumInteritemSpacing = 0.0f;
+//    [self.cv setCollectionViewLayout:self.vfl];
+//    self.cv.bounces = YES;
+//    [self.cv setShowsHorizontalScrollIndicator:NO];
+//    [self.cv setShowsVerticalScrollIndicator:NO];
 
     self.cv.backgroundColor = [UIColor whiteColor];
     
@@ -90,55 +105,62 @@
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     // REMEMBER initialize your custom UICollectionViewCell  (COLLECTIONCELL) class not the default
-    CollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CollectionCell" forIndexPath:indexPath];
+    self.cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CollectionCell" forIndexPath:indexPath];
     
-    cell.companyViewController = self;
+    self.cell.companyViewController = self;
     
     if (self.customEditingMode == NO) {
-        [cell.editLabel setHidden:YES];
-        [cell.nameLabel setHidden:YES];
+        [self.cell.editLabel setHidden:YES];
+        [self.cell.nameLabel setHidden:YES];
     } else {
-        [cell.editLabel setHidden:NO];
-        [cell.nameLabel setHidden:NO];
+        [self.cell.editLabel setHidden:NO];
+        [self.cell.nameLabel setHidden:NO];
     }
     
     if (self.deleteMode == NO) {
-        [cell.deleteLabel setHidden:YES];
+        [self.cell.deleteLabel setHidden:YES];
     } else {
-        [cell.deleteLabel setHidden:NO];
+        [self.cell.deleteLabel setHidden:NO];
     }
 
     
     Company *company = [self.companyList objectAtIndex:[indexPath row]];
 
-    [cell.collectionCompanyLabel setText:company.companyName];
+    [self.cell.collectionCompanyLabel setText:company.companyName];
+    
+    [self.cell.collectionStockLabel setText:[self.stockPrices objectAtIndex:indexPath.row ]];
     
     
     // next time use else if
-    if ([cell.collectionCompanyLabel.text  isEqual:@"SpaceX"]) {
-        [cell.collectionViewLogo setImage: [UIImage imageNamed:@"spacex-logo.jpg"]];
-        cell.collectionStockLabel.text =[self.stockQuotes objectForKey:@"SpaceX"];
+    if ([self.cell.collectionCompanyLabel.text  isEqual:@"SpaceX"]) {
+        [self.cell.collectionViewLogo setImage: [UIImage imageNamed:@"spacex-logo.jpg"]];
     }
     
-    else if ([cell.collectionCompanyLabel.text  isEqual:@"Apple mobile devices"]) {
-        [cell.collectionViewLogo setImage: [UIImage imageNamed:@"apple.gif"]];
-        cell.collectionStockLabel.text =[self.stockQuotes objectForKey:@"Apple"];
+    else if ([self.cell.collectionCompanyLabel.text  isEqual:@"Apple mobile devices"]) {
+        [self.cell.collectionViewLogo setImage: [UIImage imageNamed:@"apple.gif"]];
     }
     
-    else if ([cell.collectionCompanyLabel.text  isEqual:@"Clyff's CHEESE HOUSE!"]) {
-        [cell.collectionViewLogo setImage: [UIImage imageNamed:@"cheese.png"]];
-        cell.collectionStockLabel.text =[self.stockQuotes objectForKey:@"Bill's"];
+    else if ([self.cell.collectionCompanyLabel.text  isEqual:@"Clyff's CHEESE HOUSE!"]) {
+        [self.cell.collectionViewLogo setImage: [UIImage imageNamed:@"cheese.png"]];
     }
     
-    else if ([cell.collectionCompanyLabel.text  isEqual:@"Samsung mobile devices"]) {
-        [cell.collectionViewLogo setImage: [UIImage imageNamed:@"samsung.gif"]];
-        cell.collectionStockLabel.text =[self.stockQuotes objectForKey:@"Samsung"];
-        
-    } else {
-        [cell.collectionViewLogo setImage:[UIImage imageNamed:@"Question-mark.jpg"]];
+    else if ([self.cell.collectionCompanyLabel.text  isEqual:@"Samsung mobile devices"]) {
+        [self.cell.collectionViewLogo setImage: [UIImage imageNamed:@"samsung.gif"]];
     }
     
-    return cell;
+    else if ([self.cell.collectionCompanyLabel.text  isEqual:@"gummi Bears"]) {
+        [self.cell.collectionViewLogo setImage: [UIImage imageNamed:@"gummiBears.jpg"]];
+    }
+    
+    else if ([self.cell.collectionCompanyLabel.text  isEqual:@"lemon factory"]) {
+        [self.cell.collectionViewLogo setImage: [UIImage imageNamed:@"Lemon.png"]];
+    }
+    
+    else {
+        [self.cell.collectionViewLogo setImage:[UIImage imageNamed:@"Question-mark.jpg"]];
+    }
+    
+    return self.cell;
 }
 //
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -199,6 +221,35 @@
     }
 }
 
+//-(void)handlePan:(UIPanGestureRecognizer *)panRecognizer {
+//    
+//    CGPoint locationPoint = [panRecognizer locationInView:self.cv];
+//    
+//    if (panRecognizer.state == UIGestureRecognizerStateBegan) {
+//        
+//        NSIndexPath *indexPathOfMovingCell = [self.cv indexPathForItemAtPoint:locationPoint];
+//        self.cell = [self.cv cellForItemAtIndexPath:indexPathOfMovingCell];
+//        
+//        UIGraphicsBeginImageContext(cell.bounds.size);
+//        [cell.layer renderInContext:UIGraphicsGetCurrentContext()];
+//        UIImage *cellImage = UIGraphicsGetImageFromCurrentImageContext();
+//        UIGraphicsEndImageContext();
+//        
+//        self.movingCell = [[UIImageView alloc] initWithImage:cellImage];
+//        [self.movingCell setCenter:locationPoint];
+//        [self.movingCell setAlpha:0.75f];
+//        [self.cv addSubview:self.movingCell];
+//        
+//    }
+//    
+//    if (panRecognizer.state == UIGestureRecognizerStateChanged) {
+//        [self.cell setCenter:locationPoint];
+//    }
+//    
+//    if (panRecognizer.state == UIGestureRecognizerStateEnded) {
+//        [self.cell removeFromSuperview];
+//    }
+//}
 // method called by toolbar button edit button
 
 #pragma mark - my methods
@@ -253,24 +304,83 @@
     [self setToolbar];
     
     
+    //Get Companies stock symbol and add them to the string
+    NSMutableString *stockSymbols = [[NSMutableString alloc]initWithString:@"http://finance.yahoo.com/d/quotes.csv?s="];
+    for (Company *kompany in self.companyList){
+        [stockSymbols appendString:kompany.stockSymbol];
+        [stockSymbols appendString:@"+"];
+        if (kompany.orderValue == self.companyList.count){
+            //remove the last plus sign
+            [stockSymbols substringToIndex:[stockSymbols length] - 1];
+        }
+    }
+    [stockSymbols appendString:@"&f=a"];
+    NSLog(@"%@***************", stockSymbols);
 
     
-    // 1
-   NSString *dataUrl = @"http://finance.yahoo.com/d/quotes.csv?s=AAPL+GOOG+TSLA+WFM&f=a";
-    NSURL *url = [NSURL URLWithString:dataUrl];
+//    //1
+//    NSURL *url = [NSURL URLWithString:stockSymbols];
+//    
+//    //2
+//    NSURLSession *session = [NSURLSession sharedSession];
+//                             
+//    NSURLSessionTask *task = [session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+//        //NSLog(@"response == %@", response);
+//        [self processData:data];
+//    }];
+//    
+//    
+//    [task resume];
+//    [self.tableView reloadData];
+
     
-    // 2
-    NSURLSession *session = [NSURLSession sharedSession];
-                             
-    NSURLSessionTask *task = [session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        //NSLog(@"response == %@", response);
-        [self processData:data];
+    
+
+    
+    
+    
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    
+    NSURL *URL = [NSURL URLWithString:stockSymbols];
+    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    NSURLSessionDataTask *dataTask = [manager dataTaskWithRequest:request completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+        if (error) {
+            //error.localizedDescription important
+            //also use breakpoint inside completion block since [datatask resume] obscures if statement
+            NSLog(@"Error: %@", error.localizedDescription);
+        } else {
+            //NSLog(@"%@ %@", response, responseObject);
+            NSMutableData *data = [[NSMutableData alloc]init];
+            data = responseObject;
+            [self processData:data];
+        }
     }];
-    
-    
-    [task resume];
+    [dataTask resume];
     [self.tableView reloadData];
 
+}
+
+-(void)processData:(NSData *)data
+{
+    NSString* stockString;
+    stockString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+    
+    //NSLog(@"%@", stockString);
+    
+    self.stockPrices = [stockString componentsSeparatedByString:@"\n"];
+
+    
+    //My first memory leak to be released via instruments stack trace
+    [stockString release];
+    
+    //i forget why i needed this. (now i remember syncing asyncronous call with tableviewcell stock price)
+    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    
+    //Switch reloading of data to collection view
+    [self.cv performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    
 }
 
 -(void)setToolbar
@@ -347,37 +457,7 @@
     [self.toolbar release];
 }
 
--(void)processData:(NSData *)data
-{
-    NSString* stockString;
-    stockString = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-    
-    //NSLog(@"%@", stockString);
-    
-    NSArray *stockPrices = [stockString componentsSeparatedByString:@"\n"];
-    
-    self.stockQuotes =@{@"Apple": stockPrices[0],
-                        @"Samsung": stockPrices[1],
-                        @"SpaceX": stockPrices[2],
-                        @"Bill's": stockPrices[3],
-                        };
-    
-    NSLog(@"%@***********************", [self.stockQuotes objectForKey:@"SpaceX"]);
 
-    
-//    NSLog(@"%@ money", [self.stockQuotes objectForKey:@"Apple"]);
-//    NSLog(@"%@ money", [self.stockQuotes objectForKey:@"Samsung"]);
-    
-    //My first memory leak to be released via instruments stack trace
-    [stockString release];
-
-    //i forget why i needed this. (now i remember syncing asyncronous call with tableviewcell stock price)
-    [self.tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
-    
-    //Switch reloading of data to collection view
-    [self.cv performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
-    
-}
 
 -(void)trash
 {
@@ -399,7 +479,7 @@
     
     [[DataAccessObject sharedDAO]fetchDataCompanies];
     
-    [self.tableView reloadData];
+    [self.cv reloadData];
 }
 
 -(void)save

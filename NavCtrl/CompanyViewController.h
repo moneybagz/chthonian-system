@@ -26,8 +26,8 @@
 @property (nonatomic, retain) UIBarButtonItem *doneButton;
 @property (nonatomic, retain) UIToolbar *toolbar;
 @property (nonatomic, retain) NSDictionary *jsonDictionary;
-@property (nonatomic, retain) NSDictionary *stockQuotes;
 @property (nonatomic, retain) NSArray *dictionaryArray;
+@property (nonatomic, retain) NSArray *stockPrices;
 
 @property BOOL customEditingMode;
 @property BOOL deleteMode;

@@ -39,9 +39,9 @@
 */
 
 - (void)dealloc {
-    [_changeNameTextfield release];
-    [_changeURLtextfield release];
-    [super dealloc];
+//    [_changeNameTextfield release];
+//    [_changeURLtextfield release];
+//    [super dealloc];
 }
 - (IBAction)doneButton:(id)sender {
     
