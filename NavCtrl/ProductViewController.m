@@ -113,7 +113,17 @@ forCellWithReuseIdentifier:@"CollectionCell"];
     else if ([self.title  isEqual:@"Samsung mobile devices"]) {
         [cell.collectionViewLogo setImage: [UIImage imageNamed:@"samsung.gif"]];
         
-    } else {
+    }
+    
+    else if ([self.title  isEqual:@"gummi Bears"]) {
+        [cell.collectionViewLogo setImage: [UIImage imageNamed:@"gummiBears.jpg"]];
+    }
+    
+    else if ([self.title  isEqual:@"lemon factory"]) {
+        [cell.collectionViewLogo setImage: [UIImage imageNamed:@"Lemon.png"]];
+    }
+    
+    else {
         [cell.collectionViewLogo setImage:[UIImage imageNamed:@"Question-mark.jpg"]];
     }
     

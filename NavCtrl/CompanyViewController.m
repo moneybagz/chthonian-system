@@ -14,6 +14,8 @@
 #import "CompanyFormViewController.h"
 #import "EditViewController.h"
 #import "CollectionCell.h"
+#import "AFNetworking.h"
+#import "AFURLSessionManager.h"
 
 @interface CompanyViewController ()
 
@@ -316,20 +318,46 @@
     NSLog(@"%@***************", stockSymbols);
 
     
-    // 1
-//   NSString *dataUrl = @"http://finance.yahoo.com/d/quotes.csv?s=AAPL+GOOG+TSLA+WFM&f=a";
-    NSURL *url = [NSURL URLWithString:stockSymbols];
+//    //1
+//    NSURL *url = [NSURL URLWithString:stockSymbols];
+//    
+//    //2
+//    NSURLSession *session = [NSURLSession sharedSession];
+//                             
+//    NSURLSessionTask *task = [session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+//        //NSLog(@"response == %@", response);
+//        [self processData:data];
+//    }];
+//    
+//    
+//    [task resume];
+//    [self.tableView reloadData];
+
     
-    // 2
-    NSURLSession *session = [NSURLSession sharedSession];
-                             
-    NSURLSessionTask *task = [session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        //NSLog(@"response == %@", response);
-        [self processData:data];
+    
+
+    
+    
+    
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    
+    NSURL *URL = [NSURL URLWithString:stockSymbols];
+    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    NSURLSessionDataTask *dataTask = [manager dataTaskWithRequest:request completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
+        if (error) {
+            //error.localizedDescription important
+            //also use breakpoint inside completion block since [datatask resume] obscures if statement
+            NSLog(@"Error: %@", error.localizedDescription);
+        } else {
+            //NSLog(@"%@ %@", response, responseObject);
+            NSMutableData *data = [[NSMutableData alloc]init];
+            data = responseObject;
+            [self processData:data];
+        }
     }];
-    
-    
-    [task resume];
+    [dataTask resume];
     [self.tableView reloadData];
 
 }
@@ -342,9 +370,6 @@
     //NSLog(@"%@", stockString);
     
     self.stockPrices = [stockString componentsSeparatedByString:@"\n"];
-    
-    
-    
 
     
     //My first memory leak to be released via instruments stack trace
