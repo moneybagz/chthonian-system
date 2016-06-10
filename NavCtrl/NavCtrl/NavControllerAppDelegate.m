@@ -24,11 +24,12 @@
     self.navigationController = [[UINavigationController alloc]
                             initWithRootViewController:rootController];
     
+    
 //    ProductViewController *productViewController = [[ProductViewController alloc]init];
 //    NSArray *stack = [NSArray arrayWithObjects:rootController, productViewController, nil];
 //    self.navigationController.viewControllers = stack;
     
-    
+
     
     self.window = [[UIWindow alloc]
                    initWithFrame:[[UIScreen mainScreen] bounds]];

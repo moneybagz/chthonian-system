@@ -64,7 +64,6 @@
     
     self.title = @"Mobile device makers";
     
-
     self.vfl= [[UICollectionViewFlowLayout alloc]init];
 //
     self.cv = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height - 20) collectionViewLayout:self.vfl];
