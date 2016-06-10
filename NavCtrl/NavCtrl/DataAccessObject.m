@@ -242,6 +242,19 @@
 
 -(void)fetchDataCompanies
 {
+ 
+    //Remove Companies from memory
+    NSMutableArray *discardedItems = [NSMutableArray array];
+
+    for (Company *element in [self.allCompanies reverseObjectEnumerator]){
+        [discardedItems addObject:element];
+        [element autorelease];
+    }
+    
+    [self.allCompanies removeObjectsInArray:discardedItems];
+    
+    discardedItems = nil;
+    [discardedItems release];
     
     NSFetchRequest *request = [[NSFetchRequest alloc]init];
     

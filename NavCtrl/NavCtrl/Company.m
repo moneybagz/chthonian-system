@@ -24,14 +24,14 @@
 //    return self;
 //}
 //
-//-(void)dealloc{
-//    //release all instance variables
-//    
-//    [super dealloc];
-//    
-////    [self.companyId release];
-//    [self.companyName release];
-//}
+-(void)dealloc{
+    //release all instance variables
+    
+    [super dealloc];
+    
+//    [self.companyId release];
+    [self.companyName release];
+}
 
 
 

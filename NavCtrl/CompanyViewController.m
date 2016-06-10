@@ -21,8 +21,8 @@
 
 @property (strong, retain) IBOutlet UICollectionView *cv;
 @property (strong, retain) CollectionCell *cell;
-@property (strong, retain) UIImageView *movingCell;
 @property (strong, retain) IBOutlet UICollectionViewFlowLayout *vfl;
+@property (strong, retain) UILongPressGestureRecognizer *lp;
 
 @end
 
@@ -56,12 +56,11 @@
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
  
+    //Add gesture recognizer for move row
+    self.lp = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(collectionView:didSelectItemAtIndexPath:)];
+    [self.lp setMinimumPressDuration:1];
+    [self.view addGestureRecognizer:self.lp];
     
-    
-    //Create a DOA and put your info in companylist array
-//    [[DataAccessObject sharedDAO] copyDatabaseIfNotExist];
-//    self.companyList = [[DataAccessObject sharedDAO] allCompanies];
- 
     
     self.title = @"Mobile device makers";
     
@@ -97,8 +96,14 @@
 
     [self.view addSubview:self.cv];
     
+    
+    
 }
 //
+
+
+
+
 #pragma mark - collection view methods
 
 
@@ -177,9 +182,14 @@
 {
     return UIEdgeInsetsMake(10, 10, 10, 5);
 }
-//
+
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+    
+    
+    
+    
     if (self.customEditingMode == YES){
         
         if (!self.editViewController) {
@@ -205,6 +215,12 @@
         [self.cv reloadData];
     }
     else {
+        
+        if (self.lp.state == UIGestureRecognizerStateBegan){
+            
+            
+        }
+        
         Company *company = self.companyList[indexPath.row];
     
         self.productViewController.title = company.companyName;
@@ -220,6 +236,39 @@
             animated:YES];
     }
 }
+
+
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
+{
+    //    Company *kompany1 = self.companyList[fromIndexPath.row];
+    //    Company *kompany2 = self.companyList[toIndexPath.row];
+    
+    self.lp = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(collectionView:didSelectItemAtIndexPath:)];
+    [self.lp setMinimumPressDuration:1];
+    [self.view addGestureRecognizer:self.lp];
+    
+    [[DataAccessObject sharedDAO]companyMoveRowFromIndex:(int)fromIndexPath.row toIndex:(int)toIndexPath.row];
+    
+    NSString * company = [self.companyList objectAtIndex:fromIndexPath.row];
+    [company retain];
+    
+    NSInteger fromIndex = fromIndexPath.row;
+    NSInteger toIndex = toIndexPath.row;
+    
+    [self.companyList removeObjectAtIndex:fromIndex];
+    [self.companyList insertObject:company atIndex:toIndex];
+    
+    
+    
+    [company release];
+    
+    
+    
+    [self.cv reloadData];
+}
+
+
 
 //-(void)handlePan:(UIPanGestureRecognizer *)panRecognizer {
 //    
@@ -303,7 +352,19 @@
 
     [self setToolbar];
     
+    //calls for new stock prices every 60 seconds
+    [NSTimer scheduledTimerWithTimeInterval: 60
+                                     target: self
+                                   selector:@selector(updateStockPrice)
+                                   userInfo: nil repeats:YES];
     
+    //immediately runs updateStockPrice without waiting 60 seconds
+    [self performSelector:@selector(updateStockPrice) withObject:nil afterDelay:0];
+    
+}
+
+-(void)updateStockPrice
+{
     //Get Companies stock symbol and add them to the string
     NSMutableString *stockSymbols = [[NSMutableString alloc]initWithString:@"http://finance.yahoo.com/d/quotes.csv?s="];
     for (Company *kompany in self.companyList){
@@ -316,29 +377,8 @@
     }
     [stockSymbols appendString:@"&f=a"];
     NSLog(@"%@***************", stockSymbols);
-
     
-//    //1
-//    NSURL *url = [NSURL URLWithString:stockSymbols];
-//    
-//    //2
-//    NSURLSession *session = [NSURLSession sharedSession];
-//                             
-//    NSURLSessionTask *task = [session dataTaskWithURL:url completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-//        //NSLog(@"response == %@", response);
-//        [self processData:data];
-//    }];
-//    
-//    
-//    [task resume];
-//    [self.tableView reloadData];
-
-    
-    
-
-    
-    
-    
+    //Now add that string to NSURLSession
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     
     NSURL *URL = [NSURL URLWithString:stockSymbols];
@@ -358,8 +398,8 @@
         }
     }];
     [dataTask resume];
-    [self.tableView reloadData];
-
+    [self.cv reloadData];
+//    [self.tableView reloadData];
 }
 
 -(void)processData:(NSData *)data
