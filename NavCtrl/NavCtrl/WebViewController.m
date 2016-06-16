@@ -7,6 +7,7 @@
 //
 
 #import "WebViewController.h"
+#import "EditFormViewController.h"
 
 @interface WebViewController ()
 
@@ -23,6 +24,15 @@
     [self.webView loadRequest:nsrequest];
     self.webView.frame = CGRectMake(self.view.frame.origin.x,self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
     [self.view addSubview:self.webView];
+    
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]
+                                    initWithTitle:@"Edit"
+                                    style:UIBarButtonItemStyleBordered
+                                    target:self
+                                    action:@selector(edit)];
+    self.navigationItem.rightBarButtonItem = rightButton;
+    
+
 
 }
 
@@ -31,7 +41,19 @@
     // Dispose of any resources that can be recreated.
 }
 
-
+-(void)edit{
+    
+    if (!self.editFormViewController) {
+        self.editFormViewController = [[EditFormViewController alloc]init];
+        self.editFormViewController.webViewController = self;
+    }
+    
+    self.editFormViewController.product = self.product;
+    
+    //        [self.navigationItem.rightBarButtonItem release];
+    
+    [self.navigationController pushViewController:self.editFormViewController animated:YES];
+}
 
 /*
 #pragma mark - Navigation

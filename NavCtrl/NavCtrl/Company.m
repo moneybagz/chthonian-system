@@ -10,19 +10,17 @@
 
 @implementation Company
 
-//-(instancetype)initWithCompanyName:(NSString *)name
-//{
-//    self = [super init];
-//    
-//    if (self) {
-//        _companyName = name;
-//        
-////        _products = [[NSMutableArray alloc]init];
-//    }
-//    
-//    
-//    return self;
-//}
+-(instancetype)init
+{
+    self = [super init];
+    
+    if (self) {
+        _products = [[NSMutableArray alloc]init];
+    }
+    
+    
+    return self;
+}
 //
 //-(void)dealloc{
 //    //release all instance variables

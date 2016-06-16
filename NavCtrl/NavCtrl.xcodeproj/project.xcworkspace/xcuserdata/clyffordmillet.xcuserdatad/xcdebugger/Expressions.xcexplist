@@ -3,7 +3,10 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "-[CompanyViewController viewDidLoad]:CompanyViewController.m">
+         contextName = "-[CompanyViewController tableView:didSelectRowAtIndexPath:]:CompanyViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[ProductViewController viewWillAppear:]:ProductViewController.m">
       </ContextState>
       <ContextState
          contextName = "-[ProductViewController tableView:cellForRowAtIndexPath:]:ProductViewController.m">
@@ -14,7 +17,10 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "-[CompanyViewController tableView:didSelectRowAtIndexPath:]:CompanyViewController.m">
+         contextName = "-[CompanyViewController viewDidLoad]:CompanyViewController.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[ProductViewController tableView:numberOfRowsInSection:]:ProductViewController.m">
       </ContextState>
    </ContextStates>
 </VariablesViewState>

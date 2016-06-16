@@ -33,6 +33,8 @@
 		53681C5B1CC94A2200F1E0FC /* Company.m in Sources */ = {isa = PBXBuildFile; fileRef = 53681C5A1CC94A2200F1E0FC /* Company.m */; };
 		53681C611CC94A4600F1E0FC /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 53681C601CC94A4600F1E0FC /* Product.m */; };
 		53681C641CC98B9400F1E0FC /* DataAccessObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 53681C631CC98B9400F1E0FC /* DataAccessObject.m */; };
+		53B000B21D0B7AF10059DE25 /* OpeningView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53B000B11D0B7AF10059DE25 /* OpeningView.xib */; };
+		53B000B41D1097800059DE25 /* NewProductView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53B000B31D1097800059DE25 /* NewProductView.xib */; };
 		53F31D071CD00C2000984E4E /* CompanyFormViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F31D051CD00C2000984E4E /* CompanyFormViewController.m */; };
 		53F31D081CD00C2000984E4E /* CompanyFormViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 53F31D061CD00C2000984E4E /* CompanyFormViewController.xib */; };
 		53F31D101CD12A7900984E4E /* ProductFormViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 53F31D0E1CD12A7900984E4E /* ProductFormViewController.m */; };
@@ -93,6 +95,8 @@
 		53681C601CC94A4600F1E0FC /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Product.m; path = ../Product.m; sourceTree = "<group>"; };
 		53681C621CC98B9400F1E0FC /* DataAccessObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataAccessObject.h; sourceTree = "<group>"; };
 		53681C631CC98B9400F1E0FC /* DataAccessObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataAccessObject.m; sourceTree = "<group>"; };
+		53B000B11D0B7AF10059DE25 /* OpeningView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OpeningView.xib; sourceTree = "<group>"; };
+		53B000B31D1097800059DE25 /* NewProductView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewProductView.xib; sourceTree = "<group>"; };
 		53F31D041CD00C2000984E4E /* CompanyFormViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CompanyFormViewController.h; path = ../CompanyFormViewController.h; sourceTree = "<group>"; };
 		53F31D051CD00C2000984E4E /* CompanyFormViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CompanyFormViewController.m; path = ../CompanyFormViewController.m; sourceTree = "<group>"; };
 		53F31D061CD00C2000984E4E /* CompanyFormViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CompanyFormViewController.xib; path = ../CompanyFormViewController.xib; sourceTree = "<group>"; };
@@ -156,6 +160,8 @@
 				53F31D041CD00C2000984E4E /* CompanyFormViewController.h */,
 				53F31D051CD00C2000984E4E /* CompanyFormViewController.m */,
 				53F31D061CD00C2000984E4E /* CompanyFormViewController.xib */,
+				53B000B11D0B7AF10059DE25 /* OpeningView.xib */,
+				53B000B31D1097800059DE25 /* NewProductView.xib */,
 				53681C621CC98B9400F1E0FC /* DataAccessObject.h */,
 				53681C631CC98B9400F1E0FC /* DataAccessObject.m */,
 				5305E6951CF62BFA0095851B /* Model.xcdatamodeld */,
@@ -344,6 +350,7 @@
 				53F31D641CDA7FE400984E4E /* NavController.db in Resources */,
 				53F31D1B1CD1E43600984E4E /* EditViewController.xib in Resources */,
 				53F31D1F1CD283E600984E4E /* Question-mark.jpg in Resources */,
+				53B000B41D1097800059DE25 /* NewProductView.xib in Resources */,
 				48A656EE1816468000746D36 /* Sunflower.gif in Resources */,
 				53681C4B1CC56B4400F1E0FC /* samsung.gif in Resources */,
 				48A656E718163C1B00746D36 /* CompanyViewController.xib in Resources */,
@@ -353,6 +360,7 @@
 				53681C511CC5709B00F1E0FC /* cheese.png in Resources */,
 				53F31D161CD1758700984E4E /* EditFormViewController.xib in Resources */,
 				48A656C718163BF200746D36 /* Images.xcassets in Resources */,
+				53B000B21D0B7AF10059DE25 /* OpeningView.xib in Resources */,
 				53F31D111CD12A7900984E4E /* ProductFormViewController.xib in Resources */,
 				53F31D081CD00C2000984E4E /* CompanyFormViewController.xib in Resources */,
 			);

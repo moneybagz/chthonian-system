@@ -13,6 +13,7 @@
 @interface CompanyFormViewController : UIViewController
 
 @property (retain, nonatomic) IBOutlet UITextField *companyTextfield;
+@property (nonatomic, retain) UIToolbar *toolbar;
 
 
 - (IBAction)doneButton:(id)sender;

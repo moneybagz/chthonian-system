@@ -33,17 +33,17 @@
 {
     [super viewDidLoad];
 
-    
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(300, 300, 150, 150)];
+    [self.view addSubview:self.tableView];
     
 //    [[DataAccessObject sharedDAO]readDatabaseProducts:self.ID];
 //    self.products = [[DataAccessObject sharedDAO] allProducts];
 
     // Uncomment the following line to preserve selection between presentations.
-     self.clearsSelectionOnViewWillAppear = NO;
- 
+    UIBarButtonItem *addBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewProductForm:)];
+    self.navigationItem.rightBarButtonItem = addBtn;
     
-    
-    [self.navigationItem.backBarButtonItem setAction:@selector(leftButtonSelected:)];
+   [self.navigationItem.backBarButtonItem setAction:@selector(leftButtonSelected:)];
 }
 
 -(void)createToolbar
@@ -218,7 +218,9 @@
 
 
 - (void)viewWillAppear:(BOOL)animated {
-    [self createToolbar];
+
+    [super viewWillAppear:animated];
+//    [self createToolbar];
     
     [self.tableView setEditing:NO animated:YES];
     self.editing = NO;
@@ -226,9 +228,48 @@
     [[DataAccessObject sharedDAO]fetchDataProductsWithCompanyName:self.companyPrimaryKey];
     self.products = [[DataAccessObject sharedDAO] allProducts];
     
-    [super viewWillAppear:animated];
+    self.productOpeningView =
+    [[[NSBundle mainBundle] loadNibNamed:@"NewProductView" owner:self options:nil] firstObject];
+    self.productOpeningView.frame = self.view.bounds;
     
-       [self.tableView reloadData];
+//        self.frame = self.view.bounds;
+    if ([self.title  isEqualToString:@"Apple mobile devices"]) {
+        [self.companyLogoImage setImage:[UIImage imageNamed:@"apple.gif"]];
+        self.companyNameLabel.text = self.title;
+    } else if ([self.title  isEqualToString:@"Samsung mobile devices"]) {
+        [self.companyLogoImage setImage:[UIImage imageNamed:@"samsung.gif"]];
+        self.companyNameLabel.text = self.title;
+    } else if ([self.title  isEqualToString:@"Clyff's CHEESE HOUSE!"]) {
+        [self.companyLogoImage setImage:[UIImage imageNamed:@"cheese.png"]];
+        self.companyNameLabel.text = self.title;
+    } else if ([self.title  isEqualToString:@"SpaceX"]) {
+        [self.companyLogoImage setImage:[UIImage imageNamed:@"spacex-logo.jpg"]];
+        self.companyNameLabel.text = self.title;
+    } else {
+        [self.companyLogoImage setImage: [UIImage imageNamed:@"Question-mark.jpg"]];
+        self.companyNameLabel.text = self.title;
+    }
+    [self.productsTableView setHidden:YES];
+    [self.view addSubview:self.productOpeningView];
+//        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        
+        
+        
+//    } else {
+//        
+//        if (self.productOpeningView != nil){
+//            [self.productOpeningView removeFromSuperview];
+//            self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+//        }
+//        [self.tableView reloadData];
+//    }
+    
+    if (self.products.count > 0){
+        [self.productsTableView setHidden:NO];
+    }
+    
+    [self.tableView reloadData];
+    
 }
 
 -(void) leftButtonSelected:(id)sender {
@@ -406,8 +447,11 @@
         
         wvc.url = product.productUrl;
         
-        
+//        wvc.companyPrimaryKey = self.companyPrimaryKey;
 //        [self.navigationItem.rightBarButtonItem release];
+        wvc.product = product;
+        
+        wvc.product.companyID = self.companyPrimaryKey;
         
         // Push the view controller.
         [self.navigationController pushViewController:wvc animated:YES];
@@ -416,4 +460,29 @@
  
 
 
+- (void)dealloc {
+    [_companyLogoImage release];
+    [_companyNameLabel release];
+    [_productsTableView release];
+    [_tableView release];
+    [_productsTableView release];
+    [super dealloc];
+}
+- (IBAction)addProductButton:(id)sender {
+    if (!self.productFormViewController) {
+        self.productFormViewController = [[ProductFormViewController alloc]init];
+    }
+    
+    self.productFormViewController.productViewController = self;
+    
+    self.productFormViewController.companyPrimaryKey = self.companyPrimaryKey;
+    
+    self.productFormViewController.companyName = self.title;
+    
+    self.productFormViewController.productCount = (int)[self.products count];
+    
+    [self.navigationController
+     pushViewController:self.productFormViewController
+     animated:YES];
+}
 @end

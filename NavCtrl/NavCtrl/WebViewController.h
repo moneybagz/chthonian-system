@@ -8,11 +8,20 @@
 
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
+#import "EditFormViewController.h"
+#import "ProductViewController.h"
 
 
 @interface WebViewController : UIViewController <UIWebViewDelegate>
 
 @property (nonatomic, strong) NSString * url;
 @property(strong,nonatomic) WKWebView *webView;
+
+@property (nonatomic, retain) IBOutlet EditFormViewController *editFormViewController;
+@property int companyPrimaryKey;
+@property (nonatomic, retain) Product *product;
+
+
+
 
 @end

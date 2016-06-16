@@ -24,6 +24,8 @@
     self.navigationController = [[UINavigationController alloc]
                             initWithRootViewController:rootController];
     
+    [[UINavigationBar appearance] setBackgroundColor:[UIColor colorWithRed:160/255.0 green:169/255.0 blue:0/255.0 alpha:1]];
+    
 //    ProductViewController *productViewController = [[ProductViewController alloc]init];
 //    NSArray *stack = [NSArray arrayWithObjects:rootController, productViewController, nil];
 //    self.navigationController.viewControllers = stack;

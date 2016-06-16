@@ -28,5 +28,8 @@
 @property (nonatomic, retain) NSDictionary *jsonDictionary;
 @property (nonatomic, retain) NSDictionary *stockQuotes;
 @property (nonatomic, retain) NSArray *dictionaryArray;
+@property (nonatomic, retain) UIView *openingView;
+
+- (IBAction)AddCompanyButton:(id)sender;
 
 @end

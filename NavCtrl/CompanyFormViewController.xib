@@ -17,29 +17,9 @@
             <rect key="frame" x="0.0" y="0.0" width="639" height="1366"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter Company" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YJS-vK-DgB">
-                    <rect key="frame" x="43" y="189" width="552" height="139"/>
-                    <constraints>
-                        <constraint firstAttribute="width" secondItem="YJS-vK-DgB" secondAttribute="height" multiplier="552:139" id="qnn-J5-dRa"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="76"/>
-                    <color key="textColor" red="0.86074709892272949" green="0.98856598138809204" blue="0.0068514123558998108" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xZr-7L-gzg">
-                    <rect key="frame" x="229" y="433" width="181" height="90"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstAttribute="width" secondItem="xZr-7L-gzg" secondAttribute="height" multiplier="181:90" id="cpU-Rb-YvF"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="60"/>
-                    <state key="normal" title="DONE"/>
-                    <connections>
-                        <action selector="doneButton:" destination="-1" eventType="touchUpInside" id="uXd-Qg-Cis"/>
-                    </connections>
-                </button>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SCv-P1-fqd">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SCv-P1-fqd">
                     <rect key="frame" x="50" y="363" width="539" height="30"/>
+                    <color key="tintColor" red="0.55188577586206899" green="0.65625" blue="0.2914331896551724" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="SCv-P1-fqd" secondAttribute="height" multiplier="539:30" id="T3B-Mp-cl5"/>
                     </constraints>
@@ -47,17 +27,10 @@
                     <textInputTraits key="textInputTraits"/>
                 </textField>
             </subviews>
-            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" white="0.93865840517241383" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="YJS-vK-DgB" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="189" id="0cb-oU-IcS"/>
-                <constraint firstItem="SCv-P1-fqd" firstAttribute="top" secondItem="YJS-vK-DgB" secondAttribute="bottom" constant="35" id="1uL-Vm-4A3"/>
                 <constraint firstAttribute="trailing" secondItem="SCv-P1-fqd" secondAttribute="trailing" constant="50" id="22L-TT-pn4"/>
-                <constraint firstItem="xZr-7L-gzg" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="229" id="Eyd-Ls-74O"/>
-                <constraint firstItem="YJS-vK-DgB" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="43" id="PLc-gi-Lau"/>
-                <constraint firstAttribute="trailing" secondItem="YJS-vK-DgB" secondAttribute="trailing" constant="44" id="UFU-Kv-xMu"/>
                 <constraint firstItem="SCv-P1-fqd" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="50" id="YtF-G6-Z99"/>
-                <constraint firstAttribute="trailing" secondItem="xZr-7L-gzg" secondAttribute="trailing" constant="229" id="moR-iC-kfw"/>
-                <constraint firstItem="xZr-7L-gzg" firstAttribute="top" secondItem="SCv-P1-fqd" secondAttribute="bottom" constant="40" id="wfd-fN-baY"/>
             </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPadPro-2/3"/>
             <point key="canvasLocation" x="289.5" y="335"/>

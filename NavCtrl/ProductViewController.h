@@ -11,12 +11,18 @@
 @class EditFormViewController;
 
 
-@interface ProductViewController : UITableViewController <UITableViewDelegate, UITableViewDataSource>
+@interface ProductViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, retain) NSMutableArray *products;
 @property (nonatomic, retain) NSMutableArray *buttons;
 
+@property (retain, nonatomic) IBOutlet UITableView *productsTableView;
 @property (nonatomic, retain) IBOutlet ProductFormViewController *productFormViewController;
 @property (nonatomic, retain) IBOutlet EditFormViewController *editFormViewController;
+
+
+@property (nonatomic, retain) UITableView *tableView;
+
+
 
 @property (nonatomic, retain) UIToolbar *toolbar;
 @property (nonatomic, retain) UIBarButtonItem *doneButton;
@@ -24,6 +30,13 @@
 //@property (nonatomic) BOOL editor;
 
 @property int companyPrimaryKey;
+
+
+@property (retain, nonatomic) IBOutlet UIImageView *companyLogoImage;
+@property (retain, nonatomic) IBOutlet UILabel *companyNameLabel;
+- (IBAction)addProductButton:(id)sender;
+@property (nonatomic, retain) UIView *productOpeningView;
+
 
 
 

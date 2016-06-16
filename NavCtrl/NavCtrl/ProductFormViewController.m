@@ -21,6 +21,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]
+                                    initWithTitle:@"Save"
+                                    style:UIBarButtonItemStyleBordered
+                                    target:self
+                                    action:@selector(save)];
+    self.navigationItem.rightBarButtonItem = rightButton;
+    
+}
+
+-(void)save{
+    [[DataAccessObject sharedDAO]createProductWithName:self.productTextfield.text productURL:self.productURLtextfield.text companyPrimaryKey:self.companyPrimaryKey productCount:self.productCount];
+    
+    [self.navigationController popToViewController:self.productViewController animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -33,12 +33,21 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [[DataAccessObject sharedDAO]hardcode];
+//    [[DataAccessObject sharedDAO]hardcode];
 //
 //    [[DataAccessObject sharedDAO]fetchDataCompanies];
 //    
 //    self.companyList = [[DataAccessObject sharedDAO] allCompanies];
-
+    
+    UIBarButtonItem *addBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewCompanyForm:)];
+    self.navigationItem.rightBarButtonItem = addBtn;
+    
+    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]
+                                   initWithTitle:@"Edit"
+                                   style:UIBarButtonItemStyleBordered
+                                   target:self
+                                   action:@selector(editPlease)];
+    self.navigationItem.leftBarButtonItem = leftButton;
     
     // Uncomment the following line to preserve selection between presentations.
      self.clearsSelectionOnViewWillAppear = NO;
@@ -95,9 +104,22 @@
     
     [self.tableView reloadData];
 
-    [self setToolbar];
+//    [self setToolbar];
     
-    
+    if (self.companyList.count == 0){
+        self.openingView = [[[NSBundle mainBundle] loadNibNamed:@"OpeningView" owner:self options:nil] firstObject];
+        self.openingView.frame = self.view.bounds;
+        [self.view addSubview:self.openingView];
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        self.navigationItem.title =@"Stock Tracker";
+        
+    } else {
+        if (self.openingView != nil){
+            [self.openingView removeFromSuperview];
+            self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        }
+    }
+
 
     
     // 1
@@ -240,7 +262,7 @@
         _companyFormViewController = [[CompanyFormViewController alloc]init];
     }
     
-    [self.navigationItem.rightBarButtonItem release];
+//    [self.navigationItem.rightBarButtonItem release];
     
     [self.navigationController
      pushViewController:self.companyFormViewController
@@ -394,6 +416,8 @@
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
 //
         [tableView reloadData];
+        
+        
     }
 }
 
@@ -485,9 +509,9 @@
 
     //display editView Controller if in editing mode
     if (self.tableView.editing == YES) {
-        if (!self.editViewController) {
+//        if (!self.editViewController) {
             self.editViewController = [[EditViewController alloc]init];
-        }
+//        }
         
             
             
@@ -514,7 +538,7 @@
         
     self.productViewController.companyPrimaryKey = company.primaryKey; ////////////////////////
     
-    [self.navigationItem.rightBarButtonItem release];
+ //   [self.navigationItem.rightBarButtonItem release];
     
     [self.navigationController
         pushViewController:self.productViewController
@@ -526,4 +550,17 @@
  
 
 
+- (IBAction)AddCompanyButton:(id)sender {
+    
+    if (!self.companyFormViewController) {
+        _companyFormViewController = [[CompanyFormViewController alloc]init];
+    }
+    
+    [self.navigationItem.rightBarButtonItem release];
+    
+    [self.navigationController
+     pushViewController:self.companyFormViewController
+     animated:YES];
+    
+}
 @end

@@ -9,6 +9,7 @@
 #import "EditFormViewController.h"
 #import "Product.h"
 #import "DataAccessObject.h"
+#import "ProductViewController.h"
 
 @interface EditFormViewController ()
 
@@ -19,6 +20,43 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]
+                                    initWithTitle:@"Save"
+                                    style:UIBarButtonItemStyleBordered
+                                    target:self
+                                    action:@selector(save)];
+    self.navigationItem.rightBarButtonItem = rightButton;
+    
+    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc]
+                                   initWithTitle:@"Cancel"
+                                   style:UIBarButtonItemStyleBordered
+                                   target:self
+                                   action:@selector(pop)];
+    self.navigationItem.leftBarButtonItem = leftButton;
+    
+    self.navigationItem.title =@"Edit Company";
+}
+
+-(void)pop{
+    [self.navigationController popToViewController:self.webViewController animated:YES];
+}
+
+-(void)save{
+    [[DataAccessObject sharedDAO]editProdutNameAndUrl:self.changeNameTextfield.text URL:self.changeURLtextfield.text productPrimaryKey:self.product.primaryKey];
+    
+//    ProductViewController *pvc = [[ProductViewController alloc] initWithNibName:nil bundle:nil];
+//    
+//    
+//    // Push the view controller.
+//    [self.navigationController pushViewController:pvc animated:YES];
+    
+    NSMutableArray *allViewControllers = [NSMutableArray arrayWithArray:[self.navigationController viewControllers]];
+    for (UIViewController *aViewController in allViewControllers) {
+        if ([aViewController isKindOfClass:[ProductViewController class]]) {
+//            aViewController.companyPrimaryKey = self.comp
+            [self.navigationController popToViewController:aViewController animated:YES];
+        }
+    }
 }
 
 
